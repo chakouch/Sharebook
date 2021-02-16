@@ -191,8 +191,6 @@ session_start();
             </div>
         </section>
 
-
-
     <div class="footer">
         <footer>
             <div class="container">

@@ -1,6 +1,6 @@
 body {
   height: auto;
-  background: #475d62 url(../../assets/img/fond1.jpg) fixed;
+  background-color: white;
   background-size: cover;
   position: relative;
 }
@@ -14,7 +14,7 @@ body {
 .login form {
   max-width: 320px;
   width: 90%;
-  background-color: #1e2833;
+  background-color: #313437;
   padding: 40px;
   border-radius: 5px 50px 5px 50px;
   transform: translate(-50%, -50%);
@@ -80,11 +80,11 @@ img {
 
 .login img {
   margin: 10px 60px 10px;
-  width: 40%;
-  height: 40%;
+  width: 50%;
+  height: 60%;
 }
 
-button{
+button {
   color: white !important;
   font-weight: bold !important;
   border-radius:  50px 50px 50px 50px !important;

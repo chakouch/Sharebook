@@ -2,12 +2,13 @@
 //Permet de garder les variables de la session
 session_start();
 //Permet de récuprer le contenu du fichier connect_db.php 
+
 require 'includes/connect_db.php';
+
 //Connexion à notre base de donnée
 $bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre;charset=utf8', 'root', '');
 //Restrindre l'accés à cette page au personne non connecté
-
- if(!isset($_SESSION['id'])) {
+if(!isset($_SESSION['id'])) {
 
          header('Location: errorConnexion.html');
          exit;
@@ -22,7 +23,7 @@ $bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre;charset=utf8', 'root',
         <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-            <title>Bibliothèque</title>
+            <title>Oeuvres déposées</title>
             <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
             <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
             <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
@@ -32,10 +33,6 @@ $bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre;charset=utf8', 'root',
             <link rel="stylesheet" href="assets/css/profil.css">
             <link rel="stylesheet" href="assets/css/animate.css">
             <link rel="stylesheet" type="text/css" href="assets/css/print.min.css">
-
-
-
-
         </head>
 <body>
 <nav class="navbar navbar-light navbar-expand-md shadow-lg navigation-clean-button" style="background-color: #313437;">
@@ -78,8 +75,8 @@ $bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre;charset=utf8', 'root',
 
 
                 <?php
-                 //Rajout de la barre d'administration si la personne un administrateur
 
+                 //Rajout de la barre d'administration si la personne un administrateur
                 if (strcasecmp($_SESSION['droit'], 'admin') == 0){
 
 
@@ -110,132 +107,51 @@ $bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre;charset=utf8', 'root',
 
 <section style="background-image: url(&quot;assets/img/3image.jpg&quot;);">
     <div class="animated bounceInDown delay-100ms">
-    <h1 class="text-capitalize text-center" data-aos="fade" data-aos-duration="3000" style="color: #ffffff;font-size: 100px;"><strong>Bibliothèque</strong></h1>
+    <h1 class="text-capitalize text-center" data-aos="fade" data-aos-duration="3000" style="color: #ffffff;font-size: 100px;"><strong>Oeuvres déposées</strong></h1>
     <hr style="color: #ffffff;font-size: 27px;background-color: #ffffff;width: 700px;height: 3px;">
-    <p class="text-center" style="color: #f1f7fc;"><strong>Découvrer notre catalogue d'oeuvre disponible</strong></p>
+    <p class="text-center" style="color: #f1f7fc;"><strong>Vue sur vos oeuvres et leurs paramètres</strong></p>
     <p class="text-center" style="color: #f1f7fc;"><i class="fa fa-file-o bounce animated" style="font-size: 50px;margin-bottom: 35px;color: rgb(225,197,48);"></i></p>
 </div>
 </section>
 
 
-<section id="portfolio" class="bg-light">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h2 class="text-uppercase section-heading">Oeuvres disponibles</h2>
-                <h3 class="section-subheading text-muted">Découvrer la collection des nouvelles oeuvres disponibles !</h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6 col-md-4 portfolio-item">
-                <a class="portfolio-link" data-toggle="modal" href="#portfolioModal1">
-                    <div class="portfolio-hover">
-                        <div class="portfolio-hover-content"><i class="fa fa-plus fa-3x"></i></div>
-                    </div><img class="img-fluid" src="assets/img/cover_livre.jpg" /></a>
-                <div class="portfolio-caption">
-                    <h4>Nom oeuvre 1</h4>
-                    <p class="text-muted">Auteur</p>
-                    <p class="text-muted">Thème</p>
-
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4 portfolio-item">
-                <a class="portfolio-link" data-toggle="modal" href="#portfolioModal2">
-                    <div class="portfolio-hover">
-                        <div class="portfolio-hover-content"><i class="fa fa-plus fa-3x"></i></div>
-                    </div><img class="img-fluid" src="assets/img/cover_livre.jpg" /></a>
-                <div class="portfolio-caption">
-                    <h4>Nom oeuvre 2<br /></h4>
-                    <p class="text-muted">Auteur</p>
-                    <p class="text-muted">Thème</p>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4 portfolio-item">
-                <a class="portfolio-link" data-toggle="modal" href="#portfolioModal3">
-                    <div class="portfolio-hover">
-                        <div class="portfolio-hover-content"><i class="fa fa-plus fa-3x"></i></div>
-                    </div><img class="img-fluid" src="assets/img/cover_livre.jpg" /></a>
-                <div class="portfolio-caption">
-                    <h4>Nom oeuvre 3</h4>
-                    <p class="text-muted">Auteur</p>
-                    <p class="text-muted">Thème</p>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4 portfolio-item">
-                <a class="portfolio-link" data-toggle="modal" href="#portfolioModal4">
-                    <div class="portfolio-hover">
-                        <div class="portfolio-hover-content"><i class="fa fa-plus fa-3x"></i></div>
-                    </div><img class="img-fluid" src="assets/img/cover_livre.jpg" /></a>
-                <div class="portfolio-caption">
-                    <h4>Nom oeuvre 4</h4>
-                    <p class="text-muted">Auteur</p>
-                    <p class="text-muted">Thème</p>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4 portfolio-item">
-                <a class="portfolio-link" data-toggle="modal" href="#portfolioModal5">
-                    <div class="portfolio-hover">
-                        <div class="portfolio-hover-content"><i class="fa fa-plus fa-3x"></i></div>
-                    </div><img class="img-fluid img-fluid" src="assets/img/cover_livre.jpg" /></a>
-                <div class="portfolio-caption">
-                    <h4>Nom oeuvre 5</h4>
-                    <p class="text-muted">Auteur</p>
-                    <p class="text-muted">Thème</p>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-4 portfolio-item">
-                <a class="portfolio-link" data-toggle="modal" href="#portfolioModal6">
-                    <div class="portfolio-hover">
-                        <div class="portfolio-hover-content"><i class="fa fa-plus fa-3x"></i></div>
-                    </div><img class="img-fluid" src="assets/img/cover_livre.jpg" /></a>
-                <div class="portfolio-caption">
-                    <h4>Nom oeuvre 6</h4>
-                    <p class="text-muted">Auteur</p>
-                    <p class="text-muted">Thème</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-
-
 
 <form method="POST" enctype="multipart/form-data" style="margin-top: 50px">
+
     <div align="center">
 
 
-    <div class="input-group" style="max-width: 400px; min-width: 200px">
+        <div class="input-group" style="max-width: 400px; min-width: 200px">
 
-        <select class="form-control custom-select" id="exampleFormControlSelect1" name="choix">
-            <?php
-            //Permet de récuperer et d'afficher l'extension de tout les documents 
-            $reponse = $bdd->query('SELECT DISTINCT extension FROM files  WHERE visibilite = "public"');
+            <select class="form-control custom-select" id="exampleFormControlSelect1" name="choix">
+                <?php
+                //Permet de récuperer et d'afficher l'extension des documents de l'utilisateur
+                $reponse = $bdd->query('SELECT DISTINCT lower(extension) FROM files WHERE visibilite = "private"');
 
-            while ($donnees = $reponse->fetch())
-            {
+                while ($donnees = $reponse->fetch())
+                {
+
+                    ?>
+                    <option value="<?php echo $donnees['lower(extension)']; ?>"> <?php echo $donnees['lower(extension)']; ?></option>
+                    <?php
+                }
 
                 ?>
-                <option value="<?php echo $donnees['extension']; ?>"> <?php echo $donnees['extension']; ?></option>
-                <?php
-            }
-
-            ?>
-        </select>
-        <div class="input-group-append">
-            <label class="input-group-text" for="inputGroupSelect02">Choix</label>
+            </select>
+            <div class="input-group-append">
+                <label class="input-group-text" for="inputGroupSelect02">Choix</label>
+            </div>
         </div>
-    </div>
         <br>
-    <button type="button" class="btn btn-info"><input type="submit" class="btn btn-info" value="Afficher les documents" name="extension"/></button><br/>
+        <button type="button" class="btn btn-info"><input type="submit" class="btn btn-info" value="Afficher les documents" name="extension"/></button><br/>
     </div>
+
 </form>
 
+</br>
+</br>
 
-     <div class="container" style="overflow-x:auto;">
-
-
+     <div class="container">
 
                     <table id="example" class="table table-striped table-bordered" style="width:100%">
 
@@ -245,41 +161,33 @@ $bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre;charset=utf8', 'root',
 
      <?php
                
-            //Permet d'afficher les grilles des tableaux en fonction de l'extension des documents
                 if(isset($_POST['extension'])) {
 
                     if(!empty($_POST['choix'])){
 
-                       
-
                         $extension = $_POST['choix'];
 
+                         //Permet d'afficher les grilles des tableaux en fonction de l'extension des documents
                          if (strcmp($extension, ".pdf") == 0) {
 
-
                             echo  ' 
-
                                         <th>Nom du fichier</th>
                                         <th>Fichier</th>
                                         <th>Auteur</th>
                                         <th>Genre</th>
-                                        <th>Date upload</th> 
+                                        <th>Date upload</th>   
                                         <th>Aperçu</th>
                                         <th>Lancer Impression</th>
-
                              ';
 
                          } else {
 
                                echo  '  
-
-
                                          <th>Nom du fichier</th>
                                          <th>Fichier</th>
                                          <th>Auteur</th>
                                          <th>Genre</th>
-                                         <th>Date upload</th>   
-
+                                         <th>Date upload</th>                                         
                            ';
 
 
@@ -289,26 +197,24 @@ $bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre;charset=utf8', 'root',
 
                ?>
 
-
-
-
                 </tr>
                 </thead>
                 <tbody>
 
                 <?php
 
-                //Permet d'afficher les documents en fonctin de l'extension
+
                 if(isset($_POST['extension'])) {
 
                     if(!empty($_POST['choix'])){
-
+                    //Permet de récuperer et d'afficher les documents et des informations de ces documents
                      $ext=$_POST['choix'];
+                     $userpseudo = $_SESSION['pseudo'];
+                     $req = $db->query('SELECT pseudo, name, file_url, date, heure, genre, lower(extension)  FROM files WHERE (pseudo ="'.$userpseudo.'" AND extension="'.$ext.'" AND visibilite="private")');
 
-                    $req = $db->query('SELECT name, file_url, genre, date, heure, pseudo, lower(extension) FROM files WHERE (visibilite ="public" AND extension="'.$ext.'")');
-
+        
                     while($data = $req->fetch()){
-                         echo '<tr>';
+                        echo '<tr>';
 
                         echo '<th>'.$data['name'].'</th>';
                         echo '<th><a href="'.$data['file_url'].'" target="_blank">'.$data['name'].'</a></th>';
@@ -350,11 +256,11 @@ $bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre;charset=utf8', 'root',
             <div class="row">
                 <div class="col-md-12 item text">
                     <h3>ShareBook</h3>
-                    <p>Start-up innovante, ShareBook a pour ambition de rendre la connaissance accessible et universel.</p>
+                    <p>Start-up innovante, ShareBook a pour ambition de rendre la connaissance accessible et universel</p>
                 </div>
 
             </div>
-            <p class="copyright">ShareBook © 2021</p>
+            <p class="copyright">SmartDoc © 2019</p>
         </div>
     </footer>
 </div>
@@ -377,7 +283,7 @@ $bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre;charset=utf8', 'root',
 </script>
 
 <script>
-    //Fonction pour afficher et imprimer les documents PDF
+    //Permet d'afficher l'aperçu et de pouvoir imprimer les documents
     function print(doc) {
         var objFra = document.createElement('iframe');   // Create an IFrame.
         objFra.style.visibility = "hidden";    // Hide the frame.
@@ -387,6 +293,5 @@ $bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre;charset=utf8', 'root',
         objFra.contentWindow.print();      // Print it.
     }
 </script>
-
 
 </html>

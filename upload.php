@@ -87,7 +87,7 @@ if(isset($_POST['create_genre'])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Upload d'un document</title>
+    <title>Déposer une oeuvre</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
@@ -168,7 +168,7 @@ if(isset($_POST['create_genre'])) {
     <div class="container" >
         <div align="center" style="margin: 30px" class="animated bounceInDown delay-100ms">
 
-            <h1> Uploader un fichier</h1>
+            <h1>Déposer une oeuvre</h1>
             <i class="fa fa-file fa-5x"></i></br>
 
         </br>
