@@ -10,7 +10,7 @@ session_start();
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Sharebook</title>
+    <title>ShareBook</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
@@ -28,7 +28,7 @@ session_start();
 <body class="text-secondary">
 
         <nav class="navbar navbar-light navbar-expand-md shadow-lg navigation-clean-button" style="background-color: #313437;">
-       <div class="container"><a class="navbar-brand" href="index.php" style="color: #ffffff;">Sharebook</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+       <div class="container"><a class="navbar-brand" href="index.php" style="color: #ffffff;">ShareBook</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
            <div class="collapse navbar-collapse" id="navcol-1">
                <ul class="nav navbar-nav mr-auto">
 
@@ -118,7 +118,7 @@ session_start();
             <div align="center" class="animated bounceInDown delay-100ms">
 
 
-            <h1 style="font-size: 100px">Sharebook</h1>
+            <h1 style="font-size: 100px">ShareBook</h1>
                 <p style="font-size: 20px">Fini la paperasse, passez au format digital !</p>
 
                 <a href="#sommaire"><i class="fa fa-arrow-circle-down" style="font-size: 50px" data-bs-hover-animate="flash"></i></a>
@@ -134,7 +134,7 @@ session_start();
     <div class="team-boxed">
         <div class="container">
             <div class="intro">
-                <h2 class="text-center">Nos services Sharebook :</h2>
+                <h2 class="text-center">Nos services ShareBook :</h2>
                 <p class="text-center">Sur ce site, nous vous proposons de :</p>
             </div>
             <div class="row people">
@@ -145,19 +145,19 @@ session_start();
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4 item">
-                    <div class="box"><i class="fa fa-search" style="background-color: #f9dd16;width: 99px;height: 92px;margin: -5px;font-size: 61px;border-radius: 50px;padding: 15px;"></i>
+                    <div class="box"><i class="fa fa-money" style="background-color: #f9dd16;width: 99px;height: 92px;margin: -5px;font-size: 61px;border-radius: 50px;padding: 15px;"></i>
                         <h3 class="name"><strong>Acheter une oeuvre</strong><br></h3>
                         <p class="description">Recherchez toutes les oeuvres que vous voulez en un seul et unique site</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4 item">
-                    <div class="box"><i class="fa fa-print" style="background-color: #f9dd16;width: 99px;height: 92px;margin: -5px;font-size: 61px;border-radius: 50px;padding: 15px;"></i>
+                    <div class="box"><i class="fa fa-search" style="background-color: #f9dd16;width: 99px;height: 92px;margin: -5px;font-size: 61px;border-radius: 50px;padding: 15px;"></i>
                         <h3 class="name"><strong>Abonnement sur tout </strong><br></h3>
                         <p class="description">Abonnez-vous pour avoir un accès illimité sur toutes les oeuvres</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-12 item">
-                    <div class="box"><i class="fa fa-print" style="background-color: #f9dd16;width: 99px;height: 92px;margin: -5px;font-size: 61px;border-radius: 50px;padding: 15px;"></i>
+                    <div class="box"><i class="fa fa-binoculars" style="background-color: #f9dd16;width: 99px;height: 92px;margin: -5px;font-size: 61px;border-radius: 50px;padding: 15px;"></i>
                         <h3 class="name"><strong>Location court terme</strong><br></h3>
                         <p class="description">Si vous êtes un lecteur occasionnel, louer juste une oeuvre et une certaine durée</p>
                     </div>
@@ -171,7 +171,7 @@ session_start();
 
         <section>
             <div align="center">
-                <h1>Aperçu de Sharebook</h1>
+                <h1>Tendance actuelle</h1>
 
             </div>
 
@@ -192,17 +192,18 @@ session_start();
         </section>
 
 
+
     <div class="footer">
         <footer>
             <div class="container">
                 <div class="row">
                     <div class="col-md-12 item text">
-                        <h3>Sharebook</h3>
-                        <p>Start-up innovante, Sharebook a pour ambition de rendre la connaissance accessible et universel.</p>
+                        <h3>ShareBook</h3>
+                        <p>Start-up innovante, ShareBook a pour ambition de rendre la connaissance accessible et universel.</p>
                     </div>
                     <div class="col item social"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-snapchat"></i></a><a href="#"><i class="icon ion-social-instagram"></i></a></div>
                 </div>
-                <p class="copyright">Sharebook © 2021</p>
+                <p class="copyright">ShareBook © 2021</p>
             </div>
         </footer>
     </div>
