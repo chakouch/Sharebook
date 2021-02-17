@@ -27,19 +27,19 @@
                     //Supprimer la personne
                      $userid = $_SESSION['id'];
                      $usrpseudo= $_SESSION['pseudo'];
-                     $req = $db->query('DELETE FROM membres WHERE id ="'.$userid.'"');
+                     $req = $db->query('DELETE FROM utilisateur WHERE ID_Utilisateur ="'.$userid.'"');
                     //Supprimer les documents de l'utilisateur si l'option est cochée
                      if(!empty($_POST['scales'])){
                             
-                            $req = $db->query('DELETE FROM files WHERE pseudo ="'.$usrpseudo.'"');
+                            $req = $db->query('DELETE FROM documents WHERE ID_Auteur ="'.$usrpseudo.'"');
                             
                      }
                      //Supprimer les genres de l'utilisateur si l'option est cochée
-                     if(!empty($_POST['scales2'])){
+/*                     if(!empty($_POST['scales2'])){
                         
                             $req = $db->query('DELETE FROM genre WHERE pseudo ="'.$usrpseudo.'"');
                             
-                    }
+                    }*/
                      $message = "Compte supprimer ! ";
                      header($lien);
             }
@@ -88,9 +88,9 @@
                         Documents
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="document.php">Afficher les documents publiques</a>
-                        <a class="dropdown-item" href="mydocument.php">Afficher mes documents</a>
-                        <a class="dropdown-item" href="upload.php">Upload un document</a>
+                        <a class="dropdown-item" href="document.php">Afficher la Bibliothèque Publique</a>
+                        <a class="dropdown-item" href="mydocument.php">Afficher ma Bibliothèque Privée</a>
+                        <a class="dropdown-item" href="upload.php">Ajouter un ouvrage</a>
                     </div>
                 </li>
 
@@ -120,7 +120,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                        <a class="dropdown-item" href="affich_docs.php">Afficher les documents des utilisateurs</a>
+                        <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
                         <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
                         <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
                         <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
@@ -162,9 +162,9 @@
 
                     </br>
 
-                    <input type="checkbox" id="scales2" name="scales2">
+<!--                     <input type="checkbox" id="scales2" name="scales2">
                             <label for="scales2">Supprimer les genres associés à votre compte ? </label>
-                    </div>
+                    </div> -->
            <?php
               if(isset($message)) {
               echo '<font color="red">'.$message."</font>";

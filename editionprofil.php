@@ -16,24 +16,52 @@ $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxo
       
    }
 
-
+//Permet d'obtenir les informations de l'utilisateur actuel
+if(isset($_SESSION['id']) AND $_SESSION['id'] > 0) {
+   $getid = intval($_SESSION['id']);
+   $requser = $bdd->prepare('SELECT * FROM utilisateur WHERE ID_Utilisateur = ?');
+   $requser->execute(array($getid));
+   $userinfo = $requser->fetch();
+}
 
 if(isset($_SESSION['id'])) {
-   $requser = $bdd->prepare("SELECT * FROM membres WHERE id = ?");
+
+   $requser = $bdd->prepare("SELECT * FROM utilisateur WHERE ID_Utilisateur = ?");
    $requser->execute(array($_SESSION['id']));
    $user = $requser->fetch();
    //Permet de modifier le pseudo
-   if(isset($_POST['newpseudo']) AND !empty($_POST['newpseudo']) AND $_POST['newpseudo'] != $user['pseudo']) {
+   if(isset($_POST['newpseudo']) AND !empty($_POST['newpseudo']) AND $_POST['newpseudo'] != $userinfo['pseudo']) {
       $newpseudo = htmlspecialchars($_POST['newpseudo']);
-      $insertpseudo = $bdd->prepare("UPDATE membres SET pseudo = ? WHERE id = ?");
+      $insertpseudo = $bdd->prepare("UPDATE utilisateur SET Pseudo = ? WHERE ID_Utilisateur = ?");
       $insertpseudo->execute(array($newpseudo, $_SESSION['id']));
       header('Location: profil.php?id='.$_SESSION['id']);
    }
+
+   if(isset($_POST['newnom']) AND !empty($_POST['newnom']) AND $_POST['newnom'] != $userinfo['Nom']) {
+      $newnom = htmlspecialchars($_POST['newnom']);
+      $insertnom = $bdd->prepare("UPDATE utilisateur SET Nom = ? WHERE ID_Utilisateur = ?");
+      $insertnom->execute(array($newnom, $_SESSION['id']));
+      header('Location: profil.php?id='.$_SESSION['id']);
+   }
+
+   if(isset($_POST['newprenom']) AND !empty($_POST['newprenom']) AND $_POST['newprenom'] != $userinfo['Prenom']) {
+      $newprenom = htmlspecialchars($_POST['newprenom']);
+      $insertprenom = $bdd->prepare("UPDATE utilisateur SET Prenom = ? WHERE ID_Utilisateur = ?");
+      $insertprenom->execute(array($newprenom, $_SESSION['id']));
+      header('Location: profil.php?id='.$_SESSION['id']);
+   }
    //Permet de modifier le mail
-   if(isset($_POST['newmail']) AND !empty($_POST['newmail']) AND $_POST['newmail'] != $user['mail']) {
+   if(isset($_POST['newmail']) AND !empty($_POST['newmail']) AND $_POST['newmail'] != $userinfo['Email']) {
       $newmail = htmlspecialchars($_POST['newmail']);
-      $insertmail = $bdd->prepare("UPDATE membres SET mail = ? WHERE id = ?");
+      $insertmail = $bdd->prepare("UPDATE utilisateur SET Email = ? WHERE ID_Utilisateur = ?");
       $insertmail->execute(array($newmail, $_SESSION['id']));
+      header('Location: profil.php?id='.$_SESSION['id']);
+   }
+
+   if(isset($_POST['newtel']) AND !empty($_POST['newtel']) AND $_POST['newtel'] != $userinfo['Tel']) {
+      $newtel = htmlspecialchars($_POST['newtel']);
+      $inserttel = $bdd->prepare("UPDATE utilisateur SET Tel = ? WHERE ID_Utilisateur = ?");
+      $inserttel->execute(array($newtel, $_SESSION['id']));
       header('Location: profil.php?id='.$_SESSION['id']);
    }
    //Permet de modifier le mot de passe
@@ -85,9 +113,9 @@ if(isset($_SESSION['id'])) {
                         Documents
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="document.php">Afficher les documents publiques</a>
-                        <a class="dropdown-item" href="mydocument.php">Afficher mes documents</a>
-                        <a class="dropdown-item" href="upload.php">Upload un document</a>
+                        <a class="dropdown-item" href="document.php">Afficher la Bibliothèque Publique</a>
+                        <a class="dropdown-item" href="mydocument.php">Afficher ma Bibliothèque Privée</a>
+                        <a class="dropdown-item" href="upload.php">Ajouter un ouvrage</a>
                     </div>
                 </li>
 
@@ -116,7 +144,7 @@ if(isset($_SESSION['id'])) {
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                        <a class="dropdown-item" href="affich_docs.php">Afficher les documents des utilisateurs</a>
+                        <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrage des utilisateurs</a>
                         <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
                         <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
                         <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
@@ -139,8 +167,11 @@ if(isset($_SESSION['id'])) {
        <form class="shadow" method="post" style="border-radius: 20px 50px 20px 50px;" action="" enctype="multipart/form-data">
            <h2 class="text-center">Edition de mon profil</h2>
            <i class="fa fa-user fa-5x"></i></br>
-           <div class="form-group"><input class="form-control" type="text" name="newpseudo" placeholder="Pseudo" value="<?php echo $user['pseudo']; ?>" /></div>
-           <div class="form-group"><input class="form-control" type="text" name="newmail" placeholder="Mail" value="<?php echo $user['mail']; ?>" /></div>
+           <div class="form-group"><input class="form-control" type="text" name="newpseudo" placeholder="Pseudo" value=<?php echo $userinfo['Pseudo']; ?> /></div>
+           <div class="form-group"><input class="form-control" type="text" name="newnom" placeholder="Nom" value=<?php echo $userinfo['Nom']; ?> /></div>
+           <div class="form-group"><input class="form-control" type="text" name="newprenom" placeholder="Prenom" value=<?php echo $userinfo['Prenom']; ?> /></div>
+           <div class="form-group"><input class="form-control" type="text" name="newmail" placeholder="Mail" value=<?php echo $userinfo['Email']; ?> /></div>
+           <div class="form-group"><input class="form-control" type="text" name="newtel" placeholder="Tel" value=<?php echo $userinfo['Tel']; ?> /></div>
            <div class="form-group"><input class="form-control" type="password" name="newmdp1" placeholder="Mot de passe"/></input></div>
            <div class="form-group"><input class="form-control" type="password" name="newmdp2" placeholder="Confirmation du mot de passe"/></div>
            <div class="form-group"><input class="btn btn-primary btn-block" type="submit"/></input></div>

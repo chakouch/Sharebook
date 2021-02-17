@@ -25,7 +25,10 @@ if(isset($_POST['formconnexion'])) {
          $userinfo = $requser->fetch();
          $_SESSION['id'] = $userinfo['ID_Utilisateur'];
          $_SESSION['pseudo'] = $userinfo['Pseudo'];
+         $_SESSION['nom'] = $userinfo['Nom'];
+         $_SESSION['prenom'] = $userinfo['Prenom'];
          $_SESSION['mail'] = $userinfo['Email'];
+         $_SESSION['tel'] = $userinfo['Tel'];
          $_SESSION['droit'] = $userinfo['Roles'];
          header("Location: profil.php?id=".$_SESSION['id']);
       } else {
@@ -105,7 +108,7 @@ if(isset($_POST['formconnexion'])) {
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                         <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                                        <a class="dropdown-item" href="affich_docs.php">Afficher les documents des utilisateurs</a>
+                                        <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
                                         <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
                                         <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
                                         <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>

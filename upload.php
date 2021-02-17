@@ -17,24 +17,36 @@
           
        }
 
+
+
     if(isset($_POST['formupload'])) {
 
         if(!empty($_POST['genre'])){
 
-            if(!empty($_FILES)){
+            if(!empty($_FILES['fichier'])){
                 //Permet de récuperer toutes les informations du document
                 $file_name = $_FILES['fichier']['name'];
                 $file_type = $_FILES['fichier']['type'];
-                $file_extension = strrchr($file_name, ".");
+                $file_extension = strtoupper(strrchr($file_name, "."));
                 $file_tmp_name = $_FILES['fichier']['tmp_name'];
 
+                if(!empty($_FILES['miniature'])){
+
+                    $miniature_name = $_FILES['miniature']['name'];
+                    $miniature_type = $_FILES['miniature']['type'];
+                    $miniature_extension = strtoupper(strrchr($miniature_name, "."));
+                    $miniature_tmp_name = $_FILES['miniature']['tmp_name'];
+                    $miniature_dest = 'miniature/'.$miniature_name;
+                }
+
+
                 $file_dest = 'files/'.$file_name;
+                
 
                 $userpseudo = $_SESSION['pseudo'];
+                $userid = (int)$_SESSION['id'];
 
                 $genre = $_POST['genre'];
-
-                $visibilite = $_POST['visibilite'];
 
                 setlocale(LC_TIME, 'fra_fra');
                 
@@ -42,15 +54,33 @@
                 $heure = strftime('%H:%M:%S'); ;
     
 
-                $extension_autorisees = array('.pdf', '.PDF','.doc','.DOC','.docx','.DOCX','.xlsx','.xlsm','.xlsb');
+                $extension_autorisees_file = array('.PDF', '.BOOK');
+                $extension_autorisees_miniature = array('.JPEG', '.PNG', '.JPG');
+/*                echo $file_extension;
+                echo $miniature_extension;*/
 
                 //Permet de rajouter le document dans la base de donnée
-                if(in_array($file_extension,$extension_autorisees)){
+                if(in_array($file_extension,$extension_autorisees_file)){
                     if(move_uploaded_file($file_tmp_name, $file_dest)){
+                        
                         $file_extension = strtolower($file_extension);
-                        $req = $db->prepare('INSERT INTO files(name, file_url, pseudo, genre, visibilite, extension, date, heure) VALUES(?,?,?,?,?,?,?,?)');
-                        $req->execute(array($file_name, $file_dest, $userpseudo, $genre, $visibilite, $file_extension, $date, $heure));
+
+                        if(!empty($_FILES['miniature']) AND in_array($miniature_extension,$extension_autorisees_miniature) ){
+                            $req = $db->prepare('INSERT INTO documents(Titre, Chemin, Image, ID_Utilisateur, ID_Auteur) VALUES(?,?,?,?,?)');
+                            $req->execute(array($file_name, $file_dest, $miniature_dest, $userid, $userid));
+                            echo "\nPDOStatement::errorInfo():\n";
+                            $arr = $req->errorInfo();
+                            print_r($arr);
+                        } else {
+                            $req = $bdd->prepare('INSERT INTO documents(Titre, Chemin, ID_Utilisateur) VALUES(?,?,?)');
+                            $req->execute(array($file_name, $file_dest, $userid));
+                            echo "\nPDOStatement::errorInfo():\n";
+                            $arr = $req->errorInfo();
+                            print_r($arr);
+                        }
+                        
                         $erreurupload = "Le fichier '$file_name' a bien était upload ! ";
+
                     } else {
                         $erreurupload = "Une erreur est survenue lors de l'envoi du fichier";
                     }
@@ -72,9 +102,8 @@
 if(isset($_POST['create_genre'])) {
 
     $genre = $_POST['newgenre'];
-    $insert_genre = $bdd->prepare("INSERT INTO genre(pseudo, genre) VALUES(?, ?)");
-    $insert_genre->execute(array($_SESSION['pseudo'], $genre));
-
+    $insert_genre = $bdd->prepare("INSERT INTO genre(Nom, ID_Utilisateur) VALUES(?, ?)");
+    $insert_genre->execute(array($genre, $_SESSION['pseudo']));
 
     $msg_create_genre = "Votre genre à bien été crée";
 
@@ -119,9 +148,9 @@ if(isset($_POST['create_genre'])) {
                         Documents
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="document.php">Afficher les documents publiques</a>
-                        <a class="dropdown-item" href="mydocument.php">Afficher mes documents</a>
-                        <a class="dropdown-item" href="upload.php">Upload un document</a>
+                        <a class="dropdown-item" href="document.php">Afficher la Bibliothèque Publique</a>
+                        <a class="dropdown-item" href="mydocument.php">Afficher ma Bibliothèque Privée</a>
+                        <a class="dropdown-item" href="upload.php">Ajouter un ouvrage</a>
                     </div>
                 </li>
 
@@ -146,7 +175,7 @@ if(isset($_POST['create_genre'])) {
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                        <a class="dropdown-item" href="affich_docs.php">Afficher les documents des utilisateurs</a>
+                        <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
                         <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
                         <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
                         <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
@@ -175,15 +204,24 @@ if(isset($_POST['create_genre'])) {
 
         <form method="POST" enctype="multipart/form-data" style="border-radius: 20px 50px 20px 50px;">
             <div class="form-group">
-                <label for="exampleFormControlInput1"><strong>Votre document :</strong></label>
+                <label for="exampleFormControlInput1"><strong>Votre ouvrage :</strong></label>
                 </br>
 
                 <input type="file" class="form-control" id="exampleFormControlInput1" name="fichier">
             </div>
         </br>
 
-       
+        <form method="POST" enctype="multipart/form-data" style="border-radius: 20px 50px 20px 50px;">
             <div class="form-group">
+                <label for="exampleFormControlInput1"><strong>Miniature :</strong></label>
+                </br>
+
+                <input type="file" class="form-control" id="exampleFormControlInput2" name="miniature">
+            </div>
+        </br>
+
+       
+<!--             <div class="form-group">
                 <label for="exampleFormControlSelect1"><strong>Sélectionner la visibilité de votre document :</strong></label>
                 </br>
 
@@ -193,7 +231,7 @@ if(isset($_POST['create_genre'])) {
                     
                 </select>
             </div>
-
+ -->
         </br>
 
      
@@ -210,15 +248,15 @@ if(isset($_POST['create_genre'])) {
                      <?php
                  
 
-                       $req_reponse = $bdd->prepare('SELECT * FROM genre WHERE pseudo = ?');
-                       $req_reponse->execute(array($_SESSION['pseudo']));
+                       $req_reponse = $bdd->prepare('SELECT * FROM genre');
+                       $req_reponse->execute(array());
                       
                          
                         while ($donnees = $req_reponse->fetch())
                         {
 
                         ?>
-                                   <option value="<?php echo $donnees['genre']; ?>"> <?php echo $donnees['genre']; ?></option>
+                                   <option value="<?php echo $donnees['genre']; ?>"> <?php echo $donnees['Nom']; ?></option>
                         <?php
                         }
                          
