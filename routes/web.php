@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ConnexionController;
+use App\Http\Controllers\InscriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,9 +16,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/dashboard', function () {
     return view('index');
 });
+
+// Route::group(['namespace' => 'authentification'], function() {
+    
+    Route::get('connexion', [ConnexionController::class, 'LoginForm']);
+    Route::post('connexion', [ConnexionController::class, 'Login']);
+    Route::get('inscription', [InscriptionController::class, 'InscriptionForm']);
+    Route::post('inscription', [InscriptionController::class, 'Inscription']);
+// });

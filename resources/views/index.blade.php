@@ -95,13 +95,13 @@ session_start();
                  //Rajout du bouton de connexion ou déconnexion en fonction de la connexion ou non de l'utilisateur
                           if(isset($_SESSION['id'])) {
 
-                               echo '</ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="deconnexion.php">Vous êtes connectez : Déconnexion</a></span>';
+                               echo '</ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="deconnexion">Vous êtes connectez : Déconnexion</a></span>';
                                
                       
                             } else {
 
 
-                               echo '</ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="connexion.php">Connectez-vous</a></span>';
+                               echo '</ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="connexion">Connectez-vous</a></span>';
                             }
                 ?>
 
