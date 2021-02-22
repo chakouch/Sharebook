@@ -52,30 +52,46 @@
                 $id_type = $_POST['type'];
                 $id_editeur = $_POST['editeur'];
                 $id_collection = $_POST['collection'];
+                $resume =  $_POST['resumeouvrage'];
+                $page = intval($_POST['nombredepage']);
 /*                echo $id_genre;
                 echo $id_auteur;
                 echo $id_type;*/
+                echo $id_genre      ;
+                echo '<td>'."\r\n";
+                echo $id_auteur     ;
+                echo '<td>'."\r\n";
+                echo $id_type       ;
+                echo '<td>'."\r\n";
+                echo $id_editeur    ;
+                echo '<td>'."\r\n";
+                echo $id_collection ;
+                echo '<td>'."\r\n";
+                echo $resume        ;
+                echo '<td>'."\r\n";
+                echo $page          ;
+                echo '<td>'."\r\n";
                 setlocale(LC_TIME, 'fra_fra');
                 
                 $date = strftime('%d %B %Y');
                 $heure = strftime('%H:%M:%S'); ;
     
 
-                $extension_autorisees_file = array('.PDF', '.BOOK');
+                $extension_autorisees_file = array('.PDF', '.BOOK', '.EPUB');
                 $extension_autorisees_miniature = array('.JPEG', '.PNG', '.JPG');
 /*                echo $file_extension;
                 echo $miniature_extension;*/
 
                 //Permet de rajouter le document dans la base de donnée
                 if(in_array($file_extension,$extension_autorisees_file)){
-                    if(move_uploaded_file($miniature_tmp_name, $miniature_dest)){
+                    if(move_uploaded_file($file_tmp_name, $file_dest)){
                         
                         $file_extension = strtolower($file_extension);
 
                         if(!empty($_FILES['miniature']) AND in_array($miniature_extension,$extension_autorisees_miniature) ){
-                          if(move_uploaded_file($file_tmp_name, $file_dest)){  
-                            $req = $db->prepare('INSERT INTO documents(Titre, Chemin, Image, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation ) VALUES(?,?,?,?,?,?,?,?,?,?)');
-                            $req->execute(array($file_name, $file_dest, $miniature_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1'));
+                          if(move_uploaded_file($miniature_tmp_name, $miniature_dest)){  
+                            $req = $db->prepare('INSERT INTO documents(Titre, Chemin, Image, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation, Resume, Nombre_Pages ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)');
+                            $req->execute(array($file_name, $file_dest, $miniature_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page));
                             echo "\nPDOStatement::errorInfo():\n";
                             $arr = $req->errorInfo();
                             print_r($arr);
@@ -84,8 +100,8 @@
                             }
 
                         } else {
-                            $req = $bdd->prepare('INSERT INTO documents(Titre, Chemin, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Collection, ID_Validation) VALUES(?,?,?,?,?,?,?,?)');
-                            $req->execute(array($file_name, $file_dest, $id_auteur, $id_genre, $id_type, $userid, $id_collection, '1'));
+                            $req = $bdd->prepare('INSERT INTO documents(Titre, Chemin, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation, Resume, Nombre_Pages) VALUES(?,?,?,?,?,?,?,?,?,?,?)');
+                            $req->execute(array($file_name, $file_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page));
                             echo "\nPDOStatement::errorInfo():\n";
                             $arr = $req->errorInfo();
                             print_r($arr);
@@ -231,7 +247,7 @@ if(isset($_POST['create_genre'])) {
 
         <form method="POST" enctype="multipart/form-data" style="border-radius: 20px 50px 20px 50px;">
             <div class="form-group">
-                <label for="exampleFormControlInput1"><strong>Sélectionner votre ouvrage :</strong></label>
+                <label for="exampleFormControlInput1"><strong>Sélectionner votre ouvrage *:</strong></label>
                 </br>
 
                 <input type="file" class="form-control" id="exampleFormControlInput1" name="fichier">
@@ -251,7 +267,7 @@ if(isset($_POST['create_genre'])) {
 
         <form method="POST" enctype="multipart/form-data" style="border-radius: 20px 50px 20px 50px;">
             <div class="form-group">
-                <label for="exampleFormControlInput1"><strong>Sélectionner l'auteur de votre document :</strong></label>
+                <label for="exampleFormControlInput1"><strong>Sélectionner l'auteur de votre document *:</strong></label>
                 </br>
                 <select class="form-control" id="exampleFormControlSelect1" name="auteur">
                 
@@ -276,7 +292,7 @@ if(isset($_POST['create_genre'])) {
             </div>
     
             <div class="form-group">
-                <label for="exampleFormControlSelect1"><strong>Sélectionner le genre de votre ouvrage :</strong></label>
+                <label for="exampleFormControlSelect1"><strong>Sélectionner le genre de votre ouvrage *:</strong></label>
                 </br>
 
                 <select class="form-control" id="exampleFormControlSelect1" name="genre">
@@ -302,7 +318,7 @@ if(isset($_POST['create_genre'])) {
             </div>
 
             <div class="form-group">
-                <label for="exampleFormControlSelect1"><strong>Sélectionner le type de votre ouvrage :</strong></label>
+                <label for="exampleFormControlSelect1"><strong>Sélectionner le type de votre ouvrage *:</strong></label>
                 </br>
 
                 <select class="form-control" id="exampleFormControlSelect1" name="type">
@@ -328,7 +344,7 @@ if(isset($_POST['create_genre'])) {
             </div>
 
             <div class="form-group">
-                <label for="exampleFormControlSelect1"><strong>Sélectionner l'editeur de votre ouvrage :</strong></label>
+                <label for="exampleFormControlSelect1"><strong>Sélectionner l'editeur de votre ouvrage *:</strong></label>
                 </br>
 
                 <select class="form-control" id="exampleFormControlSelect1" name="editeur">
@@ -354,7 +370,7 @@ if(isset($_POST['create_genre'])) {
             </div>
 
             <div class="form-group">
-                <label for="exampleFormControlSelect1"><strong>Sélectionner la collection de votre ouvrage :</strong></label>
+                <label for="exampleFormControlSelect1"><strong>Sélectionner la collection de votre ouvrage *:</strong></label>
                 </br>
 
                 <select class="form-control" id="exampleFormControlSelect1" name="collection">
@@ -379,6 +395,21 @@ if(isset($_POST['create_genre'])) {
                 </select>
             </div>
 
+            <label for="exampleFormControlSelect1"><strong>Ecrire le résumé de votre ouvrage :</strong></label>
+                        </br>
+
+             <form method="POST"> 
+                  <input type="text" class="form-control" id="exampleFormControlSelect1" value = "Rentre le résumé de votre ouvrage" name="resumeouvrage">
+
+            </br>
+
+            <label for="exampleFormControlSelect1"><strong>Rentrer le nombre de page :</strong></label>
+            </br>
+
+                <input type="number" class="form-control" id="exampleFormControlSelect1" value = "Rentre le nomre de pagae" name="nombredepage">
+
+            </br>
+
              <input type="submit" value="Envoyer le fichier" name="formupload"/>
 
 
@@ -391,10 +422,10 @@ if(isset($_POST['create_genre'])) {
             </br>
 
 
-            <label for="exampleFormControlSelect1"><strong>Créer un nouveau genre :</strong></label>
+            <label for="exampleFormControlSelect1"><strong>Créer un nouveau genre *:</strong></label>
                         </br>
 
-             <form method="POST"> 
+
                   <input type="text" class="form-control" id="exampleFormControlSelect1" value = "Rentre le nouveau genre" name="newgenre">
                  </br>
                  <input type="submit" value="Créer le genre" name="create_genre"/>
@@ -407,7 +438,8 @@ if(isset($_POST['create_genre'])) {
               }
             ?>
 
-           
+            
+
 
 
             </br>

@@ -146,9 +146,10 @@ $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxo
                                     <div class="portfolio-hover-content"><i class="fa fa-plus fa-3x"></i></div>
                                 </div><img class="img-fluid" src="'.$data['Image'].'" /></a>
                             <div class="portfolio-caption">
-                                <h4>'.$data['Titre'].'</h4>
-                                <p class="text-muted">'.$data['Titre'].'</p>
-                                <p class="text-muted">'.$data['Langue'].'</p>
+                                <h4>Titre : '.$data['Titre'].'</h4>
+                                <p class="text-muted">Auteur : '.$data['ID_Auteur'].'</p>
+                                <p class="text-muted">Nombre de page : '.$data['Nombre_Pages'].'</p>
+                                <p class="text-muted">Langue : '.$data['Langue'].'</p>
 
                             </div>
                         </div>
