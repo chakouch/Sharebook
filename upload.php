@@ -20,13 +20,13 @@
 
 
     if(isset($_POST['formupload'])) {
-
-     if(!empty($_POST['genre'])){
-      if(!empty($_POST['auteur'])){
-       if(!empty($_POST['type'])){ 
-        if(!empty($_POST['editeur'])){ 
-         if(!empty($_POST['collection'])){   
-            if(!empty($_FILES['fichier'])){
+     if(!empty($_POST['nom_ouvrage'])){
+      if(!empty($_POST['genre'])){
+       if(!empty($_POST['auteur'])){
+        if(!empty($_POST['type'])){ 
+         if(!empty($_POST['editeur'])){ 
+          if(!empty($_POST['collection'])){   
+           if(!empty($_FILES['fichier'])){
                 //Permet de récuperer toutes les informations du document
                 $file_name = $_FILES['fichier']['name'];
                 $file_type = $_FILES['fichier']['type'];
@@ -47,6 +47,7 @@
                 $userpseudo = $_SESSION['pseudo'];
                 $id_user = (int)$_SESSION['id'];
 
+                $nom_ouvrage = $_POST['nom_ouvrage'];
                 $id_genre = $_POST['genre'];
                 $id_auteur = $_POST['auteur'];
                 $id_type = $_POST['type'];
@@ -91,7 +92,7 @@
                         if(!empty($_FILES['miniature']) AND in_array($miniature_extension,$extension_autorisees_miniature) ){
                           if(move_uploaded_file($miniature_tmp_name, $miniature_dest)){  
                             $req = $db->prepare('INSERT INTO documents(Titre, Chemin, Image, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation, Resume, Nombre_Pages ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)');
-                            $req->execute(array($file_name, $file_dest, $miniature_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page));
+                            $req->execute(array($nom_ouvrage, $file_dest, $miniature_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page));
                             echo "\nPDOStatement::errorInfo():\n";
                             $arr = $req->errorInfo();
                             print_r($arr);
@@ -101,7 +102,7 @@
 
                         } else {
                             $req = $bdd->prepare('INSERT INTO documents(Titre, Chemin, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation, Resume, Nombre_Pages) VALUES(?,?,?,?,?,?,?,?,?,?,?)');
-                            $req->execute(array($file_name, $file_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page));
+                            $req->execute(array($nom_ouvrage, $file_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page));
                             echo "\nPDOStatement::errorInfo():\n";
                             $arr = $req->errorInfo();
                             print_r($arr);
@@ -136,6 +137,9 @@
         } 
     
     }else {
+        $erreurupload =  "entrée un genre";
+    }
+        }else {
         $erreurupload =  "entrée un genre";
     }
 
@@ -246,6 +250,14 @@ if(isset($_POST['create_genre'])) {
         </br>
 
         <form method="POST" enctype="multipart/form-data" style="border-radius: 20px 50px 20px 50px;">
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1"><strong>Sélectionner le nom de votre ouvrage :</strong></label>
+                </br>
+
+                <input type="text" class="form-control" id="exampleFormControlInput2" name="nom_ouvrage">
+            </div>
+
             <div class="form-group">
                 <label for="exampleFormControlInput1"><strong>Sélectionner votre ouvrage *:</strong></label>
                 </br>

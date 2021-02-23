@@ -138,16 +138,20 @@ $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxo
                     $req = $db->query('SELECT * FROM documents');
 
                     while($data = $req->fetch()){
-                        
+                         
+                        $req_auteur = $bdd->prepare('SELECT Nom FROM auteur WHERE ID_Auteur = ?');
+                        $req_auteur->execute(array($data['ID_Auteur']));
+                        $auteur = $req_auteur->fetch();
+
                         echo '
                         <div class="col-sm-6 col-md-4 portfolio-item">
-                            <a class="portfolio-link" data-toggle="modal" href="#portfolioModal1">
+                            <a class="portfolio-link" href="ouvrage.php?id='.$data['ID_Document'].'" >
                                 <div class="portfolio-hover">
                                     <div class="portfolio-hover-content"><i class="fa fa-plus fa-3x"></i></div>
                                 </div><img class="img-fluid" src="'.$data['Image'].'" /></a>
                             <div class="portfolio-caption">
-                                <h4>Titre : '.$data['Titre'].'</h4>
-                                <p class="text-muted">Auteur : '.$data['ID_Auteur'].'</p>
+                                <h4>'.$data['Titre'].'</h4>
+                                <p class="text-muted">Auteur : '.$auteur[0].'</p>
                                 <p class="text-muted">Nombre de page : '.$data['Nombre_Pages'].'</p>
                                 <p class="text-muted">Langue : '.$data['Langue'].'</p>
 
