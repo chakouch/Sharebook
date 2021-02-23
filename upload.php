@@ -55,6 +55,7 @@
                 $id_collection = $_POST['collection'];
                 $resume =  $_POST['resumeouvrage'];
                 $page = intval($_POST['nombredepage']);
+                $langue = $_POST['langue'];
 /*                echo $id_genre;
                 echo $id_auteur;
                 echo $id_type;*/
@@ -91,8 +92,8 @@
 
                         if(!empty($_FILES['miniature']) AND in_array($miniature_extension,$extension_autorisees_miniature) ){
                           if(move_uploaded_file($miniature_tmp_name, $miniature_dest)){  
-                            $req = $db->prepare('INSERT INTO documents(Titre, Chemin, Image, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation, Resume, Nombre_Pages ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)');
-                            $req->execute(array($nom_ouvrage, $file_dest, $miniature_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page));
+                            $req = $db->prepare('INSERT INTO documents(Titre, Chemin, Image, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation, Resume, Nombre_Pages, Langue) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)');
+                            $req->execute(array($nom_ouvrage, $file_dest, $miniature_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page, $langue));
                             echo "\nPDOStatement::errorInfo():\n";
                             $arr = $req->errorInfo();
                             print_r($arr);
@@ -101,8 +102,8 @@
                             }
 
                         } else {
-                            $req = $bdd->prepare('INSERT INTO documents(Titre, Chemin, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation, Resume, Nombre_Pages) VALUES(?,?,?,?,?,?,?,?,?,?,?)');
-                            $req->execute(array($nom_ouvrage, $file_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page));
+                            $req = $bdd->prepare('INSERT INTO documents(Titre, Chemin, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation, Resume, Nombre_Pages, Langue) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)');
+                            $req->execute(array($nom_ouvrage, $file_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page, $langue));
                             echo "\nPDOStatement::errorInfo():\n";
                             $arr = $req->errorInfo();
                             print_r($arr);
@@ -326,6 +327,20 @@ if(isset($_POST['create_genre'])) {
                          
                     
                     ?>
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label for="exampleFormControlSelect1"><strong>Sélectionner la langue de votre ouvrage *:</strong></label>
+                </br>
+
+                <select class="form-control" id="exampleFormControlSelect1" name="langue">
+
+                    <option value="FR">Français</option>
+                    <option value="ES">Espagnol</option>
+                    <option value="DE">Allemand</option>
+                    <option value="GB">Anglais</option>
                 </select>
             </div>
 

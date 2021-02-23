@@ -1,62 +1,36 @@
 <?php
-    
-   //Permet de garder les variables de la session
-   session_start();
-   require 'includes/connect_db.php';
-   //Permet de récuprer le contenu du fichier connect_db.php 
 
-   $lien = 'Location: deconnexion.php';
+//Permet de garder les variables de la session
+session_start();
+//Connexion à notre base de donnée
+$bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre;charset=utf8', 'root', '');
+//Permet de récupere les informations des utilisateurs
+$membres = $bdd->query('SELECT * FROM membres ORDER BY id DESC LIMIT 0,5');
 
 //Restrindre l'accés à cette page au personne non connecté
  if(!isset($_SESSION['id'])) {
 
          header('Location: errorConnexion.html');
          exit;
+
+   }
+//Restrindre l'accés à cette page au personne qui ne sont pas administrateur
+ if (strcasecmp($_SESSION['droit'], 'admin') ==! 0){
+
+         header('Location: errorAdmin.html');
+         exit;
       
    }
-
-   if(isset($_POST['formsupp'])) {
-
-       if(!empty($_POST['question'])){
-            if($_POST['question'] == "non") {
-
-                     $message = '<a href="profil.php">Cliquer ici pour revenir sur votre profil</a>';
-            }
-            elseif ($_POST['question'] == "oui") {
-
-                    //Supprimer la personne
-                     $userid = $_SESSION['id'];
-                     $usrpseudo= $_SESSION['pseudo'];
-                     $req = $db->query('DELETE FROM utilisateur WHERE ID_Utilisateur ="'.$userid.'"');
-                    //Supprimer les documents de l'utilisateur si l'option est cochée
-                     if(!empty($_POST['scales'])){
-                            
-                            $req = $db->query('DELETE FROM documents WHERE ID_Auteur ="'.$usrpseudo.'"');
-                            
-                     }
-                     //Supprimer les genres de l'utilisateur si l'option est cochée
-/*                     if(!empty($_POST['scales2'])){
-                        
-                            $req = $db->query('DELETE FROM genre WHERE pseudo ="'.$usrpseudo.'"');
-                            
-                    }*/
-                     $message = "Compte supprimer ! ";
-                     header($lien);
-            }
-             
-         } else {
-            $message = "Choisiez entre oui ou non";
-         }
-   
-   }
-
+   	
 
 ?>
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Supprimer votre compte</title>
+    <title>Profil des utilisateurs du site</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
@@ -64,7 +38,8 @@
     <link rel="stylesheet" href="assets/css/footer.css">
     <link rel="stylesheet" href="assets/css/navigation.css">
     <link rel="stylesheet" href="assets/css/profil.css">
-    <link rel="stylesheet" href="assets/css/animate.css">
+
+
 </head>
 <body>
 <nav class="navbar navbar-light navbar-expand-md shadow-lg navigation-clean-button" style="background-color: #313437;">
@@ -88,9 +63,9 @@
                         Documents
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="document.php">Afficher la Bibliothèque Publique</a>
-                        <a class="dropdown-item" href="mydocument.php">Afficher ma Bibliothèque Privée</a>
-                        <a class="dropdown-item" href="upload.php">Ajouter un ouvrage</a>
+                        <a class="dropdown-item" href="document.php">Afficher les documents publiques</a>
+                        <a class="dropdown-item" href="mydocument.php">Afficher mes documents</a>
+                        <a class="dropdown-item" href="upload.php">Upload un document</a>
                     </div>
                 </li>
 
@@ -104,13 +79,9 @@
                     </div>
                 </li>
 
-           
 
                 <?php
-
-
                  //Rajout de la barre d'administration si la personne est un administrateur
-
                 if (strcasecmp($_SESSION['droit'], 'admin') == 0){
 
 
@@ -120,7 +91,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                        <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
+                        <a class="dropdown-item" href="affich_docs.php">Afficher les documents des utilisateurs</a>
                         <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
                         <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
                         <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
@@ -137,44 +108,63 @@
         </div>
     </div>
 </nav>
+
+<div align="center">
 <div class="container">
-      <div align="center" style="margin: 150px" class="animated bounceInDown delay-100ms">
-         <h2>Êtes-vous sûrs de vouloir supprimer votre compte ?</h2>
-          <i class="fa fa-user fa-5x"></i></br>
+
+  <h1 style="margin-top: 50px">Liste des utilisateurs</h1>
+    <i class="fa fa-users fa-5x"></i></br>
+
+  	</br>
+  	</br>
+    <table id="example" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+        <tr>
+       <th>Id</th>
+       <th>Pseudo</th>
+       <th>Mail</th>
+       <th>Droit</th>
+   </tr>
+        </thead>
+
+        <tbody>
+   
+      <?php while($m = $membres->fetch()) { ?>
+	      <tr>
+	      	<th><?= $m['id'] ?> </th>
+	      	<th><?= $m['pseudo'] ?></th>
+	      	<th><?= $m['mail'] ?></th>
+          <th><?= $m['droit'] ?></th>
+	       </tr>
+
+      <?php
+  	  }
+  	  ?>
+        </tbody>
+  	</table>
+  	</br>
+  	</br>
 
 
-         <form method="POST" action="" enctype="multipart/form-data">
+</div>
+</div>
 
-         </br>
+<div class="footer">
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 item text">
+                    <h3>ShareBook</h3>
+                    <p>Start-up innovante, ShareBook a pour ambition de rendre la connaissance accessible et universel</p>
+                </div>
 
-         </br>
-             <button type="button" class="btn btn-success"> Oui <input type="radio" class="btn btn-success" name="question" value="oui" id="oui" /></button>
-             <button type="button" class="btn btn-warning"> Non <input type="radio" class="btn btn-success" name="question" value="non" id="non" /></button>
-         </br>
-         </br>
-             <button type="submit" class="btn btn-danger" value="Supprimer le compte" name="formsupp"/>Supprimer le compte</button>
-         </br>
-         </br>
+            </div>
+            <p class="copyright">ShareBook © 2021</p>
+        </div>
+    </footer>
+</div>
 
-         <div>
-                    <input type="checkbox" id="scales" name="scales">
-                            <label for="scales">Supprimer les documents associés à votre compte ? </label>
-
-                    </br>
-
-<!--                     <input type="checkbox" id="scales2" name="scales2">
-                            <label for="scales2">Supprimer les genres associés à votre compte ? </label>
-                    </div> -->
-           <?php
-              if(isset($message)) {
-              echo '<font color="red">'.$message."</font>";
-              }
-            ?>
-            
-         </form>
-      </div>
-      </div>
-   </body>
+</body>
 </html>
 
 <script src="assets/js/jquery.min.js"></script>
@@ -183,3 +173,12 @@
 <script src="assets/js/bs-animation.js"></script>
 <script src="assets/js/bs-charts.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
+<script src="assets/js/jquery-3.3.1.js"></script>
+<script src="assets/js/jquery.dataTables.min.js"></script>
+<script src="assets/js/dataTables.bootstrap4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable();
+    } );
+
+</script>

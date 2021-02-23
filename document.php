@@ -153,7 +153,7 @@ $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxo
                                 <h4>'.$data['Titre'].'</h4>
                                 <p class="text-muted">Auteur : '.$auteur[0].'</p>
                                 <p class="text-muted">Nombre de page : '.$data['Nombre_Pages'].'</p>
-                                <p class="text-muted">Langue : '.$data['Langue'].'</p>
+                                <p class="text-muted">Langue : <img src="./flag/'.$data['Langue'].'.png" height="15" width="20" /></p>
 
                             </div>
                         </div>

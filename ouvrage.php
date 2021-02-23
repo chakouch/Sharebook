@@ -52,6 +52,14 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
        <link rel="stylesheet" href="assets/css/navigation.css">
        <link rel="stylesheet" href="assets/css/profil.css">
        <link rel="stylesheet" href="assets/css/animate.css">
+
+    
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/Team-Boxed.css">
+    <link rel="stylesheet" href="assets/css/navigation.css">
+
+
+
    </head>
    <body>
    <nav class="navbar navbar-light navbar-expand-md shadow-lg navigation-clean-button" style="background-color: #313437;">
@@ -128,61 +136,185 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
    </nav>
    <div class="">
       <div class="animated bounceInDown delay-100ms">
-         <h2 style="margin:50px;">Titre de l'ouvrage : <?php echo $docinfo['Titre']; ?></h2>
-
-          <?php echo '<img class="img-fluid" src="'.$docinfo['Image'].'">'?> 
+       
           <br /><br />
-         Nombres de page : <?php echo $docinfo['Nombre_Pages']; ?>
-         <br />
-         Resume : <?php echo $docinfo['Resume']; ?>
-         <br />
-         Date de Parution : <?php echo $docinfo['Date_Parution']; ?>
-         <br />
-         Langue : <?php echo $docinfo['Langue']; ?>
-         <br />
-         Auteur : 
+        
+     
+   
          <?php 
           $req_auteur = $bdd->prepare('SELECT Nom FROM auteur WHERE ID_Auteur = ?');
           $req_auteur->execute(array($docinfo['ID_Auteur']));
           $auteur = $req_auteur->fetch();
-          echo $auteur[0]; 
+     
          ?> 
-         <br />
-         Genre : 
+      
          <?php 
           $req_genre = $bdd->prepare('SELECT Nom FROM genre WHERE ID_Genre = ?');
           $req_genre->execute(array($docinfo['ID_Genre']));
           $genre = $req_genre->fetch();
-          echo $genre[0]; 
+     
          ?> 
-         <br />
-         Types : 
+       
          <?php 
           $req_types = $bdd->prepare('SELECT Nom FROM types WHERE ID_Types = ?');
           $req_types->execute(array($docinfo['ID_types']));
           $types = $req_types->fetch();
-          echo $types[0]; 
+   
          ?> 
-         <br />  
-          Editeur : 
+     
          <?php 
           $req_editeur = $bdd->prepare('SELECT Nom FROM editeur WHERE ID_Editeur = ?');
           $req_editeur->execute(array($docinfo['ID_Editeur']));
           $editeur = $req_editeur->fetch();
-          echo $editeur[0]; 
+
          ?>        
-         <br />
-          Collection : 
+  
          <?php 
           $req_collection = $bdd->prepare('SELECT Nom FROM collection WHERE ID_Collection = ?');
           $req_collection->execute(array($docinfo['ID_Collection']));
           $collection = $req_collection->fetch();
-          echo $collection[0]; 
+        
          ?> 
 
  
       </div>
    </div>
+
+
+<div class="container-fluid">
+    <h3 class="text-dark mb-4">Titre de l'ouvrage : <?php echo $docinfo['Titre']; ?></h3>
+    <div class="row mb-3">
+
+        <div class="col-lg-4">
+            <div class="card mb-3">
+
+              <div class="card-header py-3">
+            <p class="text-primary m-0 font-weight-bold">Vue miniature</p>
+        </div>
+       
+                <div class="card-body text-center shadow"><?php echo '<img class="img-fluid" src="'.$docinfo['Image'].'" /> ' ?>
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-lg-8">
+            <div class="row mb-3 d-none">
+                <div class="col">
+                    <div class="card text-white bg-primary shadow">
+                        <div class="card-body">
+                            <div class="row mb-2">
+                                <div class="col">
+                                    <p class="m-0">Peformance</p>
+                                    <p class="m-0"><strong>65.2%</strong></p>
+                                </div>
+                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                            </div>
+                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i> 5% since last month</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card text-white bg-success shadow">
+                        <div class="card-body">
+                            <div class="row mb-2">
+                                <div class="col">
+                                    <p class="m-0">Peformance</p>
+                                    <p class="m-0"><strong>65.2%</strong></p>
+                                </div>
+                                <div class="col-auto"><i class="fas fa-rocket fa-2x"></i></div>
+                            </div>
+                            <p class="text-white-50 small m-0"><i class="fas fa-arrow-up"></i> 5% since last month</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="card shadow mb-3">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 font-weight-bold">Infos essentielles</p>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="form-group"><label for="auteur"><strong>Auteur</strong></label></br>
+                                        <?php echo $auteur[0]; ?>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group"><label for="email"><strong>Nombre de pages</strong></label></br><?php echo $docinfo['Nombre_Pages']; ?></div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="form-group"><label for="first_name"><strong>Date de parution</strong></label></br><?php echo $docinfo['Date_Parution']; ?></div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group"><label for="last_name"><strong>Langue</strong></label> </br>
+
+                                          <?php echo '<img src="./flag/'.$docinfo['Langue'].'.png" height="25" width="40" />'; ?>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 font-weight-bold">Détails sur l'oeuvre</p>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="form-group"><label for="address"><strong>Résumé</strong></label></br><?php echo $docinfo['Resume']; ?></div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="form-group"><label for="city"><strong>Genre</strong></label></br><?php echo $genre[0]; ?></div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group"><label for="country"><strong>Type</strong></label></br><?php echo $types[0]; ?></div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group"><label for="country"><strong>Editeur</strong></label></br><?php echo $editeur[0]; ?></div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group"><label for="country"><strong>Collection</strong></label></br><?php echo $collection[0]; ?></div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--     <div class="card shadow mb-5">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 font-weight-bold">Vue complète de l'oeuvre</p>
+        </div>
+        <div class="card-body">
+             <?php echo '<img class="img-fluid" src="'.$docinfo['Image'].'">'?>
+        </div>
+    </div> -->
+</div>
+
+
+<div class="footer">
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 item text">
+                    <h3>ShareBook</h3>
+                    <p>Start-up innovante, ShareBook a pour ambition de rendre la connaissance accessible et universel.</p>
+                </div>
+
+            </div>
+            <p class="copyright">ShareBook © 2021</p>
+        </div>
+    </footer>
+
 
    </body>
 </html>
