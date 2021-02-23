@@ -1,62 +1,45 @@
+
 <?php
     
-   //Permet de garder les variables de la session
-   session_start();
-   require 'includes/connect_db.php';
-   //Permet de récuprer le contenu du fichier connect_db.php 
+    //Permet de garder les variables de la session
+    session_start();
+    //Permet de récuprer le contenu du fichier connect_db.php 
+    require 'includes/connect_db.php';
+    //Connexion à notre base de donnée
+    $bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre', 'root', '');
 
-   $lien = 'Location: deconnexion.php';
-
-//Restrindre l'accés à cette page au personne non connecté
- if(!isset($_SESSION['id'])) {
+    //Restrindre l'accés à cette page au personne non connecté
+    if(!isset($_SESSION['id'])) {
 
          header('Location: errorConnexion.html');
          exit;
       
    }
 
-   if(isset($_POST['formsupp'])) {
+    $user = $_SESSION['pseudo'];
 
-       if(!empty($_POST['question'])){
-            if($_POST['question'] == "non") {
+    //Permet de compter le nombre de document en fonction de sa visibilité
 
-                     $message = '<a href="profil.php">Cliquer ici pour revenir sur votre profil</a>';
-            }
-            elseif ($_POST['question'] == "oui") {
-
-                    //Supprimer la personne
-                     $userid = $_SESSION['id'];
-                     $usrpseudo= $_SESSION['pseudo'];
-                     $req = $db->query('DELETE FROM utilisateur WHERE ID_Utilisateur ="'.$userid.'"');
-                    //Supprimer les documents de l'utilisateur si l'option est cochée
-                     if(!empty($_POST['scales'])){
-                            
-                            $req = $db->query('DELETE FROM documents WHERE ID_Auteur ="'.$usrpseudo.'"');
-                            
-                     }
-                     //Supprimer les genres de l'utilisateur si l'option est cochée
-/*                     if(!empty($_POST['scales2'])){
-                        
-                            $req = $db->query('DELETE FROM genre WHERE pseudo ="'.$usrpseudo.'"');
-                            
-                    }*/
-                     $message = "Compte supprimer ! ";
-                     header($lien);
-            }
-             
-         } else {
-            $message = "Choisiez entre oui ou non";
-         }
-   
-   }
-
+    $reqpublic = $bdd->prepare("SELECT COUNT(*) FROM files WHERE pseudo = ? AND visibilite = 'public'"); 
+    $reqpublic->execute(array($user));
+    $req_public = $reqpublic->fetch();
+  
+    $reqprivate = $bdd->prepare("SELECT COUNT(*) FROM files WHERE pseudo = ? AND visibilite = 'private'"); 
+    $reqprivate->execute(array($user));
+    $req_private = $reqprivate->fetch();
+  
 
 ?>
+
+
+
+
+
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Supprimer votre compte</title>
+    <title>Statistiques document</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
@@ -88,9 +71,9 @@
                         Documents
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="document.php">Afficher la Bibliothèque Publique</a>
-                        <a class="dropdown-item" href="mydocument.php">Afficher ma Bibliothèque Privée</a>
-                        <a class="dropdown-item" href="upload.php">Ajouter un ouvrage</a>
+                        <a class="dropdown-item" href="document.php">Afficher les documents publiques</a>
+                        <a class="dropdown-item" href="mydocument.php">Afficher mes documents</a>
+                        <a class="dropdown-item" href="upload.php">Upload un document</a>
                     </div>
                 </li>
 
@@ -120,7 +103,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                        <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
+                        <a class="dropdown-item" href="affich_docs.php">Afficher les documents des utilisateurs</a>
                         <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
                         <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
                         <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
@@ -130,56 +113,52 @@
 
                 }
                 ?>
-
+          
 
             </ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="deconnexion.php">Déconnexion</a></span>
 
         </div>
     </div>
 </nav>
-<div class="container">
-      <div align="center" style="margin: 150px" class="animated bounceInDown delay-100ms">
-         <h2>Êtes-vous sûrs de vouloir supprimer votre compte ?</h2>
-          <i class="fa fa-user fa-5x"></i></br>
+    <section style="background-image: url(&quot;assets/img/3image.jpg&quot;);">
+        <div class="animated bounceInDown delay-100ms">
+        <h1 class="text-capitalize text-center" data-aos="fade" data-aos-duration="3000" style="color: #ffffff;font-size: 100px;"><strong>Statistiques</strong></h1>
+        <hr style="color: #ffffff;font-size: 27px;background-color: #ffffff;width: 700px;height: 3px;">
+        <p class="text-center" style="color: #f1f7fc;"><strong>Découvrez vos statistiques sur les fichiers que vous avez téléchargé sur votre espace</strong></p>
+        <p class="text-center" style="color: #f1f7fc;"><i class="fa fa-file-o bounce animated" style="font-size: 50px;margin-bottom: 35px;color: rgb(225,197,48);"></i></p>
+        </div>
+    </section>
+
+</br>
+    <section>
+
+         <h3 class="text-center"><strong><em>Statistiques en fonction de la visibilité de vos documents</em></strong></h3>
+        <div data-aos="fade" data-aos-duration="3000" style="margin: 40px;padding: 115px;"><canvas data-bs-chart="{&quot;type&quot;:&quot;bar&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;DOCUMENT PRIVEE&quot;,&quot;DOCUMENT PUBLIC&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;Fréquence&quot;,&quot;backgroundColor&quot;:&quot;#df4e4e&quot;,&quot;borderColor&quot;:&quot;#4e73df&quot;,&quot;data&quot;:[&quot;<?php echo($req_private[0]); ?>&quot;,&quot;<?php echo($req_public[0]); ?>&quot;,&quot;0&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:true,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{}}}"></canvas></div>
 
 
-         <form method="POST" action="" enctype="multipart/form-data">
+    </section>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/chart.min.js"></script>
+    <script src="assets/js/bs-animation.js"></script>
+    <script src="assets/js/bs-charts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
+</body>
 
-         </br>
 
-         </br>
-             <button type="button" class="btn btn-success"> Oui <input type="radio" class="btn btn-success" name="question" value="oui" id="oui" /></button>
-             <button type="button" class="btn btn-warning"> Non <input type="radio" class="btn btn-success" name="question" value="non" id="non" /></button>
-         </br>
-         </br>
-             <button type="submit" class="btn btn-danger" value="Supprimer le compte" name="formsupp"/>Supprimer le compte</button>
-         </br>
-         </br>
+<div class="footer">
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 item text">
+                    <h3>ShareBook</h3>
+                    <p>Start-up innovante, ShareBook a pour ambition de rendre la connaissance accessible et universel</p>
+                </div>
 
-         <div>
-                    <input type="checkbox" id="scales" name="scales">
-                            <label for="scales">Supprimer les documents associés à votre compte ? </label>
+            </div>
+            <p class="copyright">ShareBook © 2021</p>
+        </div>
+    </footer>
+</div>
 
-                    </br>
-
-<!--                     <input type="checkbox" id="scales2" name="scales2">
-                            <label for="scales2">Supprimer les genres associés à votre compte ? </label>
-                    </div> -->
-           <?php
-              if(isset($message)) {
-              echo '<font color="red">'.$message."</font>";
-              }
-            ?>
-            
-         </form>
-      </div>
-      </div>
-   </body>
 </html>
-
-<script src="assets/js/jquery.min.js"></script>
-<script src="assets/bootstrap/js/bootstrap.min.js"></script>
-<script src="assets/js/chart.min.js"></script>
-<script src="assets/js/bs-animation.js"></script>
-<script src="assets/js/bs-charts.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>

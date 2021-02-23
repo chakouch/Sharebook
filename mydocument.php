@@ -6,7 +6,7 @@ session_start();
 require 'includes/connect_db.php';
 
 //Connexion à notre base de donnée
-$bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre;charset=utf8', 'root', '');
+$bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxonpd.eu-central-1.rds.amazonaws.com;dbname=ShareBook', 'sharebookuser', 'uA?BL6P8;t=P-JKl)]Su>L3Gj$[mz0q]');
 //Restrindre l'accés à cette page au personne non connecté
 if(!isset($_SESSION['id'])) {
 
@@ -57,9 +57,9 @@ if(!isset($_SESSION['id'])) {
                         Documents
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="document.php">Afficher les documents publiques</a>
-                        <a class="dropdown-item" href="mydocument.php">Afficher mes documents</a>
-                        <a class="dropdown-item" href="upload.php">Upload un document</a>
+                        <a class="dropdown-item" href="document.php">Afficher la Bibliothèque Publique</a>
+                        <a class="dropdown-item" href="mydocument.php">Afficher ma Bibliothèque Privée</a>
+                        <a class="dropdown-item" href="upload.php">Ajouter un ouvrage</a>
                     </div>
                 </li>
 
@@ -86,7 +86,7 @@ if(!isset($_SESSION['id'])) {
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                        <a class="dropdown-item" href="affich_docs.php">Afficher les documents des utilisateurs</a>
+                        <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
                         <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
                         <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
                         <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
@@ -113,7 +113,6 @@ if(!isset($_SESSION['id'])) {
     <p class="text-center" style="color: #f1f7fc;"><i class="fa fa-file-o bounce animated" style="font-size: 50px;margin-bottom: 35px;color: rgb(225,197,48);"></i></p>
 </div>
 </section>
-
 
 
 <form method="POST" enctype="multipart/form-data" style="margin-top: 50px">

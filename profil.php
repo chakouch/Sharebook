@@ -2,7 +2,7 @@
 //Permet de garder les variables de la session
 session_start();
 //Connexion à notre base de donnée
-$bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre', 'root', '');
+$bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxonpd.eu-central-1.rds.amazonaws.com;dbname=ShareBook', 'sharebookuser', 'uA?BL6P8;t=P-JKl)]Su>L3Gj$[mz0q]');
 
 //Restrindre l'accés à cette page au personne non connecté
  if(!isset($_SESSION['id'])) {
@@ -15,7 +15,7 @@ $bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre', 'root', '');
 //Permet d'obtenir les informations de l'utilisateur actuel
 if(isset($_SESSION['id']) AND $_SESSION['id'] > 0) {
    $getid = intval($_SESSION['id']);
-   $requser = $bdd->prepare('SELECT * FROM membres WHERE id = ?');
+   $requser = $bdd->prepare('SELECT * FROM utilisateur WHERE ID_Utilisateur = ?');
    $requser->execute(array($getid));
    $userinfo = $requser->fetch();
 ?>
@@ -56,9 +56,9 @@ if(isset($_SESSION['id']) AND $_SESSION['id'] > 0) {
                            Documents
                        </a>
                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                           <a class="dropdown-item" href="document.php">Afficher les documents publiques</a>
-                           <a class="dropdown-item" href="mydocument.php">Afficher mes documents</a>
-                           <a class="dropdown-item" href="upload.php">Upload un document</a>
+                           <a class="dropdown-item" href="document.php">Afficher la Bibliothèque Publique</a>
+                           <a class="dropdown-item" href="mydocument.php">Afficher ma Bibliothèque Privée</a>
+                           <a class="dropdown-item" href="upload.php">Ajouter un ouvrage</a>
                        </div>
                    </li>
 
@@ -87,7 +87,7 @@ if(isset($_SESSION['id']) AND $_SESSION['id'] > 0) {
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                        <a class="dropdown-item" href="affich_docs.php">Afficher les documents des utilisateurs</a>
+                        <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
                         <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
                         <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
                         <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
@@ -109,19 +109,25 @@ if(isset($_SESSION['id']) AND $_SESSION['id'] > 0) {
    </nav>
    <div class="profile">
       <div align="center" class="animated bounceInDown delay-100ms">
-         <h2 style="margin:50px;">Profil de <?php echo $userinfo['pseudo']; ?></h2>
+         <h2 style="margin:50px;">Profil de <?php echo $userinfo['Pseudo']; ?></h2>
 
           <i class="fa fa-user fa-5x"></i>
           <br /><br />
-         Pseudo : <?php echo $userinfo['pseudo']; ?>
+         Pseudo : <?php echo $userinfo['Pseudo']; ?>
          <br />
-         Mail : <?php echo $userinfo['mail']; ?>
+         Nom : <?php echo $userinfo['Nom']; ?>
          <br />
-         Droit : <?php echo $userinfo['droit']; ?>
+         Prenom : <?php echo $userinfo['Prenom']; ?>
+         <br />
+         Mail : <?php echo $userinfo['Email']; ?>
+         <br />
+         Numéro de Téléphone : <?php echo $userinfo['Tel']; ?>
+         <br />
+         Droit : <?php echo $userinfo['Roles']; ?>
          <br />
          <br />         
          <?php
-         if(isset($_SESSION['id']) AND $userinfo['id'] == $_SESSION['id']) {
+         if(isset($_SESSION['id']) AND $userinfo['ID_Utilisateur'] == $_SESSION['id']) {
          ?>
          <br />
              <span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="editionprofil.php">Editer mon profil</a></span>
@@ -134,7 +140,12 @@ if(isset($_SESSION['id']) AND $_SESSION['id'] > 0) {
    </div>
 
    </body>
+
+
+
 </html>
+
+
 
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>

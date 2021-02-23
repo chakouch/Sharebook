@@ -1,13 +1,13 @@
 <?php
-    
-   //Permet de garder les variables de la session
-   session_start();
-   require 'includes/connect_db.php';
-   //Permet de récuprer le contenu du fichier connect_db.php 
 
-   $lien = 'Location: deconnexion.php';
+//Permet de garder les variables de la session
+session_start();
+//Connexion à notre base de donnée
+$bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre;charset=utf8', 'root', '');
+$lien = 'Location: modif_utlisateurs_admin.php';
 
 //Restrindre l'accés à cette page au personne non connecté
+
  if(!isset($_SESSION['id'])) {
 
          header('Location: errorConnexion.html');
@@ -15,48 +15,66 @@
       
    }
 
-   if(isset($_POST['formsupp'])) {
 
-       if(!empty($_POST['question'])){
-            if($_POST['question'] == "non") {
 
-                     $message = '<a href="profil.php">Cliquer ici pour revenir sur votre profil</a>';
-            }
-            elseif ($_POST['question'] == "oui") {
+//Restrindre l'accés à cette page au personne qui ne sont pas admin
 
-                    //Supprimer la personne
-                     $userid = $_SESSION['id'];
-                     $usrpseudo= $_SESSION['pseudo'];
-                     $req = $db->query('DELETE FROM utilisateur WHERE ID_Utilisateur ="'.$userid.'"');
-                    //Supprimer les documents de l'utilisateur si l'option est cochée
-                     if(!empty($_POST['scales'])){
-                            
-                            $req = $db->query('DELETE FROM documents WHERE ID_Auteur ="'.$usrpseudo.'"');
-                            
-                     }
-                     //Supprimer les genres de l'utilisateur si l'option est cochée
-/*                     if(!empty($_POST['scales2'])){
+ if (strcasecmp($_SESSION['droit'], 'admin') ==! 0){
+
+         header('Location: errorAdmin.html');
+         exit;
+   }
+
+$membres = $bdd->query('SELECT * FROM membres ORDER BY id DESC LIMIT 0,5');
+
+   if(isset($_POST['formadmin'])) {
+   		
+       if(!empty($_POST['supp_user'])){
+            //Permet de supprimer la personne
+            $user_a_supp = $_POST['supp_user'];
+            $req = $bdd->query('DELETE FROM membres WHERE pseudo ="'.$user_a_supp.'"');
+            //Permet de supprimer les documents de la personne si cette option est choisie
+             if(!empty($_POST['choixsupp'])){
                         
-                            $req = $db->query('DELETE FROM genre WHERE pseudo ="'.$usrpseudo.'"');
+                            $req = $bdd->query('DELETE FROM files WHERE pseudo ="'.$user_a_supp.'"');
                             
-                    }*/
-                     $message = "Compte supprimer ! ";
-                     header($lien);
-            }
+             }
+                //Permet de supprimer les gens de la personne si cette option est choisie
+             if(!empty($_POST['choixsupp2'])){
+                        
+                            $req = $bdd->query('DELETE FROM genre WHERE pseudo ="'.$user_a_supp.'"');
+                            
+             }
+
+            $msg_modif = "Compte supprimé ! ";        
+			   //   header($lien);
              
          } else {
-            $message = "Choisiez entre oui ou non";
+             $msg_modif = "Choisissez une personne";
          }
    
    }
 
-
+   if(isset($_POST['modifuser'])) {
+      
+       if(!empty($_POST['supp_user'])){
+            //Permet de modifier la personne 
+            $user_a_modiff = $_POST['supp_user'];
+            $reqid = $bdd->prepare("SELECT id FROM membres WHERE pseudo = ?");
+            $reqid->execute(array($user_a_modiff));
+            $user_id = $reqid->fetch();
+            header("Location: editionprofiladmin.php?id=".$user_id[0]);  
+         } 
+   
+   }
 ?>
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Supprimer votre compte</title>
+    <title>Modifier le profil des utilisateurs</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
@@ -65,6 +83,8 @@
     <link rel="stylesheet" href="assets/css/navigation.css">
     <link rel="stylesheet" href="assets/css/profil.css">
     <link rel="stylesheet" href="assets/css/animate.css">
+
+
 </head>
 <body>
 <nav class="navbar navbar-light navbar-expand-md shadow-lg navigation-clean-button" style="background-color: #313437;">
@@ -88,9 +108,9 @@
                         Documents
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="document.php">Afficher la Bibliothèque Publique</a>
-                        <a class="dropdown-item" href="mydocument.php">Afficher ma Bibliothèque Privée</a>
-                        <a class="dropdown-item" href="upload.php">Ajouter un ouvrage</a>
+                        <a class="dropdown-item" href="document.php">Afficher les documents publiques</a>
+                        <a class="dropdown-item" href="mydocument.php">Afficher mes documents</a>
+                        <a class="dropdown-item" href="upload.php">Upload un document</a>
                     </div>
                 </li>
 
@@ -104,23 +124,20 @@
                     </div>
                 </li>
 
-           
 
                 <?php
-
-
-                 //Rajout de la barre d'administration si la personne est un administrateur
 
                 if (strcasecmp($_SESSION['droit'], 'admin') == 0){
 
 
+                    //Rajout de la barre d'administration si la personne un administrateur
                     echo '<li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
                         Administration
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                        <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
+                        <a class="dropdown-item" href="affich_docs.php">Afficher les documents des utilisateurs</a>
                         <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
                         <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
                         <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
@@ -137,44 +154,89 @@
         </div>
     </div>
 </nav>
-<div class="container">
-      <div align="center" style="margin: 150px" class="animated bounceInDown delay-100ms">
-         <h2>Êtes-vous sûrs de vouloir supprimer votre compte ?</h2>
-          <i class="fa fa-user fa-5x"></i></br>
+
+<div class="contact">
+<div class="container" >
+<div align="center" class="animated bounceInDown delay-100ms">
 
 
-         <form method="POST" action="" enctype="multipart/form-data">
 
-         </br>
 
-         </br>
-             <button type="button" class="btn btn-success"> Oui <input type="radio" class="btn btn-success" name="question" value="oui" id="oui" /></button>
-             <button type="button" class="btn btn-warning"> Non <input type="radio" class="btn btn-success" name="question" value="non" id="non" /></button>
-         </br>
-         </br>
-             <button type="submit" class="btn btn-danger" value="Supprimer le compte" name="formsupp"/>Supprimer le compte</button>
-         </br>
-         </br>
+ 	<h1>Choisissser un membre</h1>
+	</br>
 
-         <div>
-                    <input type="checkbox" id="scales" name="scales">
-                            <label for="scales">Supprimer les documents associés à votre compte ? </label>
+  	<form method="POST" enctype="multipart/form-data" style="border-radius: 20px 50px 20px 50px;">
+        <i class="fa fa-user fa-5x"></i></br>
 
-                    </br>
+  	<select name="supp_user">
+ 
+		<?php
+		 
+		$reponse = $bdd->query('SELECT * FROM membres WHERE pseudo != "'.$_SESSION['pseudo'].'"');
+		 
+		while ($donnees = $reponse->fetch())
+		{
 
-<!--                     <input type="checkbox" id="scales2" name="scales2">
-                            <label for="scales2">Supprimer les genres associés à votre compte ? </label>
-                    </div> -->
-           <?php
-              if(isset($message)) {
-              echo '<font color="red">'.$message."</font>";
+		?>
+		           <option value="<?php echo $donnees['pseudo']; ?>"> <?php echo $donnees['pseudo']; ?></option>
+		<?php
+		}
+		 
+		?>
+	</select>
+    </br>
+    </br>
+
+
+
+
+        <input type="submit" class="btn btn-danger" name="formadmin" value="Supprimer la personne" style="width: 300px"/></br></br>
+        <input type="submit" class="btn btn-warning" name="modifuser" value="Modifier la personne" style="width: 300px"/>
+        </br>
+
+      </br>
+
+       <input type="checkbox" id="choixsupp" name="choixsupp">
+                            <label for="choixsupp">Supprimer les documents associés au compte ? </label>
+
+        <input type="checkbox" id="choixsupp2" name="choixsupp2">
+                            <label for="choixsupp2">Supprimer les genres associés au compte ? </label>
+                    
+
+          <?php
+          //Permet d'afficher l'erreur
+              if(isset($msg_modif)) {
+              echo '<font color="red">'.$msg_modif."</font>";
               }
-            ?>
-            
-         </form>
-      </div>
-      </div>
-   </body>
+          ?>
+
+
+ 	</form>
+
+
+    </div>
+
+ </br>
+
+</div>
+</div>
+
+<div class="footer">
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 item text">
+                    <h3>ShareBook</h3>
+                    <p>Start-up innovante, ShareBook a pour ambition de rendre la connaissance accessible et universel</p>
+                </div>
+
+            </div>
+            <p class="copyright">ShareBook © 2021</p>
+        </div>
+    </footer>
+</div>
+
+</body>
 </html>
 
 <script src="assets/js/jquery.min.js"></script>
@@ -183,3 +245,12 @@
 <script src="assets/js/bs-animation.js"></script>
 <script src="assets/js/bs-charts.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
+<script src="assets/js/jquery-3.3.1.js"></script>
+<script src="assets/js/jquery.dataTables.min.js"></script>
+<script src="assets/js/dataTables.bootstrap4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable();
+    } );
+
+</script>

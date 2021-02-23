@@ -48,9 +48,9 @@ session_start();
                         Documents
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="document.php">Afficher les documents publiques</a>
-                        <a class="dropdown-item" href="mydocument.php">Afficher mes documents</a>
-                        <a class="dropdown-item" href="upload.php">Upload un document</a>
+                        <a class="dropdown-item" href="document.php">Afficher la Bibliothèque Publique</a>
+                        <a class="dropdown-item" href="mydocument.php">Afficher ma Bibliothèque Privée</a>
+                        <a class="dropdown-item" href="upload.php">Ajouter un ouvrage</a>
                     </div>
                 </li>
 
@@ -79,7 +79,7 @@ session_start();
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                         <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                                        <a class="dropdown-item" href="affich_docs.php">Afficher les documents des utilisateurs</a>
+                                        <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
                                         <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
                                         <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
                                         <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>

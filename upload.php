@@ -6,7 +6,7 @@
     require 'includes/connect_db.php';
     //Connexion à notre base de donnée
 
-    $bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre', 'root', '');
+    $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxonpd.eu-central-1.rds.amazonaws.com;dbname=ShareBook', 'sharebookuser', 'uA?BL6P8;t=P-JKl)]Su>L3Gj$[mz0q]');
 
     //Restrindre l'accés à cette page au personne non connecté
 
@@ -17,40 +17,99 @@
           
        }
 
+
+
     if(isset($_POST['formupload'])) {
-
-        if(!empty($_POST['genre'])){
-
-            if(!empty($_FILES)){
+     if(!empty($_POST['nom_ouvrage'])){
+      if(!empty($_POST['genre'])){
+       if(!empty($_POST['auteur'])){
+        if(!empty($_POST['type'])){ 
+         if(!empty($_POST['editeur'])){ 
+          if(!empty($_POST['collection'])){   
+           if(!empty($_FILES['fichier'])){
                 //Permet de récuperer toutes les informations du document
                 $file_name = $_FILES['fichier']['name'];
                 $file_type = $_FILES['fichier']['type'];
-                $file_extension = strrchr($file_name, ".");
+                $file_extension = strtoupper(strrchr($file_name, "."));
                 $file_tmp_name = $_FILES['fichier']['tmp_name'];
-
                 $file_dest = 'files/'.$file_name;
 
+                if(!empty($_FILES['miniature'])){
+
+                    $miniature_name = $_FILES['miniature']['name'];
+                    $miniature_type = $_FILES['miniature']['type'];
+                    $miniature_extension = strtoupper(strrchr($miniature_name, "."));
+                    $miniature_tmp_name = $_FILES['miniature']['tmp_name'];
+                    $miniature_dest = 'miniatures/'.$miniature_name;
+                }
+            
+
                 $userpseudo = $_SESSION['pseudo'];
+                $id_user = (int)$_SESSION['id'];
 
-                $genre = $_POST['genre'];
-
-                $visibilite = $_POST['visibilite'];
-
+                $nom_ouvrage = $_POST['nom_ouvrage'];
+                $id_genre = $_POST['genre'];
+                $id_auteur = $_POST['auteur'];
+                $id_type = $_POST['type'];
+                $id_editeur = $_POST['editeur'];
+                $id_collection = $_POST['collection'];
+                $resume =  $_POST['resumeouvrage'];
+                $page = intval($_POST['nombredepage']);
+/*                echo $id_genre;
+                echo $id_auteur;
+                echo $id_type;*/
+                echo $id_genre      ;
+                echo '<td>'."\r\n";
+                echo $id_auteur     ;
+                echo '<td>'."\r\n";
+                echo $id_type       ;
+                echo '<td>'."\r\n";
+                echo $id_editeur    ;
+                echo '<td>'."\r\n";
+                echo $id_collection ;
+                echo '<td>'."\r\n";
+                echo $resume        ;
+                echo '<td>'."\r\n";
+                echo $page          ;
+                echo '<td>'."\r\n";
                 setlocale(LC_TIME, 'fra_fra');
                 
                 $date = strftime('%d %B %Y');
                 $heure = strftime('%H:%M:%S'); ;
     
 
-                $extension_autorisees = array('.pdf', '.PDF','.doc','.DOC','.docx','.DOCX','.xlsx','.xlsm','.xlsb');
+                $extension_autorisees_file = array('.PDF', '.BOOK', '.EPUB');
+                $extension_autorisees_miniature = array('.JPEG', '.PNG', '.JPG');
+/*                echo $file_extension;
+                echo $miniature_extension;*/
 
                 //Permet de rajouter le document dans la base de donnée
-                if(in_array($file_extension,$extension_autorisees)){
+                if(in_array($file_extension,$extension_autorisees_file)){
                     if(move_uploaded_file($file_tmp_name, $file_dest)){
+                        
                         $file_extension = strtolower($file_extension);
-                        $req = $db->prepare('INSERT INTO files(name, file_url, pseudo, genre, visibilite, extension, date, heure) VALUES(?,?,?,?,?,?,?,?)');
-                        $req->execute(array($file_name, $file_dest, $userpseudo, $genre, $visibilite, $file_extension, $date, $heure));
+
+                        if(!empty($_FILES['miniature']) AND in_array($miniature_extension,$extension_autorisees_miniature) ){
+                          if(move_uploaded_file($miniature_tmp_name, $miniature_dest)){  
+                            $req = $db->prepare('INSERT INTO documents(Titre, Chemin, Image, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation, Resume, Nombre_Pages ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)');
+                            $req->execute(array($nom_ouvrage, $file_dest, $miniature_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page));
+                            echo "\nPDOStatement::errorInfo():\n";
+                            $arr = $req->errorInfo();
+                            print_r($arr);
+                           } else {
+                              $erreurupload = "Une erreur est survenue lors de l'envoi de la miniature";
+                            }
+
+                        } else {
+                            $req = $bdd->prepare('INSERT INTO documents(Titre, Chemin, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation, Resume, Nombre_Pages) VALUES(?,?,?,?,?,?,?,?,?,?,?)');
+                            $req->execute(array($nom_ouvrage, $file_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page));
+                            echo "\nPDOStatement::errorInfo():\n";
+                            $arr = $req->errorInfo();
+                            print_r($arr);
+                        }
+                        
                         $erreurupload = "Le fichier '$file_name' a bien était upload ! ";
+
                     } else {
                         $erreurupload = "Une erreur est survenue lors de l'envoi du fichier";
                     }
@@ -61,8 +120,26 @@
 
         } else {
             $erreurupload = "rentrer un fichier";
-        }
+        } 
     } else {
+            $erreurupload = "rentrer un auteur";
+        }     
+    } else {
+            $erreurupload = "rentrer un type";
+        } 
+
+    } else {
+            $erreurupload = "rentrer un editeur";
+        } 
+
+     } else {
+            $erreurupload = "rentrer une collection";
+        } 
+    
+    }else {
+        $erreurupload =  "entrée un genre";
+    }
+        }else {
         $erreurupload =  "entrée un genre";
     }
 
@@ -72,9 +149,8 @@
 if(isset($_POST['create_genre'])) {
 
     $genre = $_POST['newgenre'];
-    $insert_genre = $bdd->prepare("INSERT INTO genre(pseudo, genre) VALUES(?, ?)");
-    $insert_genre->execute(array($_SESSION['pseudo'], $genre));
-
+    $insert_genre = $bdd->prepare("INSERT INTO genre(Nom, ID_Utilisateur) VALUES(?, ?)");
+    $insert_genre->execute(array($genre, $_SESSION['pseudo']));
 
     $msg_create_genre = "Votre genre à bien été crée";
 
@@ -119,9 +195,9 @@ if(isset($_POST['create_genre'])) {
                         Documents
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="document.php">Afficher les documents publiques</a>
-                        <a class="dropdown-item" href="mydocument.php">Afficher mes documents</a>
-                        <a class="dropdown-item" href="upload.php">Upload un document</a>
+                        <a class="dropdown-item" href="document.php">Afficher la Bibliothèque Publique</a>
+                        <a class="dropdown-item" href="mydocument.php">Afficher ma Bibliothèque Privée</a>
+                        <a class="dropdown-item" href="upload.php">Ajouter un ouvrage</a>
                     </div>
                 </li>
 
@@ -146,7 +222,7 @@ if(isset($_POST['create_genre'])) {
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                        <a class="dropdown-item" href="affich_docs.php">Afficher les documents des utilisateurs</a>
+                        <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
                         <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
                         <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
                         <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
@@ -174,51 +250,51 @@ if(isset($_POST['create_genre'])) {
         </br>
 
         <form method="POST" enctype="multipart/form-data" style="border-radius: 20px 50px 20px 50px;">
+
             <div class="form-group">
-                <label for="exampleFormControlInput1"><strong>Votre document :</strong></label>
+                <label for="exampleFormControlInput1"><strong>Sélectionner le nom de votre ouvrage :</strong></label>
+                </br>
+
+                <input type="text" class="form-control" id="exampleFormControlInput2" name="nom_ouvrage">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1"><strong>Sélectionner votre ouvrage *:</strong></label>
                 </br>
 
                 <input type="file" class="form-control" id="exampleFormControlInput1" name="fichier">
             </div>
         </br>
 
-       
+        <form method="POST" enctype="multipart/form-data" style="border-radius: 20px 50px 20px 50px;">
             <div class="form-group">
-                <label for="exampleFormControlSelect1"><strong>Sélectionner la visibilité de votre document :</strong></label>
+                <label for="exampleFormControlInput1"><strong>Sélectionner la miniature de votre ouvrage :</strong></label>
                 </br>
 
-                <select class="form-control" id="exampleFormControlSelect1" name="visibilite">
-                    <option value="private">Privée</option>
-                    <option value="public">Public</option>
-                    
-                </select>
+                <input type="file" class="form-control" id="exampleFormControlInput2" name="miniature">
             </div>
-
         </br>
 
-     
+       
+
+        <form method="POST" enctype="multipart/form-data" style="border-radius: 20px 50px 20px 50px;">
             <div class="form-group">
-                <label for="exampleFormControlSelect1"><strong>Sélectionner le genre de votre document :</strong></label>
+                <label for="exampleFormControlInput1"><strong>Sélectionner l'auteur de votre document *:</strong></label>
                 </br>
-
-                <select class="form-control" id="exampleFormControlSelect1" name="genre">
-                    <option value="webbook">Web Book</option>
-                    <option value="devoir">Devoir</option>
-                    <option value="documentperso">Document Personnelle</option>
-
-
+                <select class="form-control" id="exampleFormControlSelect1" name="auteur">
+                
                      <?php
                  
 
-                       $req_reponse = $bdd->prepare('SELECT * FROM genre WHERE pseudo = ?');
-                       $req_reponse->execute(array($_SESSION['pseudo']));
+                       $req_auteur = $bdd->prepare('SELECT * FROM auteur');
+                       $req_auteur->execute(array());
                       
                          
-                        while ($donnees = $req_reponse->fetch())
+                        while ($donnees = $req_auteur->fetch())
                         {
 
                         ?>
-                                   <option value="<?php echo $donnees['genre']; ?>"> <?php echo $donnees['genre']; ?></option>
+                                   <option value="<?php echo $donnees['ID_Auteur']; ?>"> <?php echo $donnees['Nom']; ?></option>
                         <?php
                         }
                          
@@ -226,6 +302,125 @@ if(isset($_POST['create_genre'])) {
                     ?>
                 </select>
             </div>
+    
+            <div class="form-group">
+                <label for="exampleFormControlSelect1"><strong>Sélectionner le genre de votre ouvrage *:</strong></label>
+                </br>
+
+                <select class="form-control" id="exampleFormControlSelect1" name="genre">
+
+                     <?php
+                 
+
+                       $req_genre = $bdd->prepare('SELECT * FROM genre');
+                       $req_genre->execute(array());
+                      
+                         
+                        while ($donnees = $req_genre->fetch())
+                        {
+
+                        ?>
+                                   <option value="<?php echo $donnees['ID_Genre']; ?>"> <?php echo $donnees['Nom']; ?></option>
+                        <?php
+                        }
+                         
+                    
+                    ?>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlSelect1"><strong>Sélectionner le type de votre ouvrage *:</strong></label>
+                </br>
+
+                <select class="form-control" id="exampleFormControlSelect1" name="type">
+
+                     <?php
+                 
+
+                       $req_type = $bdd->prepare('SELECT * FROM types');
+                       $req_type->execute(array());
+                      
+                         
+                        while ($donnees = $req_type->fetch())
+                        {
+
+                        ?>
+                                   <option value="<?php echo $donnees['ID_Types']; ?>"> <?php echo $donnees['Nom']; ?></option>
+                        <?php
+                        }
+                         
+                    
+                    ?>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlSelect1"><strong>Sélectionner l'editeur de votre ouvrage *:</strong></label>
+                </br>
+
+                <select class="form-control" id="exampleFormControlSelect1" name="editeur">
+
+                     <?php
+                 
+
+                       $req_editeur = $bdd->prepare('SELECT * FROM editeur');
+                       $req_editeur->execute(array());
+                      
+                         
+                        while ($donnees = $req_editeur->fetch())
+                        {
+
+                        ?>
+                                   <option value="<?php echo $donnees['ID_Editeur']; ?>"> <?php echo $donnees['Nom']; ?></option>
+                        <?php
+                        }
+                         
+                    
+                    ?>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlSelect1"><strong>Sélectionner la collection de votre ouvrage *:</strong></label>
+                </br>
+
+                <select class="form-control" id="exampleFormControlSelect1" name="collection">
+
+                     <?php
+                 
+
+                       $req_collection = $bdd->prepare('SELECT * FROM collection');
+                       $req_collection->execute(array());
+                      
+                         
+                        while ($donnees = $req_collection->fetch())
+                        {
+
+                        ?>
+                                   <option value="<?php echo $donnees['ID_Collection']; ?>"> <?php echo $donnees['Nom']; ?></option>
+                        <?php
+                        }
+                         
+                    
+                    ?>
+                </select>
+            </div>
+
+            <label for="exampleFormControlSelect1"><strong>Ecrire le résumé de votre ouvrage :</strong></label>
+                        </br>
+
+             <form method="POST"> 
+                  <input type="text" class="form-control" id="exampleFormControlSelect1" value = "Rentre le résumé de votre ouvrage" name="resumeouvrage">
+
+            </br>
+
+            <label for="exampleFormControlSelect1"><strong>Rentrer le nombre de page :</strong></label>
+            </br>
+
+                <input type="number" class="form-control" id="exampleFormControlSelect1" value = "Rentre le nomre de pagae" name="nombredepage">
+
+            </br>
 
              <input type="submit" value="Envoyer le fichier" name="formupload"/>
 
@@ -239,10 +434,10 @@ if(isset($_POST['create_genre'])) {
             </br>
 
 
-            <label for="exampleFormControlSelect1"><strong>Créer un nouveau genre :</strong></label>
+            <label for="exampleFormControlSelect1"><strong>Créer un nouveau genre *:</strong></label>
                         </br>
 
-             <form method="POST"> 
+
                   <input type="text" class="form-control" id="exampleFormControlSelect1" value = "Rentre le nouveau genre" name="newgenre">
                  </br>
                  <input type="submit" value="Créer le genre" name="create_genre"/>
@@ -255,7 +450,8 @@ if(isset($_POST['create_genre'])) {
               }
             ?>
 
-           
+            
+
 
 
             </br>

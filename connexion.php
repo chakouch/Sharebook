@@ -2,7 +2,7 @@
 //Permet de garder les variables de la session
 session_start();
 //Connexion base de données
-$bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre', 'root', ''); 
+$bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxonpd.eu-central-1.rds.amazonaws.com;dbname=ShareBook', 'sharebookuser', 'uA?BL6P8;t=P-JKl)]Su>L3Gj$[mz0q]');
 
 //Récuperer les variables du formulaire formconnexion
 if(isset($_POST['formconnexion'])) {
@@ -18,19 +18,22 @@ if(isset($_POST['formconnexion'])) {
 
 //Vérificatoin de l'existance de la personne et de ces informations de connexion
    if(!empty($pseudoconnect) AND !empty($mdpconnect)) {
-      $requser = $bdd->prepare("SELECT * FROM membres WHERE pseudo = ? AND motdepasse = ?");
+      $requser = $bdd->prepare("SELECT * FROM utilisateur WHERE Pseudo = ? AND Mdp = ?");
       $requser->execute(array($pseudoconnect, $mdpconnect));
       $userexist = $requser->rowCount();
       if($userexist == 1) {
          $userinfo = $requser->fetch();
-         $_SESSION['id'] = $userinfo['id'];
-         $_SESSION['pseudo'] = $userinfo['pseudo'];
-         $_SESSION['mail'] = $userinfo['mail'];
-         $_SESSION['droit'] = $userinfo['droit'];
+         $_SESSION['id'] = $userinfo['ID_Utilisateur'];
+         $_SESSION['pseudo'] = $userinfo['Pseudo'];
+         $_SESSION['nom'] = $userinfo['Nom'];
+         $_SESSION['prenom'] = $userinfo['Prenom'];
+         $_SESSION['mail'] = $userinfo['Email'];
+         $_SESSION['tel'] = $userinfo['Tel'];
+         $_SESSION['droit'] = $userinfo['Roles'];
          header("Location: profil.php?id=".$_SESSION['id']);
       } else {
          
-              $requserverif = $bdd->prepare("SELECT * FROM membres WHERE pseudo = ?");
+              $requserverif = $bdd->prepare("SELECT * FROM utilisateur WHERE Pseudo = ?");
               $requserverif->execute(array($pseudoconnect));
               $userexistverif = $requserverif->rowCount(); 
 
@@ -105,7 +108,7 @@ if(isset($_POST['formconnexion'])) {
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                         <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                                        <a class="dropdown-item" href="affich_docs.php">Afficher les documents des utilisateurs</a>
+                                        <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
                                         <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
                                         <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
                                         <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>

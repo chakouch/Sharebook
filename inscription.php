@@ -1,28 +1,33 @@
 <?php
 //Connexion à notre base de donnée
-$bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre', 'root', '');
+$bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxonpd.eu-central-1.rds.amazonaws.com;dbname=ShareBook', 'sharebookuser', 'uA?BL6P8;t=P-JKl)]Su>L3Gj$[mz0q]');
 
 if(isset($_POST['forminscription'])) {
   //Permet de récuperer les variables du formulaire
    $pseudo = htmlspecialchars($_POST['pseudo']);
+   $nom = htmlspecialchars($_POST['nom']);
+   $prenom = htmlspecialchars($_POST['prenom']);
    $mail = htmlspecialchars($_POST['mail']);
    $mail2 = htmlspecialchars($_POST['mail2']);
+   $tel = htmlspecialchars($_POST['tel']);
+   $date_naissance = htmlspecialchars($_POST['date_naissance']);
    $mdp = sha1($_POST['mdp']);
    $mdp2 = sha1($_POST['mdp2']);
    $droit = "aucun";
+   $date_de_creation = date("Y-m-d H:i:s");
    //Permet de rajouter la personne dans la basse de donnée
    if(!empty($_POST['pseudo']) AND !empty($_POST['mail']) AND !empty($_POST['mail2']) AND !empty($_POST['mdp']) AND !empty($_POST['mdp2'])) {
       $pseudolength = strlen($pseudo);
       if($pseudolength <= 255) {
          if($mail == $mail2) {
             if(filter_var($mail, FILTER_VALIDATE_EMAIL)) {
-               $reqpseudo = $bdd->prepare("SELECT * FROM membres WHERE pseudo = ?");
+               $reqpseudo = $bdd->prepare("SELECT * FROM utilisateur WHERE Pseudo = ?");
                $reqpseudo->execute(array($pseudo));
                $pseudoexist = $reqpseudo->rowCount();
                if($pseudoexist == 0) {
                   if($mdp == $mdp2) {
-                     $insertmbr = $bdd->prepare("INSERT INTO membres(pseudo, mail, motdepasse,droit) VALUES(?, ?, ?, ?)");
-                     $insertmbr->execute(array($pseudo, $mail, $mdp, $droit));
+                     $insertmbr = $bdd->prepare("INSERT INTO utilisateur(Pseudo, Nom, Prenom, Email, Tel, Date_Naissance, Date_de_creation, Mdp,Roles) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                     $insertmbr->execute(array($pseudo, $nom, $prenom, $mail, $tel, $date_naissance, $date_de_creation, $mdp, $droit));
                      $erreur = "Votre compte a bien été créé ! <a href=\"connexion.php\">Me connecter</a>";
 					 
                   } else {
@@ -97,7 +102,7 @@ if(isset($_POST['forminscription'])) {
 
 
 <div class="login">
-    <form method="POST" style="margin-top:-50px" action="">
+    <form method="POST" style="margin-top:50px" action="">
         <h1>ShareBook</h1>
         <img src="assets/img/logo.png" style="margin-left:center" alt="logo"><br/>
         <h2 class="sr-only">Connexion</h2>
@@ -107,6 +112,23 @@ if(isset($_POST['forminscription'])) {
 
 
             <input class="form-control" type="text" placeholder="Votre Pseudo" id="pseudo" name="pseudo" value="<?php if(isset($pseudo)) { echo $pseudo; } ?>" />
+
+
+        </div>
+
+
+        <div class="form-group">
+
+
+            <input class="form-control" type="text" placeholder="Votre Nom" id="nom" name="nom" value="<?php if(isset($nom)) { echo $nom; } ?>" />
+
+
+        </div>
+
+        <div class="form-group">
+
+
+            <input class="form-control" type="text" placeholder="Votre Prenom" id="prenom" name="prenom" value="<?php if(isset($prenom)) { echo $prenom; } ?>" />
 
 
         </div>
@@ -124,6 +146,24 @@ if(isset($_POST['forminscription'])) {
             <input class="form-control" type="email" placeholder="Confirmez votre mail" id="mail2" name="mail2" value="<?php if(isset($mail2)) { echo $mail2; } ?>" />
 
         </div>
+
+        <div class="form-group">
+
+
+
+            <input class="form-control"  type="tel" placeholder="Votre Numéro de Téléphone" id="tel" name="tel" value="<?php if(isset($tel)) { echo $tel; } ?>" />
+
+        </div>
+
+        <div class="form-group">
+
+
+
+            <input class="form-control"  type="date" placeholder="Votre Date de Naissance" id="date_naissance" name="date_naissance" value="<?php if(isset($date_naissance)) { echo $date_naissance; } ?>" />
+
+        </div>
+
+
 
         <div class="form-group">
             <input class="form-control" type="password" placeholder="Votre Mot de Passe" id="mdp" name="mdp" />
