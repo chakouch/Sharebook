@@ -78,7 +78,7 @@ if(isset($_SESSION['id']) AND $_SESSION['id'] > 0) {
 
                 //Rajout de la barre d'administration si la personne un administrateur
 
-                if (strcasecmp($_SESSION['droit'], 'admin') == 0){
+                if (strcasecmp($_SESSION['Roles'], 'admin') == 0){
 
 
                     echo '<li class="nav-item dropdown">

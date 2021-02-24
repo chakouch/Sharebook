@@ -94,9 +94,9 @@
                           if(move_uploaded_file($miniature_tmp_name, $miniature_dest)){  
                             $req = $db->prepare('INSERT INTO documents(Titre, Chemin, Image, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation, Resume, Nombre_Pages, Langue) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)');
                             $req->execute(array($nom_ouvrage, $file_dest, $miniature_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page, $langue));
-                            echo "\nPDOStatement::errorInfo():\n";
+   /*                         echo "\nPDOStatement::errorInfo():\n";
                             $arr = $req->errorInfo();
-                            print_r($arr);
+                            print_r($arr);*/
                            } else {
                               $erreurupload = "Une erreur est survenue lors de l'envoi de la miniature";
                             }
@@ -104,9 +104,9 @@
                         } else {
                             $req = $bdd->prepare('INSERT INTO documents(Titre, Chemin, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation, Resume, Nombre_Pages, Langue) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)');
                             $req->execute(array($nom_ouvrage, $file_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page, $langue));
-                            echo "\nPDOStatement::errorInfo():\n";
+/*                            echo "\nPDOStatement::errorInfo():\n";
                             $arr = $req->errorInfo();
-                            print_r($arr);
+                            print_r($arr);*/
                         }
                         
                         $erreurupload = "Le fichier '$file_name' a bien était upload ! ";
@@ -214,7 +214,7 @@ if(isset($_POST['create_genre'])) {
 
                 <?php
                  //Rajout de la barre d'administration si la personne est un administrateur
-                if (strcasecmp($_SESSION['droit'], 'admin') == 0){
+                if (strcasecmp($_SESSION['Roles'], 'admin') == 0){
 
 
                     echo '<li class="nav-item dropdown">

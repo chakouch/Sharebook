@@ -80,7 +80,7 @@ $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxo
                 <?php
                  //Rajout de la barre d'administration si la personne un administrateur
 
-                if (strcasecmp($_SESSION['droit'], 'admin') == 0){
+                if (strcasecmp($_SESSION['Roles'], 'admin') == 0){
 
 
                     echo '<li class="nav-item dropdown">
@@ -143,6 +143,11 @@ $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxo
                         $req_auteur->execute(array($data['ID_Auteur']));
                         $auteur = $req_auteur->fetch();
 
+                        $req_langue = $bdd->prepare('SELECT Nom_Court FROM langues WHERE ID_Langue = ?');
+                        $req_langue->execute(array($data['ID_Langue']));
+                        $langue = $req_langue->fetch();
+
+
                         echo '
                         <div class="col-sm-6 col-md-4 portfolio-item">
                             <a class="portfolio-link" href="ouvrage.php?id='.$data['ID_Document'].'" >
@@ -153,7 +158,7 @@ $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxo
                                 <h4>'.$data['Titre'].'</h4>
                                 <p class="text-muted">Auteur : '.$auteur[0].'</p>
                                 <p class="text-muted">Nombre de page : '.$data['Nombre_Pages'].'</p>
-                                <p class="text-muted">Langue : <img src="./flag/'.$data['Langue'].'.png" height="15" width="20" /></p>
+                                <p class="text-muted">Langue : <img src="./flag/'.$langue[0].'.png" height="15" width="20" /></p>
 
                             </div>
                         </div>

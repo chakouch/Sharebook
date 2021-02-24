@@ -29,7 +29,7 @@ if(isset($_POST['formconnexion'])) {
          $_SESSION['prenom'] = $userinfo['Prenom'];
          $_SESSION['mail'] = $userinfo['Email'];
          $_SESSION['tel'] = $userinfo['Tel'];
-         $_SESSION['droit'] = $userinfo['Roles'];
+         $_SESSION['Roles'] = $userinfo['Roles'];
          header("Location: profil.php?id=".$_SESSION['id']);
       } else {
          
@@ -98,8 +98,8 @@ if(isset($_POST['formconnexion'])) {
 
                 <?php
                 //Rajout de la barre d'administration si la personne un administrateur
-                if(isset($_SESSION['droit'])) {
-                    if (strcasecmp($_SESSION['droit'], 'admin') == 0){
+                if(isset($_SESSION['Roles'])) {
+                    if (strcasecmp($_SESSION['Roles'], 'admin') == 0){
 
 
                         echo '<li class="nav-item dropdown">

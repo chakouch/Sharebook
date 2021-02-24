@@ -3,9 +3,9 @@
 //Permet de garder les variables de la session
 session_start();
 //Connexion à notre base de donnée
-$bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre;charset=utf8', 'root', '');
+  $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxonpd.eu-central-1.rds.amazonaws.com;dbname=ShareBook', 'sharebookuser', 'uA?BL6P8;t=P-JKl)]Su>L3Gj$[mz0q]');
 //Permet de récupere les informations des utilisateurs
-$membres = $bdd->query('SELECT * FROM membres ORDER BY id DESC LIMIT 0,5');
+$membres = $bdd->query('SELECT * FROM utilisateur ORDER BY ID_Utilisateur DESC LIMIT 0,5');
 
 //Restrindre l'accés à cette page au personne non connecté
  if(!isset($_SESSION['id'])) {
@@ -15,7 +15,7 @@ $membres = $bdd->query('SELECT * FROM membres ORDER BY id DESC LIMIT 0,5');
 
    }
 //Restrindre l'accés à cette page au personne qui ne sont pas administrateur
- if (strcasecmp($_SESSION['droit'], 'admin') ==! 0){
+ if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0){
 
          header('Location: errorAdmin.html');
          exit;
@@ -82,7 +82,7 @@ $membres = $bdd->query('SELECT * FROM membres ORDER BY id DESC LIMIT 0,5');
 
                 <?php
                  //Rajout de la barre d'administration si la personne est un administrateur
-                if (strcasecmp($_SESSION['droit'], 'admin') == 0){
+                if (strcasecmp($_SESSION['Roles'], 'admin') == 0){
 
 
                     echo '<li class="nav-item dropdown">
@@ -122,7 +122,12 @@ $membres = $bdd->query('SELECT * FROM membres ORDER BY id DESC LIMIT 0,5');
         <tr>
        <th>Id</th>
        <th>Pseudo</th>
+       <th>Nom</th>
+       <th>Prenom</th>
        <th>Mail</th>
+       <th>Téléphone</th>
+       <th>Date de naissance</th>
+       <th>Date de création</th>
        <th>Droit</th>
    </tr>
         </thead>
@@ -131,10 +136,15 @@ $membres = $bdd->query('SELECT * FROM membres ORDER BY id DESC LIMIT 0,5');
    
       <?php while($m = $membres->fetch()) { ?>
 	      <tr>
-	      	<th><?= $m['id'] ?> </th>
-	      	<th><?= $m['pseudo'] ?></th>
-	      	<th><?= $m['mail'] ?></th>
-          <th><?= $m['droit'] ?></th>
+	      	<th><?= $m['ID_Utilisateur'] ?> </th>
+          <th><?= $m['Pseudo'] ?></th>
+	      	<th><?= $m['Nom'] ?></th>
+	      	<th><?= $m['Prenom'] ?></th>
+          <th><?= $m['Email'] ?></th>
+          <th><?= $m['Tel'] ?></th>
+          <th><?= $m['Date_Naissance'] ?></th>
+          <th><?= $m['Date_de_creation'] ?></th>
+          <th><?= $m['Roles'] ?></th>
 	       </tr>
 
       <?php

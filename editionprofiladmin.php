@@ -4,8 +4,7 @@
 session_start();
 
 //Connexion à notre base de donnée
-$bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre', 'root', '');
-
+$bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxonpd.eu-central-1.rds.amazonaws.com;dbname=ShareBook', 'sharebookuser', 'uA?BL6P8;t=P-JKl)]Su>L3Gj$[mz0q]');
 //Restrindre l'accés à cette page au personne non connecté
 
  if(!isset($_SESSION['id'])) {
@@ -18,7 +17,7 @@ $bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre', 'root', '');
 
 //Restrindre l'accés à cette page au personne qui ne sont pas Admin
 
- if (strcasecmp($_SESSION['droit'], 'admin') ==! 0){
+ if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0){
 
          header('Location: errorAdmin.html');
          exit;
@@ -26,27 +25,27 @@ $bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre', 'root', '');
    }
       
 if(isset($_GET['id'])) {
-   $requser = $bdd->prepare("SELECT * FROM membres WHERE id = ?");
+   $requser = $bdd->prepare("SELECT * FROM utilisateur WHERE ID_Utilisateur = ?");
    $requser->execute(array($_GET['id']));
    $user = $requser->fetch();
    //Permet de changer le pseudo
    if(isset($_POST['newpseudo']) AND !empty($_POST['newpseudo']) AND $_POST['newpseudo'] != $user['pseudo']) {
       $newpseudo = htmlspecialchars($_POST['newpseudo']);
-      $insertpseudo = $bdd->prepare("UPDATE membres SET pseudo = ? WHERE id = ?");
+      $insertpseudo = $bdd->prepare("UPDATE utilisateur SET Pseudo = ? WHERE ID_Utilisateur = ?");
       $insertpseudo->execute(array($newpseudo, $_GET['id']));
       header('Location: editionprofiladmin.php?id='.$_GET['id']);
    }
    //Permet de changer le mail
    if(isset($_POST['newmail']) AND !empty($_POST['newmail']) AND $_POST['newmail'] != $user['mail']) {
       $newmail = htmlspecialchars($_POST['newmail']);
-      $insertmail = $bdd->prepare("UPDATE membres SET mail = ? WHERE id = ?");
+      $insertmail = $bdd->prepare("UPDATE utilisateur SET Email = ? WHERE ID_Utilisateur = ?");
       $insertmail->execute(array($newmail, $_GET['id']));
       header('Location: editionprofiladmin.php?id='.$_GET['id']);
    }
    //Permet de changer le droit
     if(isset($_POST['droit']) AND !empty($_POST['droit']) AND $_POST['droit'] != $user['droit']) {
       $newdroit = htmlspecialchars($_POST['droit']);
-      $insertdroit = $bdd->prepare("UPDATE membres SET droit = ? WHERE id = ?");
+      $insertdroit = $bdd->prepare("UPDATE utilisateur SET Roles = ? WHERE ID_Utilisateur = ?");
       $insertdroit->execute(array($newdroit, $_GET['id']));
       header('Location: editionprofiladmin.php?id='.$_GET['id']);
    }
@@ -55,7 +54,7 @@ if(isset($_GET['id'])) {
       $mdp1 = sha1($_POST['newmdp1']);
       $mdp2 = sha1($_POST['newmdp2']);
       if($mdp1 == $mdp2) {
-         $insertmdp = $bdd->prepare("UPDATE membres SET motdepasse = ? WHERE id = ?");
+         $insertmdp = $bdd->prepare("UPDATE utilisateur SET Mdp = ? WHERE ID_Utilisateur = ?");
          $insertmdp->execute(array($mdp1, $_GET['id']));
          header('Location: editionprofiladmin.php?id='.$_GET['id']);
       } else {
@@ -124,7 +123,7 @@ if(isset($_GET['id'])) {
 
                 //Rajout de la barre d'administration si la personne un administrateur
 
-                if (strcasecmp($_SESSION['droit'], 'admin') == 0){
+                if (strcasecmp($_SESSION['Roles'], 'admin') == 0){
 
 
                     echo '<li class="nav-item dropdown">
@@ -162,15 +161,15 @@ if(isset($_GET['id'])) {
             <form method="POST" action="" enctype="multipart/form-data" style="border-radius: 50px">
                 <h2>Edition de mon profil</h2>
 
-                <div class="form-group"><input class="form-control" type="text" name="newpseudo" placeholder="Pseudo" value="<?php echo $user['pseudo']; ?>" /></div>
-                <div class="form-group"><input class="form-control" type="text" name="newmail" placeholder="Mail" value="<?php echo $user['mail']; ?>" /></div>
+                <div class="form-group"><input class="form-control" type="text" name="newpseudo" placeholder="Pseudo" value="<?php echo $user['Pseudo']; ?>" /></div>
+                <div class="form-group"><input class="form-control" type="text" name="newmail" placeholder="Mail" value="<?php echo $user['Email']; ?>" /></div>
                 <div class="form-group"><input class="form-control" type="password" name="newmdp1" placeholder="Mot de passe"/></div>
                 <div class="form-group"><input class="form-control" type="password" name="newmdp2" placeholder="Confirmation du mot de passe" /></div>
 
                <?php
                       //Permet de récuperer de d'afficher le droit de la personne
                      $droit = $_GET['id'];
-                     $reqid = $bdd->prepare("SELECT droit FROM membres WHERE id = ?");
+                     $reqid = $bdd->prepare("SELECT Roles FROM utilisateur WHERE ID_Utilisateur = ?");
                      $reqid->execute(array($droit));
                      $droit = $reqid->fetch();
              

@@ -17,7 +17,7 @@ if(!isset($_SESSION['id'])) {
 }
 
 //Restrindre l'accés à cette page au personne qui ne sont pas administrateur
-if (strcasecmp($_SESSION['droit'], 'admin') ==! 0){
+if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0){
 
          header('Location: errorAdmin.html');
          exit;    
@@ -200,7 +200,7 @@ if (strcasecmp($_SESSION['droit'], 'admin') ==! 0){
 
                 <?php
                  //Rajout de la barre d'administration si la personne est un administrateur
-                if (strcasecmp($_SESSION['droit'], 'admin') == 0){
+                if (strcasecmp($_SESSION['Roles'], 'admin') == 0){
 
 
                     echo '<li class="nav-item dropdown">
