@@ -21,7 +21,7 @@
 
     if(isset($_POST['formupload'])) {
      if(!empty($_POST['nom_ouvrage'])){
-      if(!empty($_POST['genre'])){
+      if(!empty($_POST['genre1'])){
        if(!empty($_POST['auteur'])){
         if(!empty($_POST['type'])){ 
          if(!empty($_POST['editeur'])){ 
@@ -48,7 +48,19 @@
                 $id_user = (int)$_SESSION['id'];
 
                 $nom_ouvrage = $_POST['nom_ouvrage'];
-                $id_genre = $_POST['genre'];
+
+                $ids_genre_upload = array();
+
+                if(!empty($_POST['genre1'])){
+                   array_push($ids_genre_upload, $_POST['genre1']);
+                }
+                if(!empty($_POST['genre2'])){
+                   array_push($ids_genre_upload, $_POST['genre2']);
+                }
+                if(!empty($_POST['genre3'])){
+                   array_push($ids_genre_upload, $_POST['genre3']);
+                }
+
                 $id_auteur = $_POST['auteur'];
                 $id_type = $_POST['type'];
                 $id_editeur = $_POST['editeur'];
@@ -59,8 +71,7 @@
 /*                echo $id_genre;
                 echo $id_auteur;
                 echo $id_type;*/
-                echo $id_genre      ;
-                echo '<td>'."\r\n";
+
                 echo $id_auteur     ;
                 echo '<td>'."\r\n";
                 echo $id_type       ;
@@ -92,21 +103,21 @@
 
                         if(!empty($_FILES['miniature']) AND in_array($miniature_extension,$extension_autorisees_miniature) ){
                           if(move_uploaded_file($miniature_tmp_name, $miniature_dest)){  
-                            $req = $db->prepare('INSERT INTO documents(Titre, Chemin, Image, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation, Resume, Nombre_Pages, Langue) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)');
-                            $req->execute(array($nom_ouvrage, $file_dest, $miniature_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page, $langue));
-   /*                         echo "\nPDOStatement::errorInfo():\n";
+                            $req = $db->prepare('INSERT INTO documents(Titre, Chemin, Image, ID_Auteur, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, Resume, Nombre_Pages, ID_Langue) VALUES(?,?,?,?,?,?,?,?,?,?,?)');
+                            $req->execute(array($nom_ouvrage, $file_dest, $miniature_dest, $id_auteur, $id_type, $id_user, $id_editeur, $id_collection, $resume, $page, $langue));
+                            echo "\nPDOStatement::errorInfo():\n";
                             $arr = $req->errorInfo();
-                            print_r($arr);*/
+                            print_r($arr);
                            } else {
                               $erreurupload = "Une erreur est survenue lors de l'envoi de la miniature";
                             }
 
                         } else {
-                            $req = $bdd->prepare('INSERT INTO documents(Titre, Chemin, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation, Resume, Nombre_Pages, Langue) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)');
-                            $req->execute(array($nom_ouvrage, $file_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page, $langue));
-/*                            echo "\nPDOStatement::errorInfo():\n";
+                            $req = $bdd->prepare('INSERT INTO documents(Titre, Chemin, ID_Auteur, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, Resume, Nombre_Pages, ID_Langue) VALUES(?,?,?,?,?,?,?,?,?,?)');
+                            $req->execute(array($nom_ouvrage, $file_dest, $id_auteur, $id_type, $id_user, $id_editeur, $id_collection, $resume, $page, $langue));
+                            echo "\nPDOStatement::errorInfo():\n";
                             $arr = $req->errorInfo();
-                            print_r($arr);*/
+                            print_r($arr);
                         }
                         
                         $erreurupload = "Le fichier '$file_name' a bien était upload ! ";
@@ -146,6 +157,26 @@
 
 }
 
+
+$req_titre = $bdd->prepare('SELECT Titre FROM documents');
+$req_titre->execute(array());
+$titre_bdd = $req_titre->fetchAll();
+
+
+$titre_list = array();
+foreach($titre_bdd as $result) { 
+//  echo $result['ID_Document'], '<br>'; 
+  array_push($titre_list, $result[0]);
+}
+echo '<br>';
+echo end($titre_list);
+
+/*foreach($ids_genre_upload as $result) { 
+    
+   $insert_genre_litteraire = $bdd->prepare("INSERT INTO genre_Documents(ID_Document, ID_Genre) VALUES(?, ?)");
+   $insert_genre_litteraire->execute(array($genre, $_SESSION['pseudo']));
+}
+*/
 //Permet de rajouter un genre dans la base de donnée
 if(isset($_POST['create_genre'])) {
 
@@ -305,15 +336,56 @@ if(isset($_POST['create_genre'])) {
             </div>
     
             <div class="form-group">
-                <label for="exampleFormControlSelect1"><strong>Sélectionner le genre de votre ouvrage *:</strong></label>
+                <label for="exampleFormControlSelect1"><strong>Sélectionner le ou les genres de votre ouvrage *:</strong></label>
                 </br>
 
-                <select class="form-control" id="exampleFormControlSelect1" name="genre">
+                <select class="form-control" id="exampleFormControlSelect1" name="genre1">
 
                      <?php
                  
 
-                       $req_genre = $bdd->prepare('SELECT * FROM genre');
+                       $req_genre = $bdd->prepare('SELECT * FROM genre_litteraire');
+                       $req_genre->execute(array());
+                      
+                         
+                        while ($donnees = $req_genre->fetch())
+                        {
+
+                        ?>
+                                   <option value="<?php echo $donnees['ID_Genre']; ?>"> <?php echo $donnees['Nom']; ?></option>
+                        <?php
+                        }
+                         
+                    
+                    ?>
+                </select>
+
+                <select class="form-control" id="exampleFormControlSelect1" name="genre2">
+
+                     <?php
+                 
+
+                       $req_genre = $bdd->prepare('SELECT * FROM genre_litteraire');
+                       $req_genre->execute(array());
+                      
+                         
+                        while ($donnees = $req_genre->fetch())
+                        {
+
+                        ?>
+                                   <option value="<?php echo $donnees['ID_Genre']; ?>"> <?php echo $donnees['Nom']; ?></option>
+                        <?php
+                        }
+                         
+                    
+                    ?>
+                </select>
+                <select class="form-control" id="exampleFormControlSelect1" name="genre3">
+
+                     <?php
+                 
+
+                       $req_genre = $bdd->prepare('SELECT * FROM genre_litteraire');
                        $req_genre->execute(array());
                       
                          
@@ -337,10 +409,20 @@ if(isset($_POST['create_genre'])) {
 
                 <select class="form-control" id="exampleFormControlSelect1" name="langue">
 
-                    <option value="FR">Français</option>
-                    <option value="ES">Espagnol</option>
-                    <option value="DE">Allemand</option>
-                    <option value="GB">Anglais</option>
+                     <?php
+                 
+                       $req_langue = $bdd->prepare('SELECT * FROM langues');
+                       $req_langue->execute(array());
+                      
+                         
+                        while ($donnees = $req_langue->fetch())
+                        {
+                    
+                                   echo '<option value="'.$donnees['ID_Langue'].'">'.$donnees['Nom_long'].'</option>';
+      
+                        }
+                    ?>
+
                 </select>
             </div>
 

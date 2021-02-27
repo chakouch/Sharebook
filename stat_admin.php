@@ -2,7 +2,7 @@
 //Permet de garder les variables de la session
 session_start();
 //Connexion à notre base de donnée
-$bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre;charset=utf8', 'root', '');
+$bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxonpd.eu-central-1.rds.amazonaws.com;dbname=ShareBook', 'sharebookuser', 'uA?BL6P8;t=P-JKl)]Su>L3Gj$[mz0q]');
 
 //Permet de recuperer les pseudo et le nombre de document qu'a cette utilisateur
 $membres = $bdd->query('SELECT DISTINCT pseudo, COUNT(pseudo) as total FROM files GROUP BY pseudo');
