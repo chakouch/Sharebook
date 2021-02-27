@@ -3,8 +3,7 @@
 //Permet de garder les variables de la session
 session_start();
 //Connexion à notre base de donnée
-$bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre;charset=utf8', 'root', '');
-$lien = 'Location: modif_utlisateurs_admin.php';
+$bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxonpd.eu-central-1.rds.amazonaws.com;dbname=ShareBook', 'sharebookuser', 'uA?BL6P8;t=P-JKl)]Su>L3Gj$[mz0q]');
 
 //Restrindre l'accés à cette page au personne non connecté
 
@@ -19,20 +18,20 @@ $lien = 'Location: modif_utlisateurs_admin.php';
 
 //Restrindre l'accés à cette page au personne qui ne sont pas admin
 
- if (strcasecmp($_SESSION['droit'], 'admin') ==! 0){
+ if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0){
 
          header('Location: errorAdmin.html');
          exit;
    }
 
-$membres = $bdd->query('SELECT * FROM membres ORDER BY id DESC LIMIT 0,5');
+$membres = $bdd->query('SELECT * FROM utilisateur ORDER BY ID_Utilisateur DESC LIMIT 0,5');
 
    if(isset($_POST['formadmin'])) {
    		
        if(!empty($_POST['supp_user'])){
             //Permet de supprimer la personne
             $user_a_supp = $_POST['supp_user'];
-            $req = $bdd->query('DELETE FROM membres WHERE pseudo ="'.$user_a_supp.'"');
+            $req = $bdd->query('DELETE FROM utilisateur WHERE Pseudo ="'.$user_a_supp.'"');
             //Permet de supprimer les documents de la personne si cette option est choisie
              if(!empty($_POST['choixsupp'])){
                         
@@ -60,7 +59,7 @@ $membres = $bdd->query('SELECT * FROM membres ORDER BY id DESC LIMIT 0,5');
        if(!empty($_POST['supp_user'])){
             //Permet de modifier la personne 
             $user_a_modiff = $_POST['supp_user'];
-            $reqid = $bdd->prepare("SELECT id FROM membres WHERE pseudo = ?");
+            $reqid = $bdd->prepare("SELECT ID_Utilisateur FROM utilisateur WHERE Pseudo = ?");
             $reqid->execute(array($user_a_modiff));
             $user_id = $reqid->fetch();
             header("Location: editionprofiladmin.php?id=".$user_id[0]);  
@@ -127,7 +126,7 @@ $membres = $bdd->query('SELECT * FROM membres ORDER BY id DESC LIMIT 0,5');
 
                 <?php
 
-                if (strcasecmp($_SESSION['droit'], 'admin') == 0){
+                if (strcasecmp($_SESSION['Roles'], 'admin') == 0){
 
 
                     //Rajout de la barre d'administration si la personne un administrateur
@@ -172,13 +171,13 @@ $membres = $bdd->query('SELECT * FROM membres ORDER BY id DESC LIMIT 0,5');
  
 		<?php
 		 
-		$reponse = $bdd->query('SELECT * FROM membres WHERE pseudo != "'.$_SESSION['pseudo'].'"');
+		$reponse = $bdd->query('SELECT * FROM utilisateur WHERE Pseudo != "'.$_SESSION['Pseudo'].'"');
 		 
 		while ($donnees = $reponse->fetch())
 		{
 
 		?>
-		           <option value="<?php echo $donnees['pseudo']; ?>"> <?php echo $donnees['pseudo']; ?></option>
+		           <option value="<?php echo $donnees['Pseudo']; ?>"> <?php echo $donnees['Pseudo']; ?></option>
 		<?php
 		}
 		 

@@ -5,7 +5,6 @@
     //Permet de récuprer le contenu du fichier connect_db.php 
     require 'includes/connect_db.php';
     //Connexion à notre base de donnée
-    $bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre', 'root', '');
    
    //Restrindre l'accés à cette page au personne non connecté
      if(!isset($_SESSION['id'])) {
@@ -103,7 +102,7 @@
 
                  //Rajout de la barre d'administration si la personne est un administrateur
 
-                if (strcasecmp($_SESSION['droit'], 'admin') == 0){
+                if (strcasecmp($_SESSION['Roles'], 'admin') == 0){
 
 
                     echo '<li class="nav-item dropdown">

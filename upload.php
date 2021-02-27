@@ -55,6 +55,7 @@
                 $id_collection = $_POST['collection'];
                 $resume =  $_POST['resumeouvrage'];
                 $page = intval($_POST['nombredepage']);
+                $langue = $_POST['langue'];
 /*                echo $id_genre;
                 echo $id_auteur;
                 echo $id_type;*/
@@ -91,21 +92,21 @@
 
                         if(!empty($_FILES['miniature']) AND in_array($miniature_extension,$extension_autorisees_miniature) ){
                           if(move_uploaded_file($miniature_tmp_name, $miniature_dest)){  
-                            $req = $db->prepare('INSERT INTO documents(Titre, Chemin, Image, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation, Resume, Nombre_Pages ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)');
-                            $req->execute(array($nom_ouvrage, $file_dest, $miniature_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page));
-                            echo "\nPDOStatement::errorInfo():\n";
+                            $req = $db->prepare('INSERT INTO documents(Titre, Chemin, Image, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation, Resume, Nombre_Pages, Langue) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)');
+                            $req->execute(array($nom_ouvrage, $file_dest, $miniature_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page, $langue));
+   /*                         echo "\nPDOStatement::errorInfo():\n";
                             $arr = $req->errorInfo();
-                            print_r($arr);
+                            print_r($arr);*/
                            } else {
                               $erreurupload = "Une erreur est survenue lors de l'envoi de la miniature";
                             }
 
                         } else {
-                            $req = $bdd->prepare('INSERT INTO documents(Titre, Chemin, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation, Resume, Nombre_Pages) VALUES(?,?,?,?,?,?,?,?,?,?,?)');
-                            $req->execute(array($nom_ouvrage, $file_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page));
-                            echo "\nPDOStatement::errorInfo():\n";
+                            $req = $bdd->prepare('INSERT INTO documents(Titre, Chemin, ID_Auteur, ID_Genre, ID_Types, ID_Utilisateur, ID_Editeur, ID_Collection, ID_Validation, Resume, Nombre_Pages, Langue) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)');
+                            $req->execute(array($nom_ouvrage, $file_dest, $id_auteur, $id_genre, $id_type, $id_user, $id_editeur, $id_collection, '1', $resume, $page, $langue));
+/*                            echo "\nPDOStatement::errorInfo():\n";
                             $arr = $req->errorInfo();
-                            print_r($arr);
+                            print_r($arr);*/
                         }
                         
                         $erreurupload = "Le fichier '$file_name' a bien était upload ! ";
@@ -213,7 +214,7 @@ if(isset($_POST['create_genre'])) {
 
                 <?php
                  //Rajout de la barre d'administration si la personne est un administrateur
-                if (strcasecmp($_SESSION['droit'], 'admin') == 0){
+                if (strcasecmp($_SESSION['Roles'], 'admin') == 0){
 
 
                     echo '<li class="nav-item dropdown">
@@ -326,6 +327,20 @@ if(isset($_POST['create_genre'])) {
                          
                     
                     ?>
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label for="exampleFormControlSelect1"><strong>Sélectionner la langue de votre ouvrage *:</strong></label>
+                </br>
+
+                <select class="form-control" id="exampleFormControlSelect1" name="langue">
+
+                    <option value="FR">Français</option>
+                    <option value="ES">Espagnol</option>
+                    <option value="DE">Allemand</option>
+                    <option value="GB">Anglais</option>
                 </select>
             </div>
 
@@ -468,6 +483,233 @@ if(isset($_POST['create_genre'])) {
 
         
         </div></div></div>
+
+        <div id="content">
+   
+    <div class="container-fluid">
+        <h3 class="text-dark mb-4">Profile</h3>
+        <div class="row mb-3">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col">
+                        <div class="card shadow mb-3">
+                            <div class="card-header py-3">
+                                <p class="text-primary m-0 font-weight-bold">Votre ouvrage :</p>
+                            </div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <div class="form-group"><label for="nom_ouvrage"><strong>Sélectionner le nom de votre ouvrage : </strong></label><input class="form-control" type="text" id="nom_ouvrage" placeholder="Nom ouvrage" name="nom_ouvrage" /></div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group"><label for="ouvrage"><strong>Sélectionner votre ouvrage *:</strong></label><input type="file" class="form-control" id="exampleFormControlInput1" name="fichier"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <div class="form-group"><label for="miniature"><strong>Sélectionner la miniature de votre ouvrage :</strong></label><input class="form-control" type="text" id="miniature" placeholder="Miniature" name="Miniature" /></div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="exampleFormControlInput1"><strong>Sélectionner l'auteur de votre document *:</strong></label>
+                                                            </br>
+                                                            <select class="form-control" id="exampleFormControlSelect1" name="auteur">
+                                                            
+                                                                 <?php
+                                                             
+
+                                                                   $req_auteur = $bdd->prepare('SELECT * FROM auteur');
+                                                                   $req_auteur->execute(array());
+                                                                  
+                                                                     
+                                                                    while ($donnees = $req_auteur->fetch())
+                                                                    {
+
+                                                                    ?>
+                                                                               <option value="<?php echo $donnees['ID_Auteur']; ?>"> <?php echo $donnees['Nom']; ?></option>
+                                                                    <?php
+                                                                    }
+                                                                     
+                                                                
+                                                                ?>
+                                                            </select>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                        <label for="exampleFormControlSelect1"><strong>Sélectionner le genre de votre ouvrage *:</strong></label>
+                                                                            </br>
+
+                                                                            <select class="form-control" id="exampleFormControlSelect1" name="genre">
+
+                                                                                 <?php
+                                                                             
+
+                                                                                   $req_genre = $bdd->prepare('SELECT * FROM genre');
+                                                                                   $req_genre->execute(array());
+                                                                                  
+                                                                                     
+                                                                                    while ($donnees = $req_genre->fetch())
+                                                                                    {
+
+                                                                                    ?>
+                                                                                               <option value="<?php echo $donnees['ID_Genre']; ?>"> <?php echo $donnees['Nom']; ?></option>
+                                                                                    <?php
+                                                                                    }
+                                                                                     
+                                                                                
+                                                                                ?>
+                                                                            </select>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+
+                                                 <label for="exampleFormControlSelect1"><strong>Sélectionner la langue de votre ouvrage *:</strong></label>
+                                                            </br>
+
+                                                            <select class="form-control" id="exampleFormControlSelect1" name="langue">
+
+                                                                <option value="FR">Français</option>
+                                                                <option value="ES">Espagnol</option>
+                                                                <option value="DE">Allemand</option>
+                                                                <option value="GB">Anglais</option>
+                                                            </select></div>
+                                                                                    </div>
+                                    </div>
+
+
+                                     <div class="form-row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                               <label for="exampleFormControlSelect1"><strong>Sélectionner le type de votre ouvrage *:</strong></label>
+                                                                        </br>
+
+                                                                        <select class="form-control" id="exampleFormControlSelect1" name="type">
+
+                                                                             <?php
+                                                                         
+
+                                                                               $req_type = $bdd->prepare('SELECT * FROM types');
+                                                                               $req_type->execute(array());
+                                                                              
+                                                                                 
+                                                                                while ($donnees = $req_type->fetch())
+                                                                                {
+
+                                                                                ?>
+                                                                                           <option value="<?php echo $donnees['ID_Types']; ?>"> <?php echo $donnees['Nom']; ?></option>
+                                                                                <?php
+                                                                                }
+                                                                                 
+                                                                            
+                                                                            ?>
+                                                                        </select>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                       <label for="exampleFormControlSelect1"><strong>Sélectionner l'editeur de votre ouvrage *:</strong></label>
+                                                                        </br>
+
+                                                                        <select class="form-control" id="exampleFormControlSelect1" name="editeur">
+
+                                                                             <?php
+                                                                         
+
+                                                                               $req_editeur = $bdd->prepare('SELECT * FROM editeur');
+                                                                               $req_editeur->execute(array());
+                                                                              
+                                                                                 
+                                                                                while ($donnees = $req_editeur->fetch())
+                                                                                {
+
+                                                                                ?>
+                                                                                           <option value="<?php echo $donnees['ID_Editeur']; ?>"> <?php echo $donnees['Nom']; ?></option>
+                                                                                <?php
+                                                                                }
+                                                                                 
+                                                                            
+                                                                            ?>
+                                                                        </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                 <label for="exampleFormControlSelect1"><strong>Sélectionner la collection de votre ouvrage *:</strong></label>
+                </br>
+
+                <select class="form-control" id="exampleFormControlSelect1" name="collection">
+
+                     <?php
+                 
+
+                       $req_collection = $bdd->prepare('SELECT * FROM collection');
+                       $req_collection->execute(array());
+                      
+                         
+                        while ($donnees = $req_collection->fetch())
+                        {
+
+                        ?>
+                                   <option value="<?php echo $donnees['ID_Collection']; ?>"> <?php echo $donnees['Nom']; ?></option>
+                        <?php
+                        }
+                         
+                    
+                    ?>
+                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="exampleFormControlSelect1"><strong>Ecrire le résumé de votre ouvrage :</strong></label>
+                        </br>
+
+             <form method="POST"> 
+                  <input type="text" class="form-control" id="exampleFormControlSelect1" value = "Rentre le résumé de votre ouvrage" name="resumeouvrage">
+
+            </br>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="exampleFormControlSelect1"><strong>Rentrer le nombre de page :</strong></label>
+            </br>
+
+                <input type="number" class="form-control" id="exampleFormControlSelect1" value = "Rentre le nomre de pagae" name="nombredepage">
+
+            </br>
+                                            </div>
+                                        </div>
+                                       
+                                    </div>
+
+                                    <input class="btn btn-primary btn-sm" type="submit" value="Envoyer le fichier" name="formupload"/>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 </body>

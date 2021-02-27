@@ -69,8 +69,8 @@ session_start();
 
                 <?php
                  //Rajout de la barre d'administration si la personne un administrateur
-                        if(isset($_SESSION['droit'])) {
-                                if (strcasecmp($_SESSION['droit'], 'admin') == 0){
+                        if(isset($_SESSION['Roles'])) {
+                                if (strcasecmp($_SESSION['Roles'], 'admin') == 0){
 
 
                                     echo '<li class="nav-item dropdown">

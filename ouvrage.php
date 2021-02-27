@@ -105,7 +105,7 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
 
                 //Rajout de la barre d'administration si la personne un administrateur
 
-                if (strcasecmp($_SESSION['droit'], 'admin') == 0){
+                if (strcasecmp($_SESSION['Roles'], 'admin') == 0){
 
 
                     echo '<li class="nav-item dropdown">
@@ -146,33 +146,38 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
           $req_auteur->execute(array($docinfo['ID_Auteur']));
           $auteur = $req_auteur->fetch();
      
-         ?> 
-      
-         <?php 
-          $req_genre = $bdd->prepare('SELECT Nom FROM genre WHERE ID_Genre = ?');
-          $req_genre->execute(array($docinfo['ID_Genre']));
-          $genre = $req_genre->fetch();
-     
-         ?> 
-       
-         <?php 
+          $req_genre = $bdd->prepare('SELECT ID_Genre FROM genre_Documents WHERE ID_Document = ?');
+          $req_genre->execute(array($docinfo['ID_Document']));
+          $ids_du_genre = $req_genre->fetchAll();
+
+          $ids_du_genre_list = array();
+
+          foreach($ids_du_genre as $result) { 
+            //echo $result['ID_Genre'], '<br>'; 
+            array_push($ids_du_genre_list, $result['ID_Genre']);
+          }
+
+
+
           $req_types = $bdd->prepare('SELECT Nom FROM types WHERE ID_Types = ?');
           $req_types->execute(array($docinfo['ID_types']));
           $types = $req_types->fetch();
    
-         ?> 
-     
-         <?php 
           $req_editeur = $bdd->prepare('SELECT Nom FROM editeur WHERE ID_Editeur = ?');
           $req_editeur->execute(array($docinfo['ID_Editeur']));
           $editeur = $req_editeur->fetch();
 
-         ?>        
-  
-         <?php 
           $req_collection = $bdd->prepare('SELECT Nom FROM collection WHERE ID_Collection = ?');
           $req_collection->execute(array($docinfo['ID_Collection']));
           $collection = $req_collection->fetch();
+        
+          $req_collection = $bdd->prepare('SELECT Nom FROM collection WHERE ID_Collection = ?');
+          $req_collection->execute(array($docinfo['ID_Collection']));
+          $collection = $req_collection->fetch();
+
+          $req_langue = $bdd->prepare('SELECT Nom_Court FROM langues WHERE ID_Langue = ?');
+          $req_langue->execute(array($docinfo['ID_Langue']));
+          $langue = $req_langue->fetch();
         
          ?> 
 
@@ -193,7 +198,6 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
         </div>
        
                 <div class="card-body text-center shadow"><?php echo '<img class="img-fluid" src="'.$docinfo['Image'].'" /> ' ?>
-                    <div class="mb-3"><button class="btn btn-primary btn-sm" type="button">Change Photo</button></div>
                 </div>
             </div>
             
@@ -252,7 +256,12 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
                                         <div class="form-group"><label for="first_name"><strong>Date de parution</strong></label></br><?php echo $docinfo['Date_Parution']; ?></div>
                                     </div>
                                     <div class="col">
-                                        <div class="form-group"><label for="last_name"><strong>Langue</strong></label> </br><?php echo $docinfo['Langue']; ?></div>
+                                        <div class="form-group"><label for="last_name"><strong>Langue</strong></label> </br>
+
+                                          <?php echo '<img src="./flag/'.$langue[0].'.png" height="25" width="40" />'; ?>
+
+                                        </div>
+
                                     </div>
                                 </div>
                             </form>
@@ -267,7 +276,18 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
                                 <div class="form-group"><label for="address"><strong>Résumé</strong></label></br><?php echo $docinfo['Resume']; ?></div>
                                 <div class="form-row">
                                     <div class="col">
-                                        <div class="form-group"><label for="city"><strong>Genre</strong></label></br><?php echo $genre[0]; ?></div>
+                                        <div class="form-group"><label for="city"><strong>Genre</strong></label></br>
+                                          <?php           
+                                               foreach($ids_du_genre_list as $result) { 
+                                                   $genre_affichage = $bdd->prepare('SELECT Nom FROM genre_litteraire WHERE ID_Genre = ?');
+                                                   $genre_affichage->execute(array($result));
+                                                   $genre_affichage = $genre_affichage->fetch();
+                                                   echo $genre_affichage[0].'<br>';
+
+                                                }
+
+                                          ?>
+                                    </div>
                                     </div>
                                     <div class="col">
                                         <div class="form-group"><label for="country"><strong>Type</strong></label></br><?php echo $types[0]; ?></div>
@@ -286,14 +306,55 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
             </div>
         </div>
     </div>
-    <div class="card shadow mb-5">
+<!--     <div class="card shadow mb-5">
         <div class="card-header py-3">
             <p class="text-primary m-0 font-weight-bold">Vue complète de l'oeuvre</p>
         </div>
         <div class="card-body">
              <?php echo '<img class="img-fluid" src="'.$docinfo['Image'].'">'?>
         </div>
+    </div> -->
+
+
+    <div class="card shadow mb-5">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 font-weight-bold">Choix d'accès à l'oeuvre</p>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <form>
+                        <div class="form-group"><strong>Comment accéder à l'oeuvre ?</strong><br /></div>
+                        <div class="form-group" align="center">
+                            <form method="POST" action="" enctype="multipart/form-data">
+
+                                 </br>
+
+                                 </br>
+                                     <button type="button" class="btn btn-success"> Achat <input type="radio" class="btn btn-success" name="question" value="achat" id="achat" /></button>
+                                     <button type="button" class="btn btn-warning"> Abonnement <input type="radio" class="btn btn-success" name="question" value="abonnement" id="abonnement" /></button>
+                                 </br>
+                                 </br>
+                                     <button type="submit" class="btn btn-danger" value="location" name="formsupp"/>Location</button>
+                                 </br>
+                                 </br>
+
+                                 <div>
+                            
+                                   <?php
+                                      if(isset($message)) {
+                                      echo '<font color="red">'.$message."</font>";
+                                      }
+                                    ?>
+                                    
+                          </form>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
+
 </div>
 
 

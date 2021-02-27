@@ -77,7 +77,7 @@ if(!isset($_SESSION['id'])) {
                 <?php
 
                  //Rajout de la barre d'administration si la personne un administrateur
-                if (strcasecmp($_SESSION['droit'], 'admin') == 0){
+                if (strcasecmp($_SESSION['Roles'], 'admin') == 0){
 
 
                     echo '<li class="nav-item dropdown">
@@ -123,19 +123,9 @@ if(!isset($_SESSION['id'])) {
         <div class="input-group" style="max-width: 400px; min-width: 200px">
 
             <select class="form-control custom-select" id="exampleFormControlSelect1" name="choix">
-                <?php
-                //Permet de récuperer et d'afficher l'extension des documents de l'utilisateur
-                $reponse = $bdd->query('SELECT DISTINCT lower(extension) FROM files WHERE visibilite = "private"');
-
-                while ($donnees = $reponse->fetch())
-                {
-
-                    ?>
-                    <option value="<?php echo $donnees['lower(extension)']; ?>"> <?php echo $donnees['lower(extension)']; ?></option>
-                    <?php
-                }
-
-                ?>
+                 <option value="All">Tous</option>
+                 <option value="my_doc">Mes ouvrages déposés</option>
+                 <option value="docs_buy">Mes ouvrages achetés</option>
             </select>
             <div class="input-group-append">
                 <label class="input-group-text" for="inputGroupSelect02">Choix</label>
