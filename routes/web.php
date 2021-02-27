@@ -26,3 +26,13 @@ Route::get('/', function () {
     Route::get('inscription', [InscriptionController::class, 'InscriptionForm']);
     Route::post('inscription', [InscriptionController::class, 'Inscription']);
 // });
+
+//Route::get('document','App\Http\Controllers\DocumentController@index');
+
+Route::get('document', function () {
+    return view('document');
+});
+
+Route::get('ouvrage/{id}', function ($id) {
+     return view('ouvrage', ['id' => $id ]);
+});

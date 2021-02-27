@@ -28,7 +28,7 @@ session_start();
 <body class="text-secondary">
 
         <nav class="navbar navbar-light navbar-expand-md shadow-lg navigation-clean-button" style="background-color: #313437;">
-       <div class="container"><a class="navbar-brand" href="index.php" style="color: #ffffff;">Sharebook</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+       <div class="container"><a class="navbar-brand" href="index" style="color: #ffffff;">Sharebook</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
            <div class="collapse navbar-collapse" id="navcol-1">
                <ul class="nav navbar-nav mr-auto">
 
@@ -37,9 +37,9 @@ session_start();
                         Mon profil
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="profil.php">Afficher mon profil</a>
-                        <a class="dropdown-item" href="editionprofil.php">Editer mon profil</a>
-                        <a class="dropdown-item" href="supp_account.php">Supprimer mon compte</a>
+                        <a class="dropdown-item" href="profil">Afficher mon profil</a>
+                        <a class="dropdown-item" href="editionprofil">Editer mon profil</a>
+                        <a class="dropdown-item" href="supp_account">Supprimer mon compte</a>
                     </div>
                 </li>
 
@@ -48,9 +48,9 @@ session_start();
                         Documents
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="document.php">Afficher les documents publiques</a>
-                        <a class="dropdown-item" href="mydocument.php">Afficher mes documents</a>
-                        <a class="dropdown-item" href="upload.php">Upload un document</a>
+                        <a class="dropdown-item" href="document">Afficher les documents publiques</a>
+                        <a class="dropdown-item" href="mydocument">Afficher mes documents</a>
+                        <a class="dropdown-item" href="upload">Upload un document</a>
                     </div>
                 </li>
 
@@ -59,8 +59,8 @@ session_start();
                         Statistiques
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="stat_extension.php">Par extension</a>
-                        <a class="dropdown-item" href="stat_public.php">Publiques / Privés</a>
+                        <a class="dropdown-item" href="stat_extension">Par extension</a>
+                        <a class="dropdown-item" href="stat_public">Publiques / Privés</a>
                     </div>
                 </li>
 
@@ -78,11 +78,11 @@ session_start();
                                         Administration
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                                        <a class="dropdown-item" href="affich_docs.php">Afficher les documents des utilisateurs</a>
-                                        <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
-                                        <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
-                                        <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
+                                        <a class="dropdown-item" href="utilisateurs_admin">Afficher tous les utilisateurs</a>
+                                        <a class="dropdown-item" href="affich_docs">Afficher les documents des utilisateurs</a>
+                                        <a class="dropdown-item" href="modif_utlisateurs_admin">Modifier / Supprimer un utilisateur</a>
+                                        <a class="dropdown-item" href="create_utilisateurs">Créer un utilisateur</a>
+                                        <a class="dropdown-item" href="stat_admin">Statistiques des utilisateurs</a>
                                     </div>
                                 </li>';
 
