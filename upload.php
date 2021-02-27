@@ -241,253 +241,15 @@ if(isset($_POST['create_genre'])) {
         </div>
     </div>
 </nav>
-<div class="contact">
-    <div class="container" >
-        <div align="center" style="margin: 30px" class="animated bounceInDown delay-100ms">
 
-            <h1>Déposer une oeuvre</h1>
-            <i class="fa fa-file fa-5x"></i></br>
-
-        </br>
-
-        <form method="POST" enctype="multipart/form-data" style="border-radius: 20px 50px 20px 50px;">
-
-            <div class="form-group">
-                <label for="exampleFormControlInput1"><strong>Sélectionner le nom de votre ouvrage :</strong></label>
-                </br>
-
-                <input type="text" class="form-control" id="exampleFormControlInput2" name="nom_ouvrage">
-            </div>
-
-            <div class="form-group">
-                <label for="exampleFormControlInput1"><strong>Sélectionner votre ouvrage *:</strong></label>
-                </br>
-
-                <input type="file" class="form-control" id="exampleFormControlInput1" name="fichier">
-            </div>
-        </br>
-
-        <form method="POST" enctype="multipart/form-data" style="border-radius: 20px 50px 20px 50px;">
-            <div class="form-group">
-                <label for="exampleFormControlInput1"><strong>Sélectionner la miniature de votre ouvrage :</strong></label>
-                </br>
-
-                <input type="file" class="form-control" id="exampleFormControlInput2" name="miniature">
-            </div>
-        </br>
-
-       
-
-        <form method="POST" enctype="multipart/form-data" style="border-radius: 20px 50px 20px 50px;">
-            <div class="form-group">
-                <label for="exampleFormControlInput1"><strong>Sélectionner l'auteur de votre document *:</strong></label>
-                </br>
-                <select class="form-control" id="exampleFormControlSelect1" name="auteur">
-                
-                     <?php
-                 
-
-                       $req_auteur = $bdd->prepare('SELECT * FROM auteur');
-                       $req_auteur->execute(array());
-                      
-                         
-                        while ($donnees = $req_auteur->fetch())
-                        {
-
-                        ?>
-                                   <option value="<?php echo $donnees['ID_Auteur']; ?>"> <?php echo $donnees['Nom']; ?></option>
-                        <?php
-                        }
-                         
-                    
-                    ?>
-                </select>
-            </div>
     
-            <div class="form-group">
-                <label for="exampleFormControlSelect1"><strong>Sélectionner le genre de votre ouvrage *:</strong></label>
-                </br>
-
-                <select class="form-control" id="exampleFormControlSelect1" name="genre">
-
-                     <?php
-                 
-
-                       $req_genre = $bdd->prepare('SELECT * FROM genre');
-                       $req_genre->execute(array());
-                      
-                         
-                        while ($donnees = $req_genre->fetch())
-                        {
-
-                        ?>
-                                   <option value="<?php echo $donnees['ID_Genre']; ?>"> <?php echo $donnees['Nom']; ?></option>
-                        <?php
-                        }
-                         
-                    
-                    ?>
-                </select>
-            </div>
-
-
-            <div class="form-group">
-                <label for="exampleFormControlSelect1"><strong>Sélectionner la langue de votre ouvrage *:</strong></label>
-                </br>
-
-                <select class="form-control" id="exampleFormControlSelect1" name="langue">
-
-                    <option value="FR">Français</option>
-                    <option value="ES">Espagnol</option>
-                    <option value="DE">Allemand</option>
-                    <option value="GB">Anglais</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="exampleFormControlSelect1"><strong>Sélectionner le type de votre ouvrage *:</strong></label>
-                </br>
-
-                <select class="form-control" id="exampleFormControlSelect1" name="type">
-
-                     <?php
-                 
-
-                       $req_type = $bdd->prepare('SELECT * FROM types');
-                       $req_type->execute(array());
-                      
-                         
-                        while ($donnees = $req_type->fetch())
-                        {
-
-                        ?>
-                                   <option value="<?php echo $donnees['ID_Types']; ?>"> <?php echo $donnees['Nom']; ?></option>
-                        <?php
-                        }
-                         
-                    
-                    ?>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="exampleFormControlSelect1"><strong>Sélectionner l'editeur de votre ouvrage *:</strong></label>
-                </br>
-
-                <select class="form-control" id="exampleFormControlSelect1" name="editeur">
-
-                     <?php
-                 
-
-                       $req_editeur = $bdd->prepare('SELECT * FROM editeur');
-                       $req_editeur->execute(array());
-                      
-                         
-                        while ($donnees = $req_editeur->fetch())
-                        {
-
-                        ?>
-                                   <option value="<?php echo $donnees['ID_Editeur']; ?>"> <?php echo $donnees['Nom']; ?></option>
-                        <?php
-                        }
-                         
-                    
-                    ?>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="exampleFormControlSelect1"><strong>Sélectionner la collection de votre ouvrage *:</strong></label>
-                </br>
-
-                <select class="form-control" id="exampleFormControlSelect1" name="collection">
-
-                     <?php
-                 
-
-                       $req_collection = $bdd->prepare('SELECT * FROM collection');
-                       $req_collection->execute(array());
-                      
-                         
-                        while ($donnees = $req_collection->fetch())
-                        {
-
-                        ?>
-                                   <option value="<?php echo $donnees['ID_Collection']; ?>"> <?php echo $donnees['Nom']; ?></option>
-                        <?php
-                        }
-                         
-                    
-                    ?>
-                </select>
-            </div>
-
-            <label for="exampleFormControlSelect1"><strong>Ecrire le résumé de votre ouvrage :</strong></label>
-                        </br>
-
-             <form method="POST"> 
-                  <input type="text" class="form-control" id="exampleFormControlSelect1" value = "Rentre le résumé de votre ouvrage" name="resumeouvrage">
-
-            </br>
-
-            <label for="exampleFormControlSelect1"><strong>Rentrer le nombre de page :</strong></label>
-            </br>
-
-                <input type="number" class="form-control" id="exampleFormControlSelect1" value = "Rentre le nomre de pagae" name="nombredepage">
-
-            </br>
-
-             <input type="submit" value="Envoyer le fichier" name="formupload"/>
-
-
-            </br>
-            <?php
-              if(isset($erreurupload)) {
-              echo '<font color="red">'.$erreurupload."</font>";
-              }
-            ?>
-            </br>
-
-
-            <label for="exampleFormControlSelect1"><strong>Créer un nouveau genre *:</strong></label>
-                        </br>
-
-
-                  <input type="text" class="form-control" id="exampleFormControlSelect1" value = "Rentre le nouveau genre" name="newgenre">
-                 </br>
-                 <input type="submit" value="Créer le genre" name="create_genre"/>
-
-
-            </br>
-            <?php
-              if(isset($msg_create_genre)) {
-              echo '<font color="red">'.$msg_create_genre."</font>";
-              }
-            ?>
-
-            
-
-
-
-            </br>
-            </br>
-
-            <div align="center">
-                     <p>Documents autorisés :</p>
-                     <i class="fa fa-file-pdf-o fa-4x" aria-hidden="true"></i>
-                     <i class="fa fa-file-excel-o fa-4x" aria-hidden="true"></i>
-                     <i class="fa fa-file-powerpoint-o fa-4x" aria-hidden="true"></i>
-
-                 </div>
-        </form>
 
         
-        </div></div></div>
-
-        <div id="content">
    
     <div class="container-fluid">
-        <h3 class="text-dark mb-4">Profile</h3>
+    </br></br>
+        <h3 class="text-dark mb-4" align="center">Déposer votre ouvrage :</h3>
+        </br></br>
         <div class="row mb-3">
             <div class="col-lg-12">
                 <div class="row">
@@ -508,32 +270,32 @@ if(isset($_POST['create_genre'])) {
                                     </div>
                                     <div class="form-row">
                                         <div class="col">
-                                            <div class="form-group"><label for="miniature"><strong>Sélectionner la miniature de votre ouvrage :</strong></label><input class="form-control" type="text" id="miniature" placeholder="Miniature" name="Miniature" /></div>
+                                            <div class="form-group"><label for="miniature"><strong>Sélectionner la miniature de votre ouvrage :</strong></label><input class="form-control" type="file" id="miniature" placeholder="Miniature" name="Miniature" /></div>
                                         </div>
                                         <div class="col">
                                             <div class="form-group">
                                                 <label for="exampleFormControlInput1"><strong>Sélectionner l'auteur de votre document *:</strong></label>
                                                             </br>
                                                             <select class="form-control" id="exampleFormControlSelect1" name="auteur">
-                                                            
-                                                                 <?php
-                                                             
+                
+                     <?php
+                 
 
-                                                                   $req_auteur = $bdd->prepare('SELECT * FROM auteur');
-                                                                   $req_auteur->execute(array());
-                                                                  
-                                                                     
-                                                                    while ($donnees = $req_auteur->fetch())
-                                                                    {
+                       $req_auteur = $bdd->prepare('SELECT * FROM auteur');
+                       $req_auteur->execute(array());
+                      
+                         
+                        while ($donnees = $req_auteur->fetch())
+                        {
 
-                                                                    ?>
-                                                                               <option value="<?php echo $donnees['ID_Auteur']; ?>"> <?php echo $donnees['Nom']; ?></option>
-                                                                    <?php
-                                                                    }
-                                                                     
-                                                                
-                                                                ?>
-                                                            </select>
+                        ?>
+                                   <option value="<?php echo $donnees['ID_Auteur']; ?>"> <?php echo $donnees['Nom']; ?></option>
+                        <?php
+                        }
+                         
+                    
+                    ?>
+                </select>
 
                                             </div>
                                         </div>
@@ -542,29 +304,70 @@ if(isset($_POST['create_genre'])) {
                                     <div class="form-row">
                                         <div class="col">
                                             <div class="form-group">
-                                                        <label for="exampleFormControlSelect1"><strong>Sélectionner le genre de votre ouvrage *:</strong></label>
-                                                                            </br>
+                                                <label for="exampleFormControlSelect1"><strong>Sélectionner le ou les genres de votre ouvrage *:</strong></label>
+                                                                    </br>
 
-                                                                            <select class="form-control" id="exampleFormControlSelect1" name="genre">
+                                                                     <select class="form-control" id="exampleFormControlSelect1" name="genre1">
 
-                                                                                 <?php
-                                                                             
+                     <?php
+                 
 
-                                                                                   $req_genre = $bdd->prepare('SELECT * FROM genre');
-                                                                                   $req_genre->execute(array());
-                                                                                  
-                                                                                     
-                                                                                    while ($donnees = $req_genre->fetch())
-                                                                                    {
+                       $req_genre = $bdd->prepare('SELECT * FROM genre_litteraire');
+                       $req_genre->execute(array());
+                      
+                         
+                        while ($donnees = $req_genre->fetch())
+                        {
 
-                                                                                    ?>
-                                                                                               <option value="<?php echo $donnees['ID_Genre']; ?>"> <?php echo $donnees['Nom']; ?></option>
-                                                                                    <?php
-                                                                                    }
-                                                                                     
-                                                                                
-                                                                                ?>
-                                                                            </select>
+                        ?>
+                                   <option value="<?php echo $donnees['ID_Genre']; ?>"> <?php echo $donnees['Nom']; ?></option>
+                        <?php
+                        }
+                         
+                    
+                    ?>
+                </select>
+
+                <select class="form-control" id="exampleFormControlSelect1" name="genre2">
+
+                     <?php
+                 
+
+                       $req_genre = $bdd->prepare('SELECT * FROM genre_litteraire');
+                       $req_genre->execute(array());
+                      
+                         
+                        while ($donnees = $req_genre->fetch())
+                        {
+
+                        ?>
+                                   <option value="<?php echo $donnees['ID_Genre']; ?>"> <?php echo $donnees['Nom']; ?></option>
+                        <?php
+                        }
+                         
+                    
+                    ?>
+                </select>
+                <select class="form-control" id="exampleFormControlSelect1" name="genre3">
+
+                     <?php
+                 
+
+                       $req_genre = $bdd->prepare('SELECT * FROM genre_litteraire');
+                       $req_genre->execute(array());
+                      
+                         
+                        while ($donnees = $req_genre->fetch())
+                        {
+
+                        ?>
+                                   <option value="<?php echo $donnees['ID_Genre']; ?>"> <?php echo $donnees['Nom']; ?></option>
+                        <?php
+                        }
+                         
+                    
+                    ?>
+                </select>
                                             </div>
                                         </div>
                                         <div class="col">
@@ -619,24 +422,24 @@ if(isset($_POST['create_genre'])) {
 
                                                                         <select class="form-control" id="exampleFormControlSelect1" name="editeur">
 
-                                                                             <?php
-                                                                         
+                     <?php
+                 
 
-                                                                               $req_editeur = $bdd->prepare('SELECT * FROM editeur');
-                                                                               $req_editeur->execute(array());
-                                                                              
-                                                                                 
-                                                                                while ($donnees = $req_editeur->fetch())
-                                                                                {
+                       $req_editeur = $bdd->prepare('SELECT * FROM editeur');
+                       $req_editeur->execute(array());
+                      
+                         
+                        while ($donnees = $req_editeur->fetch())
+                        {
 
-                                                                                ?>
-                                                                                           <option value="<?php echo $donnees['ID_Editeur']; ?>"> <?php echo $donnees['Nom']; ?></option>
-                                                                                <?php
-                                                                                }
-                                                                                 
-                                                                            
-                                                                            ?>
-                                                                        </select>
+                        ?>
+                                   <option value="<?php echo $donnees['ID_Editeur']; ?>"> <?php echo $donnees['Nom']; ?></option>
+                        <?php
+                        }
+                         
+                    
+                    ?>
+                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -648,7 +451,7 @@ if(isset($_POST['create_genre'])) {
                                                  <label for="exampleFormControlSelect1"><strong>Sélectionner la collection de votre ouvrage *:</strong></label>
                 </br>
 
-                <select class="form-control" id="exampleFormControlSelect1" name="collection">
+                 <select class="form-control" id="exampleFormControlSelect1" name="collection">
 
                      <?php
                  
@@ -701,6 +504,43 @@ if(isset($_POST['create_genre'])) {
                                     </div>
 
                                     <input class="btn btn-primary btn-sm" type="submit" value="Envoyer le fichier" name="formupload"/>
+
+
+            </br>
+            <?php
+              if(isset($erreurupload)) {
+              echo '<font color="red">'.$erreurupload."</font>";
+              }
+            ?>
+            </br>
+
+            <label for="exampleFormControlSelect1"><strong>Créer un nouveau genre *:</strong></label>
+                        </br>
+
+
+                  <input type="text" class="form-control" id="exampleFormControlSelect1" value = "Rentre le nouveau genre" name="newgenre">
+                 </br>
+                 <input type="submit" value="Créer le genre" name="create_genre"/>
+
+
+            </br>
+            <?php
+              if(isset($msg_create_genre)) {
+              echo '<font color="red">'.$msg_create_genre."</font>";
+              }
+            ?>
+
+
+            </br>
+            </br>
+
+            <div align="center">
+                     <p>Documents autorisés :</p>
+                     <i class="fa fa-file-pdf-o fa-4x" aria-hidden="true"></i>
+                     <i class="fa fa-file-excel-o fa-4x" aria-hidden="true"></i>
+                     <i class="fa fa-file-powerpoint-o fa-4x" aria-hidden="true"></i>
+
+                 </div>
                                 </form>
                             </div>
                         </div>
@@ -708,8 +548,7 @@ if(isset($_POST['create_genre'])) {
                 </div>
             </div>
         </div>
-    </div>
-</div>
+   
 
 
 </body>
