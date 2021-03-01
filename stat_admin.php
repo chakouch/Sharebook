@@ -2,10 +2,9 @@
 //Permet de garder les variables de la session
 session_start();
 //Connexion à notre base de donnée
-$bdd = new PDO('mysql:host=127.0.0.1;dbname=espace_membre;charset=utf8', 'root', '');
-
+  $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxonpd.eu-central-1.rds.amazonaws.com;dbname=ShareBook', 'sharebookuser', 'uA?BL6P8;t=P-JKl)]Su>L3Gj$[mz0q]');
 //Permet de recuperer les pseudo et le nombre de document qu'a cette utilisateur
-$membres = $bdd->query('SELECT DISTINCT pseudo, COUNT(pseudo) as total FROM files GROUP BY pseudo');
+$membres = $bdd->query('SELECT DISTINCT ID_Utilisateur, COUNT(ID_Utilisateur) as total FROM documents GROUP BY ID_Utilisateur');
 $test='pseudo';
 
 //Restrindre l'accés à cette page au personne non connecté
@@ -30,71 +29,43 @@ if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0){
 
             $genre = $_POST['genre'];
             //Permet, en fonction de ce que veux l'utilisateur, d'executer la bonne requete SQL 
-            if (strcmp($genre, "nmb_document") == 0) {
+            if (strcmp($genre, "nmb_doc_par_utilisateur") == 0) {
 
-                $test = "pseudo";
-                $test1 = "pseudo";
-                $test2 = "files";
-                $test3 = "pseudo";
-
-                $membres = $bdd->query("SELECT DISTINCT $test, COUNT($test1) as total FROM $test2 GROUP BY $test3");
-                $titre = 'Pourcentage de document par utilisateurs';
-  
-            } elseif (strcmp($genre, "nmb_genre") == 0) {
-
-                $test = "pseudo";
-                $test1 = "pseudo";
-                $test2 = "genre";
-                $test3 = "pseudo";
+                $test = "ID_Utilisateur";
+                $test1 = "ID_Utilisateur";
+                $test2 = "documents";
+                $test3 = "ID_Utilisateur";
 
                 $membres = $bdd->query("SELECT DISTINCT $test, COUNT($test1) as total FROM $test2 GROUP BY $test3");
-                $titre = 'Pourcentage de genres crées par utilisateurs';
+                $titre = 'Pourcentage de document par utilisateur';
+
+/*                echo "\nPDOStatement::errorInfo():\n";
+                $arr = $membres->errorInfo();
+                print_r($arr);*/
+
+             } elseif (strcmp($genre, "nmb_genre") == 0) {
+
+                $test = "ID_Genre";
+                $test1 = "ID_Genre";
+                $test2 = "genre_Documents";
+                $test3 = "ID_Genre";
+
+                $membres = $bdd->query("SELECT DISTINCT $test, COUNT($test1) as total FROM $test2 GROUP BY $test3");
+                $titre = 'Pourcentage de documents par genre';
   
-                
-              
-            } elseif (strcmp($genre, "nmb_priv") == 0) {
-
-                $test = "pseudo";
-                $test1 = "visibilite";
-    
-
-
-                $membres = $bdd->query("SELECT $test, COUNT($test1) as total from files WHERE visibilite='private' GROUP BY pseudo");
-                $titre = 'Pourcentage de documents privées par utilisateurs';
-  
-                 
-                
-             } elseif (strcmp($genre, "nmb_public") == 0) {
-
-                $test = "pseudo";
-                $test1 = "visibilite";
-    
-
-
-                $membres = $bdd->query("SELECT $test, COUNT($test1) as total from files WHERE visibilite='public' GROUP BY pseudo");
-                $titre = 'Pourcentage de documents public par utilisateurs';
-  
-                 
-                
-            } elseif (strcmp($genre, "nmb_right") == 0) {
-
-                $test = "droit";
-                $test1 = "droit";
-
-                $membres = $bdd->query("SELECT $test, COUNT($test1) as total from membres GROUP BY droit");
-                $titre = 'Pourcentage des droits des utilisateurs';
-                
-               
-
-            } else {
-
-                $test = "pseudo";
-                $test1 = "pseudo";
-                $test2 = "membres";
-                $test3 = "pseudo";
-  
-
                              
+             } elseif (strcmp($genre, "nmb_right") == 0) {
+                
+                $test = "Roles";
+                $test1 = "Roles";
+                $test2 = "utilisateur";
+                $test3 = "Roles";
+
+                $membres = $bdd->query("SELECT $test, COUNT($test1) as total FROM $test2 GROUP BY $test3");
+                $titre = 'Pourcentage des droits des utilisateurs';
+
+              
+
             }
 
           
@@ -130,10 +101,33 @@ if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0){
           ['Country', 'Visits'],
          
 
- <?php while($m = $membres->fetch()) { ?>
+ <?php 
+
+ while($m = $membres->fetch()) { 
+   if (strcmp($genre, "nmb_doc_par_utilisateur") == 0) {
+              $req_utilisateur = $bdd->prepare('SELECT Pseudo FROM utilisateur WHERE ID_Utilisateur = ?');
+              $req_utilisateur->execute(array($m[$test]));
+              $donnees = $req_utilisateur->fetch();
+    }
+
+    elseif (strcmp($genre, "nmb_genre") == 0) {
+              $req_genre = $bdd->prepare('SELECT Nom FROM genre_litteraire WHERE ID_Genre = ?');
+              $req_genre->execute(array($m[$test]));
+              $donnees = $req_genre->fetch();
+    }
+    elseif (strcmp($genre, "nmb_right") == 0) {
+              $req_droit = $bdd->prepare('SELECT Roles FROM utilisateur WHERE Roles = ?');
+              $req_droit->execute(array($m[$test]));
+              $donnees = $req_droit->fetch();
+
+
+    }
+
+
+  ?>
       
 
-        ['<?= $m[$test] ?>',  <?= $m['total'] ?>],
+        ['<?= $donnees[0] ?>',  <?= $m['total'] ?>],
          
       <?php
 
@@ -239,10 +233,8 @@ if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0){
                     <div class="input-group mb-3">
 
                         <select class="form-control custom-select" id="exampleFormControlSelect1" name="genre">
-                            <option value="nmb_document">Pourcentage de document par utilisateurs</option>
+                            <option value="nmb_doc_par_utilisateur">Pourcentage de document par utilisateur</option>
                             <option value="nmb_genre">Pourcentage de genres crées par utilisateurs</option>
-                            <option value="nmb_priv">Pourcentage de documents privées par utilisateurs</option>
-                            <option value="nmb_public">Pourcentage de documents publics par utilisateur</option>
                             <option value="nmb_right">Pourcentage des droits des utilisateurs</option>
                         </select>
                         <div class="input-group-append">

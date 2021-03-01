@@ -181,7 +181,7 @@
    }
    
    //Permet de rajouter un genre dans la base de donnée
-   if(isset($_POST['create_genre'])) {
+/*   if(isset($_POST['create_genre'])) {
    
    $genre = $_POST['newgenre'];
    $insert_genre = $bdd->prepare("INSERT INTO genre_litteraire(ID_Genre_Maitre, Nom) VALUES(?, ?)");
@@ -189,7 +189,7 @@
    
    $msg_create_genre = "Votre genre à bien été crée";
    
-   }
+   }*/
    
    ?>
 <html>
@@ -508,7 +508,7 @@
 						   echo '</br>';
                            }
                            ?>
-                        </br>
+<!--                         </br>
                         <label for="exampleFormControlSelect1"><strong>Créer un nouveau genre *:</strong></label>
                         </br>
                         <input type="text" class="form-control" id="exampleFormControlSelect1" value = "Rentre le nouveau genre" name="newgenre">
@@ -516,12 +516,12 @@
                         <input class="btn btn-primary btn-sm" type="submit" value="Créer le genre" name="create_genre"/>
                         </br>
                         <?php
-                           if(isset($msg_create_genre)) {
+/*                           if(isset($msg_create_genre)) {
 						   echo '</br>';
                            echo '<font color="red">'.$msg_create_genre."</font>";
 						   echo '</br>';
-                           }
-                           ?>
+                           }*/
+                           ?> -->
                         </br>
                         </br>
                         <div align="center">
