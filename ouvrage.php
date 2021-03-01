@@ -314,6 +314,47 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
              <?php echo '<img class="img-fluid" src="'.$docinfo['Image'].'">'?>
         </div>
     </div> -->
+
+
+    <div class="card shadow mb-5">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 font-weight-bold">Choix d'accès à l'oeuvre</p>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <form>
+                        <div class="form-group"><strong>Comment accéder à l'oeuvre ?</strong><br /></div>
+                        <div class="form-group" align="center">
+                            <form method="POST" action="" enctype="multipart/form-data">
+
+                                 </br>
+
+                                 </br>
+                                     <button type="button" class="btn btn-success"> Achat <input type="radio" class="btn btn-success" name="question" value="achat" id="achat" /></button>
+                                     <button type="button" class="btn btn-warning"> Abonnement <input type="radio" class="btn btn-success" name="question" value="abonnement" id="abonnement" /></button>
+                                 </br>
+                                 </br>
+                                     <button type="submit" class="btn btn-danger" value="location" name="formsupp"/>Location</button>
+                                 </br>
+                                 </br>
+
+                                 <div>
+                            
+                                   <?php
+                                      if(isset($message)) {
+                                      echo '<font color="red">'.$message."</font>";
+                                      }
+                                    ?>
+                                    
+                          </form>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 
