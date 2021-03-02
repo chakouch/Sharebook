@@ -274,7 +274,7 @@
       <div class="row mb-3">
          <div class="col-lg-12">
             <div class="row">
-               <div class="col">
+               <div class="col-md-8 ml-auto mr-auto">
                   <div class="card shadow mb-3">
 
                     <form method="POST" enctype="multipart/form-data" style="border-radius: 20px 50px 20px 50px;">
@@ -285,8 +285,8 @@
                      <div class="card-body">
                         <form>
                           <form method="POST" enctype="multipart/form-data" style="border-radius: 20px 50px 20px 50px;">
-                           <div class="form-row">
-                              <div class="col">
+                           <div class="form-row" style="margin: 10px">
+                              <div class="col" style="margin-right: 40px">
                                  <div class="form-group"><label for="nom_ouvrage"><strong>Sélectionner le nom de votre ouvrage : </strong></label><input class="form-control" type="text" id="nom_ouvrage" placeholder="Nom ouvrage" name="nom_ouvrage" /></div>
                               </div>
                               <div class="col">
@@ -294,8 +294,8 @@
                               </div>
                            </div>
                            <form method="POST" enctype="multipart/form-data" style="border-radius: 20px 50px 20px 50px;">
-                           <div class="form-row">
-                              <div class="col">
+                           <div class="form-row" style="margin: 10px">
+                              <div class="col" style="margin-right: 40px">
                                  <div class="form-group"><label for="miniature"><strong>Sélectionner la miniature de votre ouvrage :</strong></label><input  type="file" class="form-control" id="exampleFormControlInput2" name="miniature" /></div>
                               </div>
                               <div class="col">
@@ -322,8 +322,8 @@
                                  </div>
                               </div>
                            </div>
-                           <div class="form-row">
-                              <div class="col">
+                           <div class="form-row" style="margin: 10px">
+                              <div class="col" style="margin-right: 40px">
                                  <div class="form-group">
                                     <label for="exampleFormControlSelect1"><strong>Sélectionner le ou les genres de votre ouvrage *:</strong></label>
                                     </br>
@@ -405,8 +405,8 @@
                                  </div>
                               </div>
                            </div>
-                           <div class="form-row">
-                              <div class="col">
+                           <div class="form-row" style="margin: 10px">
+                              <div class="col" style="margin-right: 40px">
                                  <div class="form-group">
                                     <label for="exampleFormControlSelect1"><strong>Sélectionner le type de votre ouvrage *:</strong></label>
                                     </br>
@@ -452,9 +452,9 @@
                                     </select>
                                  </div>
                               </div>
-                           </div>
-                           <div class="form-row">
-                              <div class="col">
+                           </div> 
+                           <div class="form-row" style="margin: 10px">
+                              <div class="col" style="margin-right: 40px">
                                  <div class="form-group">
                                     <label for="exampleFormControlSelect1"><strong>Sélectionner la collection de votre ouvrage *:</strong></label>
                                     </br>
@@ -487,14 +487,14 @@
                         </div>
                         </div>
                         </div>
-                        <div class="form-row">
-                        <div class="col">
+                        <div class="form-row" style="margin: 10px">
+                        <div class="col" style="margin-right: 40px">
                         <div class="form-group">
                         <label for="exampleFormControlSelect1"><strong>Rentrer le nombre de page :</strong></label>
                         </br>
                         <input type="number" class="form-control" id="exampleFormControlSelect1" value = "Rentre le nomre de pagae" name="nombredepage">
                         </br>
-                        <p>Date de parution
+                        <label for="exampleFormControlSelect1"><strong>Date de parution :</strong></label>
                         <input class="form-control"  type="date" placeholder="La Date de parution :" id="date_parution" name="date_parution" />
                         </div>
                         </div>
