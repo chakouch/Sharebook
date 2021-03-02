@@ -98,7 +98,8 @@
                   <?php
                      //Rajout de la barre d'administration si la personne est un administrateur
                      
-                     if (strcasecmp($_SESSION['Roles'], 'admin') == 0){
+
+                     if (strcasecmp($_SESSION['Roles'], 'admin') == 0 OR strcasecmp($_SESSION['Roles'], 'gestionnaire') == 0) {
                      
                      
                         echo '<li class="nav-item dropdown">
@@ -107,13 +108,26 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                            <a class="dropdown-item" href="affich_docs.php">Afficher les documents des utilisateurs</a>
                             <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
                             <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
                             <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
                         </div>
                      </li>';
-                     
+
+                     }
+
+                     if (strcasecmp($_SESSION['Roles'], 'admin') == 0 OR strcasecmp($_SESSION['Roles'], 'validateur') == 0) {
+
+                        echo '<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
+                            Validation
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
+                            <a class="dropdown-item" href="docs_non_valide.php">Documents non validés</a>
+                            <a class="dropdown-item" href="docs_refuse.php">Documents refusés</a>
+                        </div>
+                     </li>';
                      
                      }
                      ?>

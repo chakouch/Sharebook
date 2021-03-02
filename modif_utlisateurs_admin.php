@@ -18,11 +18,11 @@ $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxo
 
 //Restrindre l'accés à cette page au personne qui ne sont pas admin
 
- if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0){
+if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0 AND strcasecmp($_SESSION['Roles'], 'gestionnaire') ==! 0){
 
          header('Location: errorAdmin.html');
-         exit;
-   }
+         exit;    
+}
 
 $membres = $bdd->query('SELECT * FROM utilisateur ORDER BY ID_Utilisateur DESC LIMIT 0,5');
 
@@ -126,25 +126,37 @@ $membres = $bdd->query('SELECT * FROM utilisateur ORDER BY ID_Utilisateur DESC L
 
                 <?php
 
-                if (strcasecmp($_SESSION['Roles'], 'admin') == 0){
+                     if (strcasecmp($_SESSION['Roles'], 'admin') == 0 OR strcasecmp($_SESSION['Roles'], 'gestionnaire') == 0) {
+                     
+                     
+                        echo '<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
+                            Administration
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
+                            <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
+                            <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
+                            <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
+                        </div>
+                     </li>';
 
+                     }
 
-                    //Rajout de la barre d'administration si la personne un administrateur
-                    echo '<li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
-                        Administration
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                        <a class="dropdown-item" href="affich_docs.php">Afficher les documents des utilisateurs</a>
-                        <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
-                        <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
-                        <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
-                    </div>
-                </li>';
+                     if (strcasecmp($_SESSION['Roles'], 'admin') == 0 OR strcasecmp($_SESSION['Roles'], 'validateur') == 0) {
 
-
-                }
+                        echo '<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
+                            Validation
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
+                            <a class="dropdown-item" href="docs_non_valide.php">Documents non validés</a>
+                            <a class="dropdown-item" href="docs_refuse.php">Documents refusés</a>
+                        </div>
+                     </li>';
+                     
+                     }
                 ?>
 
 
