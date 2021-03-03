@@ -1,85 +1,39 @@
-<?php 
+<?php
+
 //Permet de garder les variables de la session
 session_start();
 //Connexion à notre base de donnée
   $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxonpd.eu-central-1.rds.amazonaws.com;dbname=ShareBook', 'sharebookuser', 'uA?BL6P8;t=P-JKl)]Su>L3Gj$[mz0q]');
-//Permet de recuperer les pseudo et le nombre de document qu'a cette utilisateur
-$membres = $bdd->query('SELECT DISTINCT ID_Utilisateur, COUNT(ID_Utilisateur) as total FROM documents GROUP BY ID_Utilisateur');
-$test='pseudo';
+//Permet de récupere les informations des utilisateurs
+$documents = $bdd->prepare('SELECT * FROM documents WHERE Valider LIKE 0 ORDER BY ID_Document');
+$documents->execute(array());
+/*echo "\nPDOStatement::errorInfo():\n";
+$arr = $documents->errorInfo();*/
+//print_r($arr);
 
 //Restrindre l'accés à cette page au personne non connecté
-
-if(!isset($_SESSION['id'])) {
+ if(!isset($_SESSION['id'])) {
 
          header('Location: errorConnexion.html');
          exit;
-}
 
+   }
 //Restrindre l'accés à cette page au personne qui ne sont pas administrateur
-if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0 AND strcasecmp($_SESSION['Roles'], 'gestionnaire') ==! 0){
+if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0 AND strcasecmp($_SESSION['Roles'], 'validateur') ==! 0){
 
          header('Location: errorAdmin.html');
          exit;    
 }
-
-
- if(isset($_POST['formupload'])) {
-
-        if(!empty($_POST['genre'])){
-
-            $genre = $_POST['genre'];
-            //Permet, en fonction de ce que veux l'utilisateur, d'executer la bonne requete SQL 
-            if (strcmp($genre, "nmb_doc_par_utilisateur") == 0) {
-
-                $test = "ID_Utilisateur";
-                $test1 = "ID_Utilisateur";
-                $test2 = "documents";
-                $test3 = "ID_Utilisateur";
-
-                $membres = $bdd->query("SELECT DISTINCT $test, COUNT($test1) as total FROM $test2 GROUP BY $test3");
-                $titre = 'Pourcentage de document par utilisateur';
-
-/*                echo "\nPDOStatement::errorInfo():\n";
-                $arr = $membres->errorInfo();
-                print_r($arr);*/
-
-             } elseif (strcmp($genre, "nmb_genre") == 0) {
-
-                $test = "ID_Genre";
-                $test1 = "ID_Genre";
-                $test2 = "genre_Documents";
-                $test3 = "ID_Genre";
-
-                $membres = $bdd->query("SELECT DISTINCT $test, COUNT($test1) as total FROM $test2 GROUP BY $test3");
-                $titre = 'Pourcentage de documents par genre';
-  
-                             
-             } elseif (strcmp($genre, "nmb_right") == 0) {
-                
-                $test = "Roles";
-                $test1 = "Roles";
-                $test2 = "utilisateur";
-                $test3 = "Roles";
-
-                $membres = $bdd->query("SELECT $test, COUNT($test1) as total FROM $test2 GROUP BY $test3");
-                $titre = 'Pourcentage des droits des utilisateurs';
-
-              
-
-            }
-
-          
-        }
-
-  }
+    
 
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Statistiques avancées</title>
+    <title>Profil des utilisateurs du site</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
@@ -87,71 +41,10 @@ if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0 AND strcasecmp($_SESSION['Role
     <link rel="stylesheet" href="assets/css/footer.css">
     <link rel="stylesheet" href="assets/css/navigation.css">
     <link rel="stylesheet" href="assets/css/profil.css">
-    <link rel="stylesheet" href="assets/css/animate.css">
-
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-
-        var data = google.visualization.arrayToDataTable([
-          ['Country', 'Visits'],
-         
-
- <?php 
-
- while($m = $membres->fetch()) { 
-   if (strcmp($genre, "nmb_doc_par_utilisateur") == 0) {
-              $req_utilisateur = $bdd->prepare('SELECT Pseudo FROM utilisateur WHERE ID_Utilisateur = ?');
-              $req_utilisateur->execute(array($m[$test]));
-              $donnees = $req_utilisateur->fetch();
-    }
-
-    elseif (strcmp($genre, "nmb_genre") == 0) {
-              $req_genre = $bdd->prepare('SELECT Nom FROM genre_litteraire WHERE ID_Genre = ?');
-              $req_genre->execute(array($m[$test]));
-              $donnees = $req_genre->fetch();
-    }
-    elseif (strcmp($genre, "nmb_right") == 0) {
-              $req_droit = $bdd->prepare('SELECT Roles FROM utilisateur WHERE Roles = ?');
-              $req_droit->execute(array($m[$test]));
-              $donnees = $req_droit->fetch();
 
 
-    }
-
-
-  ?>
-      
-
-        ['<?= $donnees[0] ?>',  <?= $m['total'] ?>],
-         
-      <?php
-
-      } 
-      ?>
-
- 
-
-
-
-        ]);
-
-        var options = {
-          title:   <?php echo "'".$titre."'"; ?>,
-          is3D:true,
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-        chart.draw(data, options);
-      }
-    </script>
-  </head>
- <body>
+</head>
+<body>
 <nav class="navbar navbar-light navbar-expand-md shadow-lg navigation-clean-button" style="background-color: #313437;">
     <div class="container"><a class="navbar-brand" href="index.php" style="color: #ffffff;">ShareBook</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navcol-1">
@@ -190,11 +83,7 @@ if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0 AND strcasecmp($_SESSION['Role
                 </li>
 
 
-
-
                 <?php
-                 //Rajout de la barre d'administration si la personne est un administrateur
-
                      if (strcasecmp($_SESSION['Roles'], 'admin') == 0 OR strcasecmp($_SESSION['Roles'], 'gestionnaire') == 0) {
                      
                      
@@ -235,40 +124,96 @@ if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0 AND strcasecmp($_SESSION['Role
     </div>
 </nav>
 
+<div align="center">
+<div class="container">
 
-<div class="contact" style="background-color: white">
+  <h1 style="margin-top: 50px">Liste des documents non validés</h1>
+    <i class="fa fa-users fa-5x"></i></br>
 
-  <div class="container">
-    <div align="center">
+    </br>
+    </br>
+    <table id="example" class="table table-striped table-bordered" style="width:110%">
+        <thead>
+        <tr>
+       <th>Titre</th>
+       <th>Nombres de page</th>
+       <th>Date de parution</th>
+       <th>Date de soumissions</th>
+       <th>Auteur</th>
+       <th>Types</th>
+       <th>Editeur</th>
+       <th>Collection</th>
+       <th>Utilisateur</th>
+       <th>Langues</th>
+       <th>Validation</th>
+   </tr>
+        </thead>
 
-        <div class="row">
-            <div class="col-sm-6">
-                <form method="POST" enctype="multipart/form-data" style="margin-top: 50px">
-                    <div class="input-group mb-3">
+        <tbody>
+   
+      <?php while($m = $documents->fetch()) { ?>
+          <tr>
+            
+            <th><?= $m['Titre'] ?></th>
+            <th><?= $m['Nombre_Pages'] ?></th>
+            <th><?= $m['Date_Parution'] ?></th>
+            <th><?= $m['Date_soumission'] ?></th>
+          <?php
 
-                        <select class="form-control custom-select" id="exampleFormControlSelect1" name="genre">
-                            <option value="nmb_doc_par_utilisateur">Pourcentage de document par utilisateur</option>
-                            <option value="nmb_genre">Pourcentage de genres crées par utilisateurs</option>
-                            <option value="nmb_right">Pourcentage des droits des utilisateurs</option>
-                        </select>
-                        <div class="input-group-append">
-                            <label class="input-group-text" for="inputGroupSelect02">Choix</label> 
-                        </div>
-                    </div>
-                    </br></br>
-                    <input type="submit" value="Génerer le graphique" name="formupload"/>
-                </form>
 
-            </div>
-            <div class="col-sm-6">
-                <div id="piechart" style="width: 900px; height: 500px; background-color: transparent !important;"></div>
-            </div>
-        </div>
+              $req_auteur = $bdd->prepare('SELECT Nom FROM auteur WHERE ID_Auteur = ?');
+              $req_auteur->execute(array($m['ID_Auteur']));
+              $auteur = $req_auteur->fetch();
 
-        </div>
-    </div>
-    </div>
-</form>
+              echo '<th>'.$auteur[0].'</th>';
+
+              $req_types = $bdd->prepare('SELECT Nom FROM types WHERE ID_Types = ?');
+              $req_types->execute(array($m['ID_types']));
+              $types = $req_types->fetch();
+
+              echo '<th>'.$types[0].'</th>';
+       
+              $req_editeurs = $bdd->prepare('SELECT Nom FROM editeur WHERE ID_Editeur = ?');
+              $req_editeurs->execute(array($m['ID_Editeur']));
+              $editeurs = $req_editeurs->fetch();
+
+              echo '<th>'.$editeurs[0].'</th>';
+
+              $req_collection = $bdd->prepare('SELECT Nom FROM collection WHERE ID_Collection = ?');
+              $req_collection->execute(array($m['ID_Collection']));
+              $collection = $req_collection->fetch();
+
+              echo '<th>'.$collection[0].'</th>';
+            
+              $req_utilisateur = $bdd->prepare('SELECT Pseudo FROM utilisateur WHERE ID_Utilisateur = ?');
+              $req_utilisateur->execute(array($m['ID_Utilisateur']));
+              $utilisateur = $req_utilisateur->fetch();
+
+              echo '<th>'.$utilisateur[0].'</th>';
+
+              $req_langue = $bdd->prepare('SELECT Nom_long FROM langues WHERE ID_Langue = ?');
+              $req_langue->execute(array($m['ID_Langue']));
+              $langue = $req_langue->fetch();
+
+              echo '<th>'.$langue[0].'</th>';
+
+          
+            echo '<th><form action="ouvrage_validation.php?id='.$m['ID_Document'].'" method="POST" target="_blank"> 
+            <button type="submit">Validation</button> </form></th>'
+            ?>
+           </tr>
+
+      <?php
+      }
+      ?>
+        </tbody>
+    </table>
+    </br>
+    </br>
+
+
+</div>
+</div>
 
 <div class="footer">
     <footer>
@@ -285,9 +230,21 @@ if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0 AND strcasecmp($_SESSION['Role
     </footer>
 </div>
 
+</body>
+</html>
 
 <script src="assets/js/jquery.min.js"></script>
 <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/chart.min.js"></script>
+<script src="assets/js/bs-animation.js"></script>
+<script src="assets/js/bs-charts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
+<script src="assets/js/jquery-3.3.1.js"></script>
+<script src="assets/js/jquery.dataTables.min.js"></script>
+<script src="assets/js/dataTables.bootstrap4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable();
+    } );
 
-</body>
-</html>
+</script>

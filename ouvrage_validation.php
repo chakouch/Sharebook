@@ -5,7 +5,12 @@ session_start();
 $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxonpd.eu-central-1.rds.amazonaws.com;dbname=ShareBook', 'sharebookuser', 'uA?BL6P8;t=P-JKl)]Su>L3Gj$[mz0q]');
 
 //Restrindre l'accés à cette page au personne non connecté
+ if(!isset($_SESSION['id'])) {
 
+         header('Location: errorConnexion.html');
+         exit;
+      
+   }
 
 
 $docs = $bdd->prepare('SELECT ID_Document FROM documents');
@@ -31,6 +36,14 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
    $docinfo = $req_doc->fetch();
 
 
+if(isset($_POST['formupload'])) {
+  $req_valudation = $bdd->prepare('INSERT INTO documents(Titre, Nombre_Pages, Resume, Date_Parution, Chemin, Image, Date_soumission, ID_Auteur, ID_Types, ID_Editeur, ID_Collection, ID_Utilisateur, ID_Langue) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)');
+  $req_valudation->execute(array($nom_ouvrage, $page, $resume, $date_parution, $file_dest, $miniature_dest, $date, $id_auteur, $id_type, $id_editeur, $id_collection, $id_user, $langue));
+
+  echo "\nPDOStatement::errorInfo():\n";
+  $arr = $req_valudation->errorInfo();
+  print_r($arr);
+}
 
 ?>
 
@@ -99,9 +112,6 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
                 <?php
 
                 //Rajout de la barre d'administration si la personne un administrateur
-                 if(isset($_SESSION['id'])) {
-
-       
 
                      if (strcasecmp($_SESSION['Roles'], 'admin') == 0 OR strcasecmp($_SESSION['Roles'], 'gestionnaire') == 0) {
                      
@@ -134,7 +144,6 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
                      </li>';
                      
                      }
-                   }
                 ?>
 
                  <?php
@@ -318,60 +327,54 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
             </div>
         </div>
     </div>
-<!--     <div class="card shadow mb-5">
-        <div class="card-header py-3">
-            <p class="text-primary m-0 font-weight-bold">Vue complète de l'oeuvre</p>
-        </div>
-        <div class="card-body">
-             <?php echo '<img class="img-fluid" src="'.$docinfo['Image'].'">'?>
-        </div>
-    </div> -->
+
 
 
     <div class="card shadow mb-5">
         <div class="card-header py-3">
-            <p class="text-primary m-0 font-weight-bold">Choix d'accès à l'oeuvre</p>
+            <p class="text-primary m-0 font-weight-bold">Vue complète de l'oeuvre</p>
         </div>
         <div class="card-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <form>
-                        <div class="form-group"><strong>Comment accéder à l'oeuvre ?</strong><br /></div>
-                        <div class="form-group" align="center">
-                            <form method="POST" action="" enctype="multipart/form-data">
+          <?php 
 
-                                 </br>
+  //        echo strtoupper(pathinfo($docinfo['Chemin'], PATHINFO_EXTENSION));
 
-                                 </br>
-                                     <button type="button" class="btn btn-success"> Achat <input type="radio" class="btn btn-success" name="question" value="achat" id="achat" /></button>
-                                     <button type="button" class="btn btn-warning"> Abonnement <input type="radio" class="btn btn-success" name="question" value="abonnement" id="abonnement" /></button>
-                                 </br>
-                                 </br>
-                                     <button type="submit" class="btn btn-danger" value="location" name="formsupp"/>Location</button>
-                                 </br>
-                                   <div class="form-group col-md-4">
-                                  <label for="inputDate" style="font-weight: bold">Date de la location</label>
-                                  <input type="date" class="form-control" name="date" placeholder="date" value="">
-                                </div>
-                                 </br>
+          if(strtoupper(pathinfo($docinfo['Chemin'], PATHINFO_EXTENSION)) == "PDF"){
+            echo '<form action="'.$docinfo['Chemin'].'" method="POST" target="_blank"><button type="submit">Cliquez ici</button> </form>';
+            $path="'".$docinfo['Chemin']."'";
+            echo '<th><iframe src="'.$docinfo['Chemin'].'" id="test" frameborder="0"></iframe></th>';
+            echo '<th><input type="button" id="bt" onclick="print('.$path.')" value="Imprimer le PDF" /></th>';
+          }
+          elseif(strtoupper(pathinfo($docinfo['Chemin'], PATHINFO_EXTENSION)) == "BOOK"){
+            echo '<form action="'.$docinfo['Chemin'].'" method="POST" target="_blank"><button type="submit">Cliquez ici</button> </form>';
+          }
+               
+          elseif(strtoupper(pathinfo($docinfo['Chemin'], PATHINFO_EXTENSION)) == "EPUB"){
+            echo '<form action="'.$docinfo['Chemin'].'" method="POST" target="_blank"><button type="submit">Cliquez ici</button> </form>';
+/*            echo "<form action='https://chrome.google.com/webstore/detail/epubreader/jhhclmfgfllimlhabjkgkeebkbiadflb?hl=fr' method='POST' target='_blank'><button type='submit'>Cliquer ici pour télécharger l'extension sur Google Chrome</button> </form>";
+*/
+          }
+     
 
-                                 <div>
-                            
-                                   <?php
-                                      if(isset($message)) {
-                                      echo '<font color="red">'.$message."</font>";
-                                      }
-                                    ?>
-                                    
-                          </form>
-                        </div>
-                    </form>
-                </div>
-            </div>
+   
+
+
+          echo '<select name="validation_du_document">
+
+          <option value="">Validation du documents</option>
+          <option value="admin">Validé</option>
+          <option value="aucun">Non Validé</option>
+          <option value="aucun">Refusé</option>
+
+        </select>'
+
+
+
+            ?>
+
+                                        
         </div>
     </div>
-
-</div>
 
 
 <div class="footer">
@@ -390,6 +393,38 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
 
 
    </body>
+
+
+
+
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/chart.min.js"></script>
+<script src="assets/js/bs-animation.js"></script>
+<script src="assets/js/bs-charts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
+<script src="assets/js/jquery-3.3.1.js"></script>
+<script src="assets/js/jquery.dataTables.min.js"></script>
+<script src="assets/js/dataTables.bootstrap4.min.js"></script>
+<script src="assets/js/print.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable();
+    } );
+</script>
+
+<script>
+    //Fonction pour afficher et imprimer les documents PDF
+    function print(doc) {
+        var objFra = document.createElement('iframe');   // Create an IFrame.
+        objFra.style.visibility = "hidden";    // Hide the frame.
+        objFra.src = doc;                      // Set source.
+        document.body.appendChild(objFra);  // Add the frame to the web page.
+        objFra.contentWindow.focus();       // Set focus.
+        objFra.contentWindow.print();      // Print it.
+    }
+</script>
+
 </html>
 
     <script src="assets/js/jquery.min.js"></script>
