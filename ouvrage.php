@@ -101,11 +101,8 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
                 //Rajout de la barre d'administration si la personne un administrateur
                  if(isset($_SESSION['id'])) {
 
-<<<<<<< HEAD
        
 
-=======
->>>>>>> 14f31d437df5bf8ba096e20ea252821bd2e70c37
                      if (strcasecmp($_SESSION['Roles'], 'admin') == 0 OR strcasecmp($_SESSION['Roles'], 'gestionnaire') == 0) {
                      
                      
@@ -120,19 +117,11 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
                             <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
                         </div>
                      </li>';
-<<<<<<< HEAD
 
                      }
 
                      if (strcasecmp($_SESSION['Roles'], 'admin') == 0 OR strcasecmp($_SESSION['Roles'], 'validateur') == 0) {
 
-=======
-
-                     }
-
-                     if (strcasecmp($_SESSION['Roles'], 'admin') == 0 OR strcasecmp($_SESSION['Roles'], 'validateur') == 0) {
-
->>>>>>> 14f31d437df5bf8ba096e20ea252821bd2e70c37
                         echo '<li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
                             Validation
@@ -145,10 +134,7 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
                      </li>';
                      
                      }
-<<<<<<< HEAD
                    }
-=======
->>>>>>> 14f31d437df5bf8ba096e20ea252821bd2e70c37
                 ?>
 
                  <?php

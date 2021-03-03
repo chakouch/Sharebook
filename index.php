@@ -68,12 +68,9 @@ session_start();
 
 
                 <?php
-<<<<<<< HEAD
 
                     if(isset($_SESSION['id'])) {
 
-=======
->>>>>>> 14f31d437df5bf8ba096e20ea252821bd2e70c37
                      if (strcasecmp($_SESSION['Roles'], 'admin') == 0 OR strcasecmp($_SESSION['Roles'], 'gestionnaire') == 0) {
                      
                      
@@ -105,10 +102,7 @@ session_start();
                      </li>';
                      
                      }
-<<<<<<< HEAD
                  }
-=======
->>>>>>> 14f31d437df5bf8ba096e20ea252821bd2e70c37
                 ?>
 
                  <?php
