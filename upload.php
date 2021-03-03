@@ -181,7 +181,7 @@
    }
    
    //Permet de rajouter un genre dans la base de donnée
-   if(isset($_POST['create_genre'])) {
+/*   if(isset($_POST['create_genre'])) {
    
    $genre = $_POST['newgenre'];
    $insert_genre = $bdd->prepare("INSERT INTO genre_litteraire(ID_Genre_Maitre, Nom) VALUES(?, ?)");
@@ -189,7 +189,7 @@
    
    $msg_create_genre = "Votre genre à bien été crée";
    
-   }
+   }*/
    
    ?>
 <html>
@@ -243,7 +243,8 @@
                   </li>
                   <?php
                      //Rajout de la barre d'administration si la personne est un administrateur
-                     if (strcasecmp($_SESSION['Roles'], 'admin') == 0){
+
+                     if (strcasecmp($_SESSION['Roles'], 'admin') == 0 OR strcasecmp($_SESSION['Roles'], 'gestionnaire') == 0) {
                      
                      
                         echo '<li class="nav-item dropdown">
@@ -252,13 +253,26 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                            <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
                             <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
                             <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
                             <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
                         </div>
                      </li>';
-                     
+
+                     }
+
+                     if (strcasecmp($_SESSION['Roles'], 'admin') == 0 OR strcasecmp($_SESSION['Roles'], 'validateur') == 0) {
+
+                        echo '<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
+                            Validation
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
+                            <a class="dropdown-item" href="docs_non_valide.php">Documents non validés</a>
+                            <a class="dropdown-item" href="docs_refuse.php">Documents refusés</a>
+                        </div>
+                     </li>';
                      
                      }
                      ?>
@@ -274,7 +288,7 @@
       <div class="row mb-3">
          <div class="col-lg-12">
             <div class="row">
-               <div class="col-md-8 ml-auto mr-auto">
+               <div class="col">
                   <div class="card shadow mb-3">
 
                     <form method="POST" enctype="multipart/form-data" style="border-radius: 20px 50px 20px 50px;">
@@ -285,8 +299,8 @@
                      <div class="card-body">
                         <form>
                           <form method="POST" enctype="multipart/form-data" style="border-radius: 20px 50px 20px 50px;">
-                           <div class="form-row" style="margin: 10px">
-                              <div class="col" style="margin-right: 40px">
+                           <div class="form-row">
+                              <div class="col">
                                  <div class="form-group"><label for="nom_ouvrage"><strong>Sélectionner le nom de votre ouvrage : </strong></label><input class="form-control" type="text" id="nom_ouvrage" placeholder="Nom ouvrage" name="nom_ouvrage" /></div>
                               </div>
                               <div class="col">
@@ -294,8 +308,8 @@
                               </div>
                            </div>
                            <form method="POST" enctype="multipart/form-data" style="border-radius: 20px 50px 20px 50px;">
-                           <div class="form-row" style="margin: 10px">
-                              <div class="col" style="margin-right: 40px">
+                           <div class="form-row">
+                              <div class="col">
                                  <div class="form-group"><label for="miniature"><strong>Sélectionner la miniature de votre ouvrage :</strong></label><input  type="file" class="form-control" id="exampleFormControlInput2" name="miniature" /></div>
                               </div>
                               <div class="col">
@@ -322,8 +336,8 @@
                                  </div>
                               </div>
                            </div>
-                           <div class="form-row" style="margin: 10px">
-                              <div class="col" style="margin-right: 40px">
+                           <div class="form-row">
+                              <div class="col">
                                  <div class="form-group">
                                     <label for="exampleFormControlSelect1"><strong>Sélectionner le ou les genres de votre ouvrage *:</strong></label>
                                     </br>
@@ -405,8 +419,8 @@
                                  </div>
                               </div>
                            </div>
-                           <div class="form-row" style="margin: 10px">
-                              <div class="col" style="margin-right: 40px">
+                           <div class="form-row">
+                              <div class="col">
                                  <div class="form-group">
                                     <label for="exampleFormControlSelect1"><strong>Sélectionner le type de votre ouvrage *:</strong></label>
                                     </br>
@@ -452,9 +466,9 @@
                                     </select>
                                  </div>
                               </div>
-                           </div> 
-                           <div class="form-row" style="margin: 10px">
-                              <div class="col" style="margin-right: 40px">
+                           </div>
+                           <div class="form-row">
+                              <div class="col">
                                  <div class="form-group">
                                     <label for="exampleFormControlSelect1"><strong>Sélectionner la collection de votre ouvrage *:</strong></label>
                                     </br>
@@ -487,14 +501,14 @@
                         </div>
                         </div>
                         </div>
-                        <div class="form-row" style="margin: 10px">
-                        <div class="col" style="margin-right: 40px">
+                        <div class="form-row">
+                        <div class="col">
                         <div class="form-group">
                         <label for="exampleFormControlSelect1"><strong>Rentrer le nombre de page :</strong></label>
                         </br>
                         <input type="number" class="form-control" id="exampleFormControlSelect1" value = "Rentre le nomre de pagae" name="nombredepage">
                         </br>
-                        <label for="exampleFormControlSelect1"><strong>Date de parution :</strong></label>
+                        <p>Date de parution
                         <input class="form-control"  type="date" placeholder="La Date de parution :" id="date_parution" name="date_parution" />
                         </div>
                         </div>
@@ -508,7 +522,7 @@
 						   echo '</br>';
                            }
                            ?>
-                        </br>
+<!--                         </br>
                         <label for="exampleFormControlSelect1"><strong>Créer un nouveau genre *:</strong></label>
                         </br>
                         <input type="text" class="form-control" id="exampleFormControlSelect1" value = "Rentre le nouveau genre" name="newgenre">
@@ -516,12 +530,12 @@
                         <input class="btn btn-primary btn-sm" type="submit" value="Créer le genre" name="create_genre"/>
                         </br>
                         <?php
-                           if(isset($msg_create_genre)) {
+/*                           if(isset($msg_create_genre)) {
 						   echo '</br>';
                            echo '<font color="red">'.$msg_create_genre."</font>";
 						   echo '</br>';
-                           }
-                           ?>
+                           }*/
+                           ?> -->
                         </br>
                         </br>
                         <div align="center">
