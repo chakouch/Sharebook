@@ -5,3 +5,8 @@ section {
 h1 {
     animation-name: bounceInDown !important;
 }
+
+
+.star_note {
+    color: #d79743;
+}

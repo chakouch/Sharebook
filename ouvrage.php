@@ -7,7 +7,7 @@ $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxo
 //Restrindre l'accés à cette page au personne non connecté
 
 
-
+ 
 $docs = $bdd->prepare('SELECT ID_Document FROM documents');
 $docs->execute();
 $id_docs = $docs->fetchAll();
@@ -24,11 +24,15 @@ if (!in_array($_GET['id'], $ids)) {
   exit;
 }
 
+ $nav_active='avis' ;
+
 if(isset($_GET['id']) AND $_GET['id'] > 0) {
    $get_id_doc = intval($_GET['id']);
    $req_doc = $bdd->prepare('SELECT * FROM documents WHERE ID_Document = ?');
    $req_doc->execute(array($get_id_doc));
    $docinfo = $req_doc->fetch();
+
+
 
 
 
@@ -48,11 +52,23 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
        <link rel="stylesheet" href="assets/css/profil.css">
        <link rel="stylesheet" href="assets/css/animate.css">
 
+
     
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/Team-Boxed.css">
     <link rel="stylesheet" href="assets/css/navigation.css">
+    <link rel="stylesheet" href="assets/css/star-rating.css">
 
+    <link rel="icon" href="logo_small.png">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kaushan+Script">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/star-rating.css" />
+    <link rel="stylesheet" href="assets/css/animation.css" />
 
 
    </head>
@@ -328,6 +344,90 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
     </div> -->
 
 
+
+    <div class="card shadow mb-5">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 font-weight-bold">Commentaires</p>
+        </div>
+        <div class="card-body">
+            <div class="container">
+          <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="text-uppercase section-heading small_title animated revealOnScroll fadeInDown" data-animation="fadeInDown=" style=" animation-delay: 1s;">Avis Clients</h2>
+                    <hr class="seperator-line animated revealOnScroll fadeInDown" data-animation="fadeInDown=" style=" animation-delay: 1s;"></hr>
+                </div>
+            </div>
+            <div class="row" style="background-color: white;">
+              <div class="col-lg-6" >
+              	<h4 class="text section-heading small_title_text animated revealOnScroll fadeInUp" data-animation="fadeInUp=" style="animation-delay: 2s;">Partager nous votre expérience !</h4>
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="inputName">Nom</label>
+                      <input type="text" class="form-control" id="inputName" placeholder="Nom">
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="inputAddress">Email</label>
+                      <input type="email" class="form-control" id="inputAddress" placeholder="Email">
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="inputDate">Date de la Location</label>
+                      <input type="date" class="form-control" id="inputDate">
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="inputNote">Note</label>
+                      <select class="star-rating">
+                        <option value="">Choisir une note</option>
+                        <option value="5">Excellent</option>
+                        <option value="4">Très bien</option>
+                        <option value="3">Moyen</option>
+                        <option value="2">Mauvais</option>
+                        <option value="1">Terrible</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputMessage">Votre commentaire</label>
+                    <textarea class="form-control" rows="3" id="inputMessage" placeholder="Votre commentaire"></textarea>
+                  </div>
+                  <div class="form-group col-md-3" style="float: right;">
+                    <button id="ajouter_avis" class="btn btn-primary">Envoyer mon avis</button>
+                  </div>
+              </div>
+
+
+                 <div class="col-md-6" style="">
+                 	<h4 class="text section-heading small_title_text animated revealOnScroll fadeInUp" data-animation="fadeInUp=" style="animation-delay: 2s;">Avis des lecteurs <i class="fa fa-users fa-1x"></i> :</h4> </br>
+                 	<div class="container">
+						    <table id="example" class="table table-striped table-bordered" style="width:100%">
+						        <thead>
+						        <tr>
+							       <th>Nom</th>
+							       <th>Date</th>
+							       <th>Avis</th>
+						       </tr>
+						        </thead>
+
+						        <tbody>
+							      <tr>
+							      	  <th>Sugee</th>
+							          <th>5 Mars</th>
+								      <th>Ce livre est trop génial !</th>
+							       </tr>
+						        </tbody>
+						  	</table>
+						  	</br>
+					</div>
+                 </div>
+            </div>
+          </div>
+        </div>
+        </div>
+    </div>
+
+
+
     <div class="card shadow mb-5">
         <div class="card-header py-3">
             <p class="text-primary m-0 font-weight-bold">Choix d'accès à l'oeuvre</p>
@@ -372,6 +472,7 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
     </div>
 
 </div>
+</form>
 
 
 <div class="footer">
@@ -388,11 +489,24 @@ if(isset($_GET['id']) AND $_GET['id'] > 0) {
         </div>
     </footer>
 
-
+</div>
    </body>
-</html>
 
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="assets/js/star-rating.min.js"></script>
 
 
+    <?php 
+
+
+        switch ($nav_active) {
+        case "avis":
+            echo '<script src="assets/js/avis.js"></script>';
+            break;
+        }
+
+            ?>
+
+</html>
