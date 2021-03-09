@@ -60,7 +60,7 @@ session_start();
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="stat_extension">Par extension</a>
-                        <a class="dropdown-item" href="stat_public">Publiques / Privés</a>
+                        <!-- <a class="dropdown-item" href="stat_public">Publiques / Privés</a> -->
                     </div>
                 </li>
 

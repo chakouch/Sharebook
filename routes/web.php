@@ -55,6 +55,7 @@ Route::get('ouvrage_validation/{id}', function ($id) { return view('ouvrage_vali
 Route::post('ouvrage_validation/{id}', function ($id) { return view('ouvrage_validation', ['id' => $id ]); });
 Route::get('create_utilisateurs', function () { return view('create_utilisateurs'); });
 Route::post('create_utilisateurs', function () { return view('create_utilisateurs'); });
+Route::get('docs_refuse', function () { return view('docs_refuse'); });
 
 Route::get('document', function () {
     return view('document');

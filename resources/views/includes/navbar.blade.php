@@ -7,17 +7,17 @@ $cartCollection = \Cart::getContent();
 ?>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-<link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/fonts/font-awesome.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/fonts/ionicons.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/contact.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/footer.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/navigation.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/profil.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}">    
-<link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/Team-Boxed.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/navigation.css') }}">
+<link rel="stylesheet" href="{{ asset('/assets/bootstrap/css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('/assets/fonts/font-awesome.min.css') }}">
+<link rel="stylesheet" href="{{ asset('/assets/fonts/ionicons.min.css') }}">
+<link rel="stylesheet" href="{{ asset('/assets/css/contact.css') }}">
+<link rel="stylesheet" href="{{ asset('/assets/css/footer.css') }}">
+<link rel="stylesheet" href="{{ asset('/assets/css/navigation.css') }}">
+<link rel="stylesheet" href="{{ asset('/assets/css/profil.css') }}">
+<link rel="stylesheet" href="{{ asset('/assets/css/animate.css') }}">    
+<link rel="stylesheet" href="{{ asset('/assets/css/styles.css') }}">
+<link rel="stylesheet" href="{{ asset('/assets/css/Team-Boxed.css') }}">
+<link rel="stylesheet" href="{{ asset('/assets/css/navigation.css') }}">
 <nav class="navbar navbar-light navbar-expand-md shadow-lg navigation-clean-button" style="background-color: #313437;">
         
     <div class="container"><a class="navbar-brand" href="/index" style="color: #ffffff;">ShareBook</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>

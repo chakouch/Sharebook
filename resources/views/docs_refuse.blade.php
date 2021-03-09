@@ -5,7 +5,7 @@ session_start();
 //Connexion à notre base de donnée
   $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxonpd.eu-central-1.rds.amazonaws.com;dbname=ShareBook', 'sharebookuser', 'uA?BL6P8;t=P-JKl)]Su>L3Gj$[mz0q]');
 //Permet de récupere les informations des utilisateurs
-$documents = $bdd->prepare('SELECT * FROM documents WHERE Valider LIKE 0 ORDER BY ID_Document');
+$documents = $bdd->prepare('SELECT * FROM documents WHERE Refuser LIKE 1 ORDER BY ID_Document');
 $documents->execute(array());
 /*echo "\nPDOStatement::errorInfo():\n";
 $arr = $documents->errorInfo();*/
@@ -31,7 +31,7 @@ if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0 AND strcasecmp($_SESSION['Role
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Documents non validés</title>
+    <title>Documents refusés</title>
     @include('includes.navbar')
 </head>
 <body>
@@ -39,7 +39,7 @@ if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0 AND strcasecmp($_SESSION['Role
 <div align="center">
 <div class="container">
 
-  <h1 style="margin-top: 50px">Liste des documents non validés</h1>
+  <h1 style="margin-top: 50px">Liste des documents refusés</h1>
     <i class="fa fa-users fa-5x"></i></br>
 
     </br>
@@ -110,7 +110,7 @@ if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0 AND strcasecmp($_SESSION['Role
               echo '<th>'.$langue[0].'</th>';
 
           
-            echo '<th><form action="ouvrage_validation/'.$m['ID_Document'].'" method="GET" target="_blank"> 
+            echo '<th><form action="ouvrage_validation?id='.$m['ID_Document'].'" method="POST" target="_blank"> 
             <button type="submit">Validation</button> </form></th>'
             ?>
            </tr>

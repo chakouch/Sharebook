@@ -54,7 +54,7 @@ session_start();
                                 <h4>'.$document->Titre.'</h4>
                                 <p class="text-muted">Auteur : '.collect($auteur)['Nom'].'</p>
                                 <p class="text-muted">Nombre de page : '.$document->Nombre_Pages.'</p>
-                                <p class="text-muted">Langue : <img src="./flag/'.collect($langue)['Nom_Court'].'.png" height="15" width="20" /></p>
+                                <p class="text-muted">Langue : <img src="ouvrage/flag/'.collect($langue)['Nom_Court'].'.png" height="15" width="20" /></p>
 
                             </div>
                         </div>
