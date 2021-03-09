@@ -67,7 +67,6 @@ if(isset($_POST['forminscription'])) {
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
 
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
     <link rel="stylesheet" href="assets/css/styles.css">
 
     <link rel="stylesheet" href="assets/css/navigation.css">

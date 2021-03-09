@@ -1,62 +1,39 @@
 <?php
-    
-   //Permet de garder les variables de la session
-   session_start();
-   require 'includes/connect_db.php';
-   //Permet de récuprer le contenu du fichier connect_db.php 
 
-   $lien = 'Location: deconnexion.php';
+//Permet de garder les variables de la session
+session_start();
+//Connexion à notre base de donnée
+  $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxonpd.eu-central-1.rds.amazonaws.com;dbname=ShareBook', 'sharebookuser', 'uA?BL6P8;t=P-JKl)]Su>L3Gj$[mz0q]');
+//Permet de récupere les informations des utilisateurs
+$documents = $bdd->prepare('SELECT * FROM documents WHERE Valider LIKE 0 ORDER BY ID_Document');
+$documents->execute(array());
+/*echo "\nPDOStatement::errorInfo():\n";
+$arr = $documents->errorInfo();*/
+//print_r($arr);
 
 //Restrindre l'accés à cette page au personne non connecté
  if(!isset($_SESSION['id'])) {
 
          header('Location: errorConnexion.html');
          exit;
-      
+
    }
+//Restrindre l'accés à cette page au personne qui ne sont pas administrateur
+if (strcasecmp($_SESSION['Roles'], 'admin') ==! 0 AND strcasecmp($_SESSION['Roles'], 'validateur') ==! 0){
 
-   if(isset($_POST['formsupp'])) {
-
-       if(!empty($_POST['question'])){
-            if($_POST['question'] == "non") {
-
-                     $message = '<a href="profil.php">Cliquer ici pour revenir sur votre profil</a>';
-            }
-            elseif ($_POST['question'] == "oui") {
-
-                    //Supprimer la personne
-                     $userid = $_SESSION['id'];
-                     $usrpseudo= $_SESSION['pseudo'];
-                     $req = $db->query('DELETE FROM utilisateur WHERE ID_Utilisateur ="'.$userid.'"');
-                    //Supprimer les documents de l'utilisateur si l'option est cochée
-                     if(!empty($_POST['scales'])){
-                            
-                            $req = $db->query('DELETE FROM documents WHERE ID_Auteur ="'.$usrpseudo.'"');
-                            
-                     }
-                     //Supprimer les genres de l'utilisateur si l'option est cochée
-/*                     if(!empty($_POST['scales2'])){
-                        
-                            $req = $db->query('DELETE FROM genre WHERE pseudo ="'.$usrpseudo.'"');
-                            
-                    }*/
-                     $message = "Compte supprimer ! ";
-                     header($lien);
-            }
-             
-         } else {
-            $message = "Choisiez entre oui ou non";
-         }
-   
-   }
-
+         header('Location: errorAdmin.html');
+         exit;    
+}
+    
 
 ?>
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Supprimer votre compte</title>
+    <title>Profil des utilisateurs du site</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
@@ -64,7 +41,8 @@
     <link rel="stylesheet" href="assets/css/footer.css">
     <link rel="stylesheet" href="assets/css/navigation.css">
     <link rel="stylesheet" href="assets/css/profil.css">
-    <link rel="stylesheet" href="assets/css/animate.css">
+
+
 </head>
 <body>
 <nav class="navbar navbar-light navbar-expand-md shadow-lg navigation-clean-button" style="background-color: #313437;">
@@ -88,9 +66,9 @@
                         Documents
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="document.php">Afficher la Bibliothèque Publique</a>
-                        <a class="dropdown-item" href="mydocument.php">Afficher ma Bibliothèque Privée</a>
-                        <a class="dropdown-item" href="upload.php">Ajouter un ouvrage</a>
+                        <a class="dropdown-item" href="document.php">Afficher les documents publiques</a>
+                        <a class="dropdown-item" href="mydocument.php">Afficher mes documents</a>
+                        <a class="dropdown-item" href="upload.php">Upload un document</a>
                     </div>
                 </li>
 
@@ -104,14 +82,8 @@
                     </div>
                 </li>
 
-           
 
                 <?php
-
-
-                 //Rajout de la barre d'administration si la personne est un administrateur
-
-
                      if (strcasecmp($_SESSION['Roles'], 'admin') == 0 OR strcasecmp($_SESSION['Roles'], 'gestionnaire') == 0) {
                      
                      
@@ -151,44 +123,114 @@
         </div>
     </div>
 </nav>
+
+<div align="center">
 <div class="container">
-      <div align="center" style="margin: 150px" class="animated bounceInDown delay-100ms">
-         <h2>Êtes-vous sûrs de vouloir supprimer votre compte ?</h2>
-          <i class="fa fa-user fa-5x"></i></br>
 
+  <h1 style="margin-top: 50px">Liste des documents non validés</h1>
+    <i class="fa fa-users fa-5x"></i></br>
 
-         <form method="POST" action="" enctype="multipart/form-data">
+    </br>
+    </br>
+    <table id="example" class="table table-striped table-bordered" style="width:110%">
+        <thead>
+        <tr>
+       <th>Titre</th>
+       <th>Nombres de page</th>
+       <th>Date de parution</th>
+       <th>Date de soumissions</th>
+       <th>Auteur</th>
+       <th>Types</th>
+       <th>Editeur</th>
+       <th>Collection</th>
+       <th>Utilisateur</th>
+       <th>Langues</th>
+       <th>Validation</th>
+   </tr>
+        </thead>
 
-         </br>
-
-         </br>
-             <button type="button" class="btn btn-success"> Oui <input type="radio" class="btn btn-success" name="question" value="oui" id="oui" /></button>
-             <button type="button" class="btn btn-warning"> Non <input type="radio" class="btn btn-success" name="question" value="non" id="non" /></button>
-         </br>
-         </br>
-             <button type="submit" class="btn btn-danger" value="Supprimer le compte" name="formsupp"/>Supprimer le compte</button>
-         </br>
-         </br>
-
-         <div>
-                    <input type="checkbox" id="scales" name="scales">
-                            <label for="scales">Supprimer les documents associés à votre compte ? </label>
-
-                    </br>
-
-<!--                     <input type="checkbox" id="scales2" name="scales2">
-                            <label for="scales2">Supprimer les genres associés à votre compte ? </label>
-                    </div> -->
-           <?php
-              if(isset($message)) {
-              echo '<font color="red">'.$message."</font>";
-              }
-            ?>
+        <tbody>
+   
+      <?php while($m = $documents->fetch()) { ?>
+          <tr>
             
-             </form>
+            <th><?= $m['Titre'] ?></th>
+            <th><?= $m['Nombre_Pages'] ?></th>
+            <th><?= $m['Date_Parution'] ?></th>
+            <th><?= $m['Date_soumission'] ?></th>
+          <?php
+
+
+              $req_auteur = $bdd->prepare('SELECT Nom FROM auteur WHERE ID_Auteur = ?');
+              $req_auteur->execute(array($m['ID_Auteur']));
+              $auteur = $req_auteur->fetch();
+
+              echo '<th>'.$auteur[0].'</th>';
+
+              $req_types = $bdd->prepare('SELECT Nom FROM types WHERE ID_Types = ?');
+              $req_types->execute(array($m['ID_types']));
+              $types = $req_types->fetch();
+
+              echo '<th>'.$types[0].'</th>';
+       
+              $req_editeurs = $bdd->prepare('SELECT Nom FROM editeur WHERE ID_Editeur = ?');
+              $req_editeurs->execute(array($m['ID_Editeur']));
+              $editeurs = $req_editeurs->fetch();
+
+              echo '<th>'.$editeurs[0].'</th>';
+
+              $req_collection = $bdd->prepare('SELECT Nom FROM collection WHERE ID_Collection = ?');
+              $req_collection->execute(array($m['ID_Collection']));
+              $collection = $req_collection->fetch();
+
+              echo '<th>'.$collection[0].'</th>';
+            
+              $req_utilisateur = $bdd->prepare('SELECT Pseudo FROM utilisateur WHERE ID_Utilisateur = ?');
+              $req_utilisateur->execute(array($m['ID_Utilisateur']));
+              $utilisateur = $req_utilisateur->fetch();
+
+              echo '<th>'.$utilisateur[0].'</th>';
+
+              $req_langue = $bdd->prepare('SELECT Nom_long FROM langues WHERE ID_Langue = ?');
+              $req_langue->execute(array($m['ID_Langue']));
+              $langue = $req_langue->fetch();
+
+              echo '<th>'.$langue[0].'</th>';
+
+          
+            echo '<th><form action="ouvrage_validation.php?id='.$m['ID_Document'].'" method="POST" target="_blank"> 
+            <button type="submit">Validation</button> </form></th>'
+            ?>
+           </tr>
+
+      <?php
+      }
+      ?>
+        </tbody>
+    </table>
+    </br>
+    </br>
+
+
+</div>
+</div>
+
+<div class="footer">
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 item text">
+                    <h3>ShareBook</h3>
+                    <p>Start-up innovante, ShareBook a pour ambition de rendre la connaissance accessible et universel</p>
+                </div>
+
+            </div>
+            <p class="copyright">ShareBook © 2021</p>
         </div>
-      </div>
-   </body>
+    </footer>
+</div>
+
+</body>
 </html>
 
 <script src="assets/js/jquery.min.js"></script>
@@ -197,3 +239,12 @@
 <script src="assets/js/bs-animation.js"></script>
 <script src="assets/js/bs-charts.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
+<script src="assets/js/jquery-3.3.1.js"></script>
+<script src="assets/js/jquery.dataTables.min.js"></script>
+<script src="assets/js/dataTables.bootstrap4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable();
+    } );
+
+</script>

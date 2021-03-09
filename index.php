@@ -13,7 +13,6 @@ session_start();
     <title>ShareBook</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
     <link rel="stylesheet" href="assets/css/contact.css">
     <link rel="stylesheet" href="assets/css/footer.css">
     <link rel="stylesheet" href="assets/css/navigation.css">
@@ -68,34 +67,48 @@ session_start();
 
 
                 <?php
-                 //Rajout de la barre d'administration si la personne un administrateur
-                        if(isset($_SESSION['Roles'])) {
-                                if (strcasecmp($_SESSION['Roles'], 'admin') == 0){
 
+                    if(isset($_SESSION['id'])) {
 
-                                    echo '<li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
-                                        Administration
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                                        <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
-                                        <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
-                                        <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
-                                        <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
-                                    </div>
-                                </li>';
+                     if (strcasecmp($_SESSION['Roles'], 'admin') == 0 OR strcasecmp($_SESSION['Roles'], 'gestionnaire') == 0) {
+                     
+                     
+                        echo '<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
+                            Administration
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
+                            <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
+                            <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
+                            <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
+                        </div>
+                     </li>';
 
+                     }
 
-                            }
-                        }
+                     if (strcasecmp($_SESSION['Roles'], 'admin') == 0 OR strcasecmp($_SESSION['Roles'], 'validateur') == 0) {
+
+                        echo '<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
+                            Validation
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
+                            <a class="dropdown-item" href="docs_non_valide.php">Documents non validés</a>
+                            <a class="dropdown-item" href="docs_refuse.php">Documents refusés</a>
+                        </div>
+                     </li>';
+                     
+                     }
+                 }
                 ?>
 
                  <?php
                  //Rajout du bouton de connexion ou déconnexion en fonction de la connexion ou non de l'utilisateur
                           if(isset($_SESSION['id'])) {
 
-                               echo '</ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="deconnexion.php">Vous êtes connectez : Déconnexion</a></span>';
+                               echo '</ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="deconnexion.php">Déconnexion</a></span>';
                                
                       
                             } else {

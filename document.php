@@ -7,12 +7,6 @@ require 'includes/connect_db.php';
 $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxonpd.eu-central-1.rds.amazonaws.com;dbname=ShareBook', 'sharebookuser', 'uA?BL6P8;t=P-JKl)]Su>L3Gj$[mz0q]');
 //Restrindre l'accés à cette page au personne non connecté
 
- if(!isset($_SESSION['id'])) {
-
-         header('Location: errorConnexion.html');
-         exit;
-      
-   }
 
 ?>
 
@@ -25,7 +19,6 @@ $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxo
             <title>Bibliothèque</title>
             <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
             <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
-            <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
             <link rel="stylesheet" href="assets/css/contact.css">
             <link rel="stylesheet" href="assets/css/footer.css">
             <link rel="stylesheet" href="assets/css/navigation.css">
@@ -80,29 +73,57 @@ $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxo
                 <?php
                  //Rajout de la barre d'administration si la personne un administrateur
 
-                if (strcasecmp($_SESSION['Roles'], 'admin') == 0){
+                if(isset($_SESSION['id'])) {
 
+                     if (strcasecmp($_SESSION['Roles'], 'admin') == 0 OR strcasecmp($_SESSION['Roles'], 'gestionnaire') == 0) {
+                     
+                     
+                        echo '<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
+                            Administration
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
+                            <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
+                            <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
+                            <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
+                        </div>
+                     </li>';
 
-                    echo '<li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
-                        Administration
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                        <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
-                        <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
-                        <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
-                        <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
-                    </div>
-                </li>';
+                     }
 
+                     if (strcasecmp($_SESSION['Roles'], 'admin') == 0 OR strcasecmp($_SESSION['Roles'], 'validateur') == 0) {
 
-                }
+                        echo '<li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
+                            Validation
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="affich_docs.php">Afficher les ouvrages des utilisateurs</a>
+                            <a class="dropdown-item" href="docs_non_valide.php">Documents non validés</a>
+                            <a class="dropdown-item" href="docs_refuse.php">Documents refusés</a>
+                        </div>
+                     </li>';
+                     
+                     }
+                 }
                 ?>
 
           
 
-            </ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="deconnexion.php">Déconnexion</a></span>
+           <?php
+                 //Rajout du bouton de connexion ou déconnexion en fonction de la connexion ou non de l'utilisateur
+                          if(isset($_SESSION['id'])) {
+
+                               echo '</ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="deconnexion.php">Déconnexion</a></span>';
+                               
+                      
+                            } else {
+
+
+                               echo '</ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="connexion.php">Connectez-vous</a></span>';
+                            }
+                ?>
 
         </div>
     </div>
@@ -135,7 +156,7 @@ $bdd = new PDO('mysql:host=ls-0f927a463e6d389cf0f567dc4d5a58f8ca59fcd7.cq7na6hxo
 
                 //Permet d'afficher les documents 
 
-                    $req = $db->query('SELECT * FROM documents');
+                    $req = $db->query('SELECT * FROM documents WHERE Valider = 1');
 
                     while($data = $req->fetch()){
                          
