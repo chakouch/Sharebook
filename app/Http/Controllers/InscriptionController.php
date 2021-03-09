@@ -24,8 +24,8 @@ class InscriptionController extends Controller
         $mail2 = $request->mail2;
         $tel = $request->tel;
         $date_naissance = $request->date_naissance;
-        $mdp = $request->mdp;
-        $mdp2 = $request->mdp2;
+        $mdp = sha1($request->mdp);
+        $mdp2 = sha1($request->mdp2);
         $droit = "aucun";
         $genre = 0;
         $date_supprimer = null;

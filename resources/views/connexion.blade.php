@@ -20,7 +20,7 @@
 
 
 <nav class="navbar navbar-light navbar-expand-md shadow-lg navigation-clean-button" style="background-color: #313437;">
-    <div class="container"><a class="navbar-brand" href="index.php" style="color: #ffffff;">ShareBook</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+    <div class="container"><a class="navbar-brand" href="/" style="color: #ffffff;">ShareBook</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navcol-1">
             <ul class="nav navbar-nav mr-auto">
                      
@@ -48,11 +48,11 @@
                                         Administration
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        <a class="dropdown-item" href="utilisateurs_admin.php">Afficher tous les utilisateurs</a>
-                                        <a class="dropdown-item" href="affich_docs.php">Afficher les documents des utilisateurs</a>
-                                        <a class="dropdown-item" href="modif_utlisateurs_admin.php">Modifier / Supprimer un utilisateur</a>
-                                        <a class="dropdown-item" href="create_utilisateurs.php">Créer un utilisateur</a>
-                                        <a class="dropdown-item" href="stat_admin.php">Statistiques des utilisateurs</a>
+                                        <a class="dropdown-item" href="utilisateurs_admin">Afficher tous les utilisateurs</a>
+                                        <a class="dropdown-item" href="affich_docs">Afficher les documents des utilisateurs</a>
+                                        <a class="dropdown-item" href="modif_utlisateurs_admin">Modifier / Supprimer un utilisateur</a>
+                                        <a class="dropdown-item" href="create_utilisateurs">Créer un utilisateur</a>
+                                        <a class="dropdown-item" href="stat_admin">Statistiques des utilisateurs</a>
                                     </div>
                                 </li>';
 
@@ -65,13 +65,13 @@
                 //Rajout du bouton de connexion ou déconnexion en fonction de la connexion ou non de l'utilisateur
                 if(isset($_SESSION['id'])) {
 
-                    echo '</ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="deconnexion.php">Vous êtes connectez : Déconnexion</a></span>';
+                    echo '</ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="deconnexion">Vous êtes connectez : Déconnexion</a></span>';
 
 
                 } else {
 
 
-                    echo '</ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="connexion.php">Connectez-vous</a></span>';
+                    echo '</ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="connexion">Connectez-vous</a></span>';
                 }
                 ?>
         </div>

@@ -10,7 +10,7 @@ session_start();
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Sharebook</title>
+    <title>ShareBook</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
@@ -28,7 +28,7 @@ session_start();
 <body class="text-secondary">
 
         <nav class="navbar navbar-light navbar-expand-md shadow-lg navigation-clean-button" style="background-color: #313437;">
-       <div class="container"><a class="navbar-brand" href="index" style="color: #ffffff;">Sharebook</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+       <div class="container"><a class="navbar-brand" href="index" style="color: #ffffff;">ShareBook</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
            <div class="collapse navbar-collapse" id="navcol-1">
                <ul class="nav navbar-nav mr-auto">
 
@@ -95,7 +95,7 @@ session_start();
                  //Rajout du bouton de connexion ou déconnexion en fonction de la connexion ou non de l'utilisateur
                           if(isset($_SESSION['id'])) {
 
-                               echo '</ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="deconnexion">Vous êtes connectez : Déconnexion</a></span>';
+                               echo '</ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="deconnexion">Vous êtes connecté : Déconnexion</a></span>';
                                
                       
                             } else {

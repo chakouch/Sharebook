@@ -5,89 +5,10 @@ session_start();
 <!doctype html>
 <html>
         <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
             <title>Bibliothèque</title>
-            <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-            <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
-            <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
-            <link rel="stylesheet" href="assets/css/contact.css">
-            <link rel="stylesheet" href="assets/css/footer.css">
-            <link rel="stylesheet" href="assets/css/navigation.css">
-            <link rel="stylesheet" href="assets/css/profil.css">
-            <link rel="stylesheet" href="assets/css/animate.css">
-            <link rel="stylesheet" type="text/css" href="assets/css/print.min.css">
+            @include('includes.navbar')
         </head>
 <body>
-<nav class="navbar navbar-light navbar-expand-md shadow-lg navigation-clean-button" style="background-color: #313437;">
-    
-    <div class="container"><a class="navbar-brand" href="index" style="color: #ffffff;">ShareBook</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="navcol-1">
-            <ul class="nav navbar-nav mr-auto">
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
-                        Mon profil
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="profil">Afficher mon profil</a>
-                        <a class="dropdown-item" href="editionprofil">Editer mon profil</a>
-                        <a class="dropdown-item" href="supp_account">Supprimer mon compte</a>
-                    </div>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
-                        Documents
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="document">Afficher la Bibliothèque Publique</a>
-                        <a class="dropdown-item" href="mydocument">Afficher ma Bibliothèque Privée</a>
-                        <a class="dropdown-item" href="upload">Ajouter un ouvrage</a>
-                    </div>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
-                        Statistiques
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="stat_extension">Par extension</a>
-                        <a class="dropdown-item" href="stat_public">Publiques / Privés</a>
-                    </div>
-                </li>
-
-
-                <?php
-                 //Rajout de la barre d'administration si la personne un administrateur
-
-                if (strcasecmp($_SESSION['droit'], 'admin') == 0){
-
-
-                    echo '<li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
-                        Administration
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="utilisateurs_admin">Afficher tous les utilisateurs</a>
-                        <a class="dropdown-item" href="affich_docs">Afficher les ouvrages des utilisateurs</a>
-                        <a class="dropdown-item" href="modif_utlisateurs_admin">Modifier / Supprimer un utilisateur</a>
-                        <a class="dropdown-item" href="create_utilisateurs">Créer un utilisateur</a>
-                        <a class="dropdown-item" href="stat_admin">Statistiques des utilisateurs</a>
-                    </div>
-                </li>';
-
-
-                }
-                ?>
-
-          
-
-            </ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="deconnexion">Déconnexion</a></span>
-
-        </div>
-    </div>
-</nav>
 
 <section style="background-image: url(&quot;assets/img/3image.jpg&quot;);">
     <div class="animated bounceInDown delay-100ms">

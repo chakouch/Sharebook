@@ -25,98 +25,15 @@ if (!in_array($id, $ids)) {
 
 if(isset($id) AND $id > 0) {
     $docinfo = DB::select("SELECT * FROM documents WHERE ID_Document = ?", [$id])[0];  
+}
 ?>
 <!doctype html>
 <html>
    <head>
-       <meta charset="utf-8">
-       <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-       <title>Sharebook - Profil</title>
-       <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
-       <link rel="stylesheet" href="{{ asset('assets/fonts/font-awesome.min.css') }}">
-       <link rel="stylesheet" href="{{ asset('assets/fonts/ionicons.min.css') }}">
-       <link rel="stylesheet" href="{{ asset('assets/css/contact.css') }}">
-       <link rel="stylesheet" href="{{ asset('assets/css/footer.css') }}">
-       <link rel="stylesheet" href="{{ asset('assets/css/navigation.css') }}">
-       <link rel="stylesheet" href="{{ asset('assets/css/profil.css') }}">
-       <link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}">    
-       <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}">
-       <link rel="stylesheet" href="{{ asset('assets/css/Team-Boxed.css') }}">
-       <link rel="stylesheet" href="{{ asset('assets/css/navigation.css') }}">
+       <title>Sharebook - Ouvrages</title>
+       @include('includes.navbar')
    </head>
    <body>
-   <nav class="navbar navbar-light navbar-expand-md shadow-lg navigation-clean-button" style="background-color: #313437;">
-       <div class="container"><a class="navbar-brand" href="index" style="color: #ffffff;">ShareBook</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-           <div class="collapse navbar-collapse" id="navcol-1">
-               <ul class="nav navbar-nav mr-auto">
-
-                   <li class="nav-item dropdown">
-                       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
-                           Mon profil
-                       </a>
-                       <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                           <a class="dropdown-item" href="{{ url('profil') }}">Afficher mon profil</a>
-                           <a class="dropdown-item" href="{{ url('editionprofil') }}">Editer mon profil</a>
-                           <a class="dropdown-item" href="{{ url('supp_account') }}">Supprimer mon compte</a>
-                       </div>
-                   </li>
-
-                   <li class="nav-item dropdown">
-                       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
-                           Documents
-                       </a>
-                       <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                           <a class="dropdown-item" href="{{ url('document') }}">Afficher la Bibliothèque Publique</a>
-                           <a class="dropdown-item" href="{{ url('mydocument') }}">Afficher ma Bibliothèque Privée</a>
-                           <a class="dropdown-item" href="{{ url('upload') }}">Ajouter un ouvrage</a>
-                       </div>
-                   </li>
-
-                   <li class="nav-item dropdown">
-                       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
-                           Statistiques
-                       </a>
-                       <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                           <a class="dropdown-item" href="{{ url('stat_extension') }}">Par extension</a>
-                           <a class="dropdown-item" href="{{ url('stat_public') }}">Publiques / Privés</a>
-                       </div>
-                   </li>
-
-              
-   
-                <?php
-
-                //Rajout de la barre d'administration si la personne un administrateur
-
-                if (strcasecmp($_SESSION['droit'], 'admin') == 0){
-
-
-                    echo '<li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color: white !important;">
-                        Administration
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="utilisateurs_admin">Afficher tous les utilisateurs</a>
-                        <a class="dropdown-item" href="affich_docs">Afficher les ouvrages des utilisateurs</a>
-                        <a class="dropdown-item" href="modif_utlisateurs_admin">Modifier / Supprimer un utilisateur</a>
-                        <a class="dropdown-item" href="create_utilisateurs">Créer un utilisateur</a>
-                        <a class="dropdown-item" href="stat_admin">Statistiques des utilisateurs</a>
-                    </div>
-                </li>';
-
-
-                }
-                ?>
-
-                 <?php
-                 }
-                 ?>
-
-                  </ul><span class="navbar-text actions"> <a class="btn btn-light action-button" role="button" href="deconnexion">Déconnexion</a></span>
-
-             </div>
-       </div>
-   </nav>
    <div class="">
       <div class="animated bounceInDown delay-100ms">
        
@@ -156,10 +73,7 @@ if(isset($id) AND $id > 0) {
 
 
 <div class="container-fluid">
-    <div class="row">
     <h3 class="text-dark mb-4 col-md-10">Titre de l'ouvrage : <?php echo $docinfo->Titre; ?></h3>
-    <span class="col-md-2"> <a class="btn btn-light action-button float-right" role="button" href="cart">Ajouter au panier</a></span>
-    </div>
     <div class="row mb-3">
 
         <div class="col-lg-4">
@@ -277,6 +191,40 @@ if(isset($id) AND $id > 0) {
             </div>
         </div>
     </div>
+
+    <div class="card shadow mb-5">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 font-weight-bold">Choix d'accès à l'oeuvre</p>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-10">
+                    <div>
+                        <div class="form-group"><strong>Comment accéder à l'oeuvre ?</strong><br /></div>
+                        <div class="form-group row" align="center">
+                                 </br>
+                                    <form class="col-md-1 float-right" action="{{ route('cart.store', $id) }}" method="POST">
+                                        {{ csrf_field() }}
+                                        <button type="submit" class="btn btn-success"">Achat</button>
+                                    </form>
+                                 </br>
+                                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modal_azure_budget_create">Location</a>
+                                 </br>
+                                    
+                                 <div>
+                            
+                                   <?php
+                                      if(isset($message)) {
+                                      echo '<font color="red">'.$message."</font>";
+                                      }
+                                    ?>
+                                    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
@@ -295,4 +243,6 @@ if(isset($id) AND $id > 0) {
     </footer>
 </div>
 </body>
+
+@include("location.modal_rent")
 </html>
